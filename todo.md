@@ -313,3 +313,8 @@
 - [x] Implement form validation and error handling
 - [x] Integrate edit and delete buttons on recipe cards
 - [x] Test recipe editing modal UI with Sushi Confidential recipes
+
+## Prep Planning Buffer Rounding (Current Sprint)
+- [x] Update prep planning calculation to round buffer quantities to whole numbers
+- [x] Update frontend display to show rounded values
+- [x] Test with Sushi Confidential recipes to verify rounding

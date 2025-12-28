@@ -121,10 +121,10 @@ export async function generatePrepPlan(
     recommendations.push({
       ingredientId,
       ingredientName: data.name,
-      recommendedQuantity: Math.ceil(data.totalQuantity * 10) / 10, // Round to 1 decimal
+      recommendedQuantity: Math.round(data.totalQuantity), // Round to whole number
       unit: data.unit,
-      safetyBuffer: Math.ceil(safetyBuffer * 10) / 10,
-      totalWithBuffer: Math.ceil((data.totalQuantity + safetyBuffer) * 10) / 10,
+      safetyBuffer: Math.round(safetyBuffer), // Round to whole number
+      totalWithBuffer: Math.round(data.totalQuantity + safetyBuffer), // Round to whole number
       recipes: data.recipes,
     });
   }

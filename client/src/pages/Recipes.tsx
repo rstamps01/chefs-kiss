@@ -139,10 +139,16 @@ export default function Recipes() {
     };
   }, [recipes]);
 
-  // Calculate individual recipe metrics
+  // Calculate individual recipe metrics using converted costs
   const getRecipeMetrics = (recipe: any) => {
     const sellingPrice = parseFloat(recipe.sellingPrice || "0");
+    
+    // Use convertedCost from backend if available, otherwise fallback to quantity * costPerUnit
     const ingredientCost = recipe.ingredients.reduce((sum: number, ing: any) => {
+      if (ing.convertedCost) {
+        return sum + parseFloat(ing.convertedCost);
+      }
+      // Fallback for old data
       const quantity = parseFloat(ing.quantity || "0");
       const costPerUnit = parseFloat(ing.costPerUnit || "0");
       return sum + (quantity * costPerUnit);
@@ -151,10 +157,16 @@ export default function Recipes() {
     const foodCostPercent = sellingPrice > 0 ? (ingredientCost / sellingPrice) * 100 : 0;
     const margin = sellingPrice > 0 ? ((sellingPrice - ingredientCost) / sellingPrice) * 100 : 0;
 
+    // Check for conversion warnings
+    const hasConversionWarnings = recipe.ingredients.some((ing: any) => ing.conversionWarning);
+    const conversionCount = recipe.ingredients.filter((ing: any) => ing.conversionApplied).length;
+
     return {
       cost: ingredientCost.toFixed(2),
       foodCostPercent: Math.round(foodCostPercent),
       margin: Math.round(margin),
+      hasConversionWarnings,
+      conversionCount,
     };
   };
 
@@ -250,6 +262,22 @@ export default function Recipes() {
                           <span className="text-muted-foreground">Price:</span>
                           <span className="font-medium">${parseFloat(recipe.sellingPrice || "0").toFixed(2)}</span>
                         </div>
+                        {metrics.conversionCount > 0 && (
+                          <div className="flex items-center gap-2 pt-2 text-xs text-blue-600 dark:text-blue-400">
+                            <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+                            </svg>
+                            <span>{metrics.conversionCount} unit conversion{metrics.conversionCount > 1 ? 's' : ''} applied</span>
+                          </div>
+                        )}
+                        {metrics.hasConversionWarnings && (
+                          <div className="flex items-center gap-2 pt-2 text-xs text-amber-600 dark:text-amber-400">
+                            <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                            </svg>
+                            <span>Missing unit conversions</span>
+                          </div>
+                        )}
                         <div className="flex gap-2 pt-2">
                           <Button 
                             variant="outline" 

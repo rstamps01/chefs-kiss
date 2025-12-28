@@ -117,7 +117,8 @@ export async function getRecipesWithIngredients(restaurantId: number) {
           ingredientId: recipeIngredients.ingredientId,
           ingredientName: ingredients.name,
           quantity: recipeIngredients.quantity,
-          unit: recipeIngredients.unit,
+          unit: recipeIngredients.unit, // Recipe unit (how it's used)
+          ingredientUnit: ingredients.unit, // Ingredient storage unit (how it's purchased)
           category: ingredients.category,
           costPerUnit: ingredients.costPerUnit,
         })
@@ -125,9 +126,56 @@ export async function getRecipesWithIngredients(restaurantId: number) {
         .leftJoin(ingredients, eq(recipeIngredients.ingredientId, ingredients.id))
         .where(eq(recipeIngredients.recipeId, recipe.id));
 
+      // Calculate costs with unit conversion
+      const ingredientsWithCosts = await Promise.all(
+        recipeIngs.map(async (ing) => {
+          let convertedCost = 0;
+          let conversionFactor: number | null = null;
+          let conversionApplied = false;
+          let conversionWarning: string | null = null;
+
+          if (ing.ingredientId && ing.costPerUnit && ing.unit && ing.ingredientUnit) {
+            const recipeUnit = ing.unit;
+            const ingredientUnit = ing.ingredientUnit;
+
+            // Check if units match
+            if (recipeUnit === ingredientUnit) {
+              // No conversion needed
+              convertedCost = Number(ing.quantity) * Number(ing.costPerUnit);
+            } else {
+              // Units don't match - need conversion
+              conversionFactor = await getConversionFactor(
+                ing.ingredientId,
+                recipeUnit,
+                ingredientUnit
+              );
+
+              if (conversionFactor !== null) {
+                // Conversion found: convert recipe quantity to ingredient unit
+                const convertedQuantity = Number(ing.quantity) * conversionFactor;
+                convertedCost = convertedQuantity * Number(ing.costPerUnit);
+                conversionApplied = true;
+              } else {
+                // No conversion found - use direct multiplication with warning
+                convertedCost = Number(ing.quantity) * Number(ing.costPerUnit);
+                conversionWarning = `Missing conversion: ${recipeUnit} → ${ingredientUnit}`;
+              }
+            }
+          }
+
+          return {
+            ...ing,
+            convertedCost: convertedCost.toFixed(2),
+            conversionFactor,
+            conversionApplied,
+            conversionWarning,
+          };
+        })
+      );
+
       return {
         ...recipe,
-        ingredients: recipeIngs,
+        ingredients: ingredientsWithCosts,
       };
     })
   );

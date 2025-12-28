@@ -402,3 +402,19 @@
 - [x] Test deleting conversion
 - [x] Verify conversions appear in list immediately after creation
 - [x] Write vitest tests for unit conversion system (6 tests, all passing)
+
+### Phase 3: Recipe Cost Calculation with Auto-Conversion
+- [x] Review current recipe cost calculation logic in db.ts
+- [x] Add helper function to convert units using conversion factors
+- [x] Enhance getRecipeWithIngredients to include conversion logic
+- [x] Calculate converted ingredient costs when units don't match
+- [x] Add conversion metadata to recipe ingredient responses (convertedCost, conversionFactor, conversionApplied, conversionWarning)
+- [x] Handle missing conversion scenarios with warnings
+- [x] Update recipe list endpoint to include conversion status
+- [x] Add frontend conversion indicator badges (blue for applied, amber for missing)
+- [x] Display conversion count on recipe cards
+- [x] Show warnings for missing conversions on recipe cards
+- [x] Test with salmon recipe (pieces → oz conversion)
+- [x] Test with standard unit conversions (lb → oz, cup → ml)
+- [x] Test missing conversion warning display (verified in browser)
+- [x] Write vitest tests for cost calculation with conversions (5 tests, all passing)

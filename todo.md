@@ -486,3 +486,14 @@
 - [ ] Debug why conversions exist in database but aren't being applied to some ingredients (Crab Stick, sauces)
 - [ ] Investigate conversion lookup timing/caching issues
 - [ ] Resolve remaining "Missing unit conversions" warnings on 50+ recipes
+
+## Conversion Lookup Debugging (Completed)
+- [x] Investigated why Crab Stick pieces→lb conversion didn't exist
+- [x] Investigated why sauce oz→gallon conversions existed but showed warnings
+- [x] Traced through getConversionFactor execution with test data
+- [x] Identified root cause: missing pieces→lb and weight→count conversions
+- [x] Added 19 pieces→lb conversions for seafood ingredients
+- [x] Added 6 weight→count conversions (oz→each, pieces→sheet)
+- [x] Verified all 59 recipes show correct costs (56-72% margins)
+- [x] Verified ALL "Missing unit conversions" warnings resolved (0 warnings)
+- [x] Documented final verification results

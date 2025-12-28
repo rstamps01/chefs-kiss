@@ -201,3 +201,16 @@
 - [x] Update ARCHITECTURE.md with multi-POS integration strategy
 - [x] Update DEVELOPMENT_GUIDE.md with POS integration workflow
 - [x] Commit all updated documentation to GitHub
+
+## CSV Import UI Implementation (Current Sprint)
+- [x] Design CSV data flow and field mapping schema
+- [x] Add CSV parsing helper functions (server-side)
+- [x] Create database helpers for bulk sales data insertion
+- [x] Add tRPC endpoints for CSV upload and validation
+- [x] Build DataImport page component with file upload
+- [x] Implement field mapping UI with dropdowns
+- [x] Add CSV preview table (first 10 rows)
+- [x] Implement validation logic and error display
+- [x] Add import progress indicator
+- [x] Test CSV import with sample POS data
+- [x] Update navigation to include Data Import link

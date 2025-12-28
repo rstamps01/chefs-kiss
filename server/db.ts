@@ -247,3 +247,130 @@ export async function addRecipeIngredients(data: {
     }))
   );
 }
+
+// ============================================================================
+// SALES DATA IMPORT QUERIES
+// ============================================================================
+
+/**
+ * Import sales data from CSV (bulk insert with conflict handling)
+ */
+export async function importSalesData(data: Array<{
+  locationId: number;
+  date: string;
+  totalSales: number;
+  totalOrders: number;
+  lunchSales: number | null;
+  dinnerSales: number | null;
+  notes: string | null;
+}>) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  if (data.length === 0) {
+    return { inserted: 0, updated: 0 };
+  }
+
+  // Import salesData table
+  const { salesData } = await import("../drizzle/schema");
+
+  // Calculate derived fields for each row
+  const values = data.map(row => {
+    const date = new Date(row.date);
+    const dayOfWeek = date.getDay(); // 0=Sunday, 6=Saturday
+    const averageOrderValue = row.totalOrders > 0 
+      ? (row.totalSales / row.totalOrders).toFixed(2)
+      : "0.00";
+
+    return {
+      locationId: row.locationId,
+      date: date, // Use Date object instead of string
+      totalSales: row.totalSales.toFixed(2),
+      totalOrders: row.totalOrders,
+      averageOrderValue,
+      lunchSales: row.lunchSales ? row.lunchSales.toFixed(2) : null,
+      dinnerSales: row.dinnerSales ? row.dinnerSales.toFixed(2) : null,
+      dayOfWeek,
+      isHoliday: false, // Default, can be updated later
+      notes: row.notes,
+    };
+  });
+
+  // Use onDuplicateKeyUpdate to handle conflicts (update if date+location exists)
+  const { sql } = await import("drizzle-orm");
+  await db.insert(salesData).values(values).onDuplicateKeyUpdate({
+    set: {
+      totalSales: sql`VALUES(totalSales)`,
+      totalOrders: sql`VALUES(totalOrders)`,
+      averageOrderValue: sql`VALUES(averageOrderValue)`,
+      lunchSales: sql`VALUES(lunchSales)`,
+      dinnerSales: sql`VALUES(dinnerSales)`,
+      notes: sql`VALUES(notes)`,
+    },
+  });
+
+  return { inserted: values.length, updated: 0 };
+}
+
+/**
+ * Get sales data for a location within date range
+ */
+export async function getSalesData(locationId: number, startDate?: string, endDate?: string) {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get sales data: database not available");
+    return [];
+  }
+
+  const { salesData } = await import("../drizzle/schema");
+  const { and, sql } = await import("drizzle-orm");
+
+  // Build conditions
+  const conditions = [eq(salesData.locationId, locationId)];
+  if (startDate) {
+    conditions.push(sql`${salesData.date} >= ${startDate}`);
+  }
+  if (endDate) {
+    conditions.push(sql`${salesData.date} <= ${endDate}`);
+  }
+
+  return await db
+    .select()
+    .from(salesData)
+    .where(and(...conditions));
+}
+
+/**
+ * Check if sales data exists for a date range
+ */
+export async function checkExistingSalesData(
+  locationId: number,
+  dates: string[]
+): Promise<string[]> {
+  const db = await getDb();
+  if (!db) {
+    return [];
+  }
+
+  const { salesData } = await import("../drizzle/schema");
+
+  // Get all sales data for location and filter in memory
+  const allSales = await db
+    .select({ date: salesData.date })
+    .from(salesData)
+    .where(eq(salesData.locationId, locationId));
+
+  // Convert to string dates and filter
+  const existingDates = allSales.map(row => {
+    const date = row.date;
+    if (date instanceof Date) {
+      return date.toISOString().split('T')[0];
+    }
+    return String(date);
+  });
+
+  // Return only dates that are in the input array
+  return existingDates.filter(date => dates.includes(date));
+}

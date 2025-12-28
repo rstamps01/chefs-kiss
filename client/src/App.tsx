@@ -14,6 +14,7 @@ import Reports from "./pages/Reports";
 import Settings from "./pages/Settings";
 import RecipeIngredientsView from "./pages/RecipeIngredientsView";
 import AddRecipeForm from "./pages/AddRecipeForm";
+import DataImport from "./pages/DataImport";
 
 function Router() {
   return (
@@ -39,6 +40,11 @@ function Router() {
       <Route path="/recipes">
         <DashboardLayout>
           <Recipes />
+        </DashboardLayout>
+      </Route>
+      <Route path="/data-import">
+        <DashboardLayout>
+          <DataImport />
         </DashboardLayout>
       </Route>
       <Route path="/reports">

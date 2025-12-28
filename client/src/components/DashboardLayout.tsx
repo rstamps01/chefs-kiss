@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/sidebar";
 import { getLoginUrl } from "@/const";
 import { useIsMobile } from "@/hooks/useMobile";
-import { BarChart3, TrendingUp, ChefHat, FileText, Settings as SettingsIcon, LogOut, PanelLeft, Home } from "lucide-react";
+import { BarChart3, TrendingUp, ChefHat, FileText, Settings as SettingsIcon, LogOut, PanelLeft, Home, Upload } from "lucide-react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
 import { DashboardLayoutSkeleton } from './DashboardLayoutSkeleton';
@@ -30,6 +30,7 @@ import { Button } from "./ui/button";
 const menuItems = [
   { icon: Home, label: "Overview", path: "/dashboard" },
   { icon: BarChart3, label: "Analytics", path: "/dashboard" },
+  { icon: Upload, label: "Data Import", path: "/data-import" },
   { icon: TrendingUp, label: "Forecasting", path: "/forecasting" },
   { icon: ChefHat, label: "Prep Planning", path: "/prep-planning" },
   { icon: ChefHat, label: "Recipes", path: "/recipes" },

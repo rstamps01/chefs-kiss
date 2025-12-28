@@ -246,3 +246,8 @@
 - [x] Double sidebar logo size (h-12 → h-24)
 - [x] Double header logo size (h-12 → h-24)
 - [x] Test layout and visual balance
+
+## Hero Logo Replacement (Current Sprint)
+- [x] Copy favicon_256.png to public directory
+- [x] Replace hero logo with icon-only version
+- [x] Test visual impact and sizing

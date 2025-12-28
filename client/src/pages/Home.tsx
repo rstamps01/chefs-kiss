@@ -38,7 +38,7 @@ export default function Home() {
               Intelligent Operations for <span className="text-primary">Data-Driven</span> Restaurants
             </h1>
             <div className="flex items-center justify-center mt-4">
-              <img src="/logo.png" alt="Chef's Kiss" className="h-32" style={{ maxWidth: '450px' }} />
+              <img src="/hero-icon.png" alt="Chef's Kiss" className="h-64 w-64" />
             </div>
             <p className="text-xl text-muted-foreground">
               Transform your POS data into actionable insights. Optimize prep planning, reduce waste, 

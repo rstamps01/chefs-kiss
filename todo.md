@@ -318,3 +318,12 @@
 - [x] Update prep planning calculation to round buffer quantities to whole numbers
 - [x] Update frontend display to show rounded values
 - [x] Test with Sushi Confidential recipes to verify rounding
+
+## Recipe Creation Modal (Current Sprint)
+- [x] Add backend create recipe endpoint with validation
+- [x] Add backend create recipe ingredients endpoint
+- [x] Create RecipeCreateModal component with form
+- [x] Add "New Recipe" button to Recipes page
+- [x] Implement ingredient selection with quantity inputs
+- [x] Add form validation for required fields
+- [x] Test recipe creation with new menu items

@@ -6,11 +6,13 @@ import { Plus, Search, Edit, Trash2, Loader2 } from "lucide-react";
 import { trpc } from "@/lib/trpc";
 import { useState, useMemo } from "react";
 import { RecipeEditModal } from "@/components/RecipeEditModal";
+import { RecipeCreateModal } from "@/components/RecipeCreateModal";
 import { useToast } from "@/hooks/use-toast";
 
 export default function Recipes() {
   const [searchQuery, setSearchQuery] = useState("");
   const [editingRecipe, setEditingRecipe] = useState<any>(null);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const { toast } = useToast();
   const utils = trpc.useUtils();
   
@@ -121,7 +123,7 @@ export default function Recipes() {
             Manage menu items and their ingredient requirements
           </p>
         </div>
-        <Button>
+        <Button onClick={() => setIsCreateModalOpen(true)}>
           <Plus className="mr-2 h-4 w-4" />
           Add Recipe
         </Button>
@@ -274,6 +276,13 @@ export default function Recipes() {
           onOpenChange={(open) => !open && setEditingRecipe(null)}
         />
       )}
+      
+      {/* Create Modal */}
+      <RecipeCreateModal
+        open={isCreateModalOpen}
+        onOpenChange={setIsCreateModalOpen}
+        onSuccess={() => utils.recipes.list.invalidate()}
+      />
     </div>
   );
 }

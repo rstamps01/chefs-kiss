@@ -251,3 +251,9 @@
 - [x] Copy favicon_256.png to public directory
 - [x] Replace hero logo with icon-only version
 - [x] Test visual impact and sizing
+
+## Hero Icon Enhancements (Current Sprint)
+- [x] Add fade-in and scale animation on page load
+- [x] Implement hover effect (rotation or scale)
+- [x] Add responsive sizing for mobile devices
+- [x] Test animations across different screen sizes

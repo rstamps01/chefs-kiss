@@ -3,6 +3,7 @@ import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
 import { getUserRestaurant, getRecipesWithIngredients, getIngredients, getRestaurantLocations, createRecipe, addRecipeIngredients, importSalesData, checkExistingSalesData, getSalesAnalytics, getDailySalesData, getSalesByDayOfWeek, getSalesDateRange } from "./db";
+import { generateForecast } from "./forecasting";
 import { z } from "zod";
 
 export const appRouter = router({
@@ -286,6 +287,30 @@ export const appRouter = router({
         }
         
         return await getSalesDateRange(input.locationId);
+      }),
+  }),
+
+  // Forecasting endpoints
+  forecasting: router({
+    generate: protectedProcedure
+      .input(z.object({
+        locationId: z.number(),
+        daysAhead: z.number().int().min(1).max(30).default(14),
+      }))
+      .query(async ({ ctx, input }) => {
+        // Verify user owns this location
+        const restaurant = await getUserRestaurant(ctx.user.id);
+        if (!restaurant) {
+          throw new Error("Restaurant not found");
+        }
+        
+        const locations = await getRestaurantLocations(restaurant.id);
+        const location = locations.find(loc => loc.id === input.locationId);
+        if (!location) {
+          throw new Error("Location not found or access denied");
+        }
+        
+        return await generateForecast(input.locationId, input.daysAhead);
       }),
   }),
 });

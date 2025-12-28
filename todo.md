@@ -461,3 +461,28 @@
 - [ ] "Missing unit conversions" warning appears on all recipes (cosmetic issue, costs are correct)
 - [ ] 7 duplicate recipes exist from earlier testing (can be deleted via UI)
 - [ ] Some recipes may need portion size adjustments based on actual restaurant data
+
+## Duplicate Recipe Cleanup (Completed)
+- [x] Identify all duplicate recipes in database
+- [x] Verified no duplicate recipe names exist
+- [x] Confirmed 59 unique recipes (52 base + 7 size/variant options)
+- [x] Documented recipe count verification
+
+## Unit Conversion Warning Fix (Current Task)
+- [ ] Investigate missing unit conversion detection logic in backend
+- [ ] Query all recipe ingredients to identify conversion requirements
+- [ ] Add missing unit conversions to database
+- [ ] Verify warnings are resolved in UI
+- [ ] Save checkpoint after fix
+
+## Unit Conversion System Fixes (Current Sprint)
+- [x] Investigated missing unit conversion warnings on all recipes
+- [x] Fixed unit comparison bug (was comparing string unit names vs integer IDs)
+- [x] Fixed ingredient unit data types (converted 63 ingredients from string to ID)
+- [x] Fixed sashimi-grade fish units (lb → pieces with adjusted per-piece costs)
+- [x] Added 832 standard unit conversions (oz↔lb, cup↔gallon, tsp↔tbsp, etc.)
+- [x] Verified recipe costs improved dramatically (54-92% reduction)
+- [x] Confirmed some recipes now show positive margins (Geisha Girl: 55%, Shishito-Kamikaze: 63%)
+- [ ] Debug why conversions exist in database but aren't being applied to some ingredients (Crab Stick, sauces)
+- [ ] Investigate conversion lookup timing/caching issues
+- [ ] Resolve remaining "Missing unit conversions" warnings on 50+ recipes

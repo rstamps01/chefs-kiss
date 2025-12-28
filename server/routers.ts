@@ -2,7 +2,7 @@ import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
-import { getUserRestaurant, getRecipesWithIngredients, getIngredients, getRestaurantLocations, createRecipe, addRecipeIngredients, importSalesData, checkExistingSalesData, getSalesAnalytics, getDailySalesData, getSalesByDayOfWeek, getSalesDateRange } from "./db";
+import { getUserRestaurant, getRecipesWithIngredients, getIngredients, getRestaurantLocations, createRecipe, addRecipeIngredients, updateRecipe, updateRecipeIngredients, deleteRecipe, importSalesData, checkExistingSalesData, getSalesAnalytics, getDailySalesData, getSalesByDayOfWeek, getSalesDateRange } from "./db";
 import { generateForecast } from "./forecasting";
 import { generatePrepPlan, generateMultiDayPrepPlan } from "./prep-planning";
 import { z } from "zod";
@@ -72,6 +72,48 @@ export const appRouter = router({
         }
         
         return { success: true, recipeId };
+      }),
+    update: protectedProcedure
+      .input(z.object({
+        recipeId: z.number().int().positive(),
+        name: z.string().min(1).optional(),
+        category: z.string().min(1).optional(),
+        servings: z.number().int().positive().optional(),
+        prepTime: z.number().int().optional(),
+        cookTime: z.number().int().optional(),
+        sellingPrice: z.number().positive().optional(),
+        description: z.string().optional(),
+        ingredients: z.array(z.object({
+          ingredientId: z.number().int().positive(),
+          quantity: z.number().positive(),
+          unit: z.string().min(1),
+        })).optional(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        const { recipeId, ingredients, ...recipeUpdates } = input;
+        
+        // Update recipe details
+        if (Object.keys(recipeUpdates).length > 0) {
+          await updateRecipe(recipeId, {
+            ...recipeUpdates,
+            sellingPrice: recipeUpdates.sellingPrice?.toString(),
+          });
+        }
+        
+        // Update ingredients if provided
+        if (ingredients) {
+          await updateRecipeIngredients(recipeId, ingredients);
+        }
+        
+        return { success: true };
+      }),
+    delete: protectedProcedure
+      .input(z.object({
+        recipeId: z.number().int().positive(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        await deleteRecipe(input.recipeId);
+        return { success: true };
       }),
   }),
   

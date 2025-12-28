@@ -297,3 +297,14 @@
 - [x] Show ingredient counts and costs from database
 - [x] Calculate food cost percentage from actual ingredient costs
 - [x] Test recipe display with seeded data
+
+## Recipe Editing Modal (Current Sprint)
+- [x] Add backend update recipe endpoint with validation
+- [x] Add backend update recipe ingredients endpoint
+- [x] Add backend delete recipe endpoint
+- [x] Create RecipeEditModal component with form
+- [x] Add form fields for recipe details (name, description, price, servings)
+- [x] Add ingredient list editor with add/remove/update quantity
+- [x] Implement form validation and error handling
+- [x] Integrate edit and delete buttons on recipe cards
+- [x] Test recipe editing modal UI with Sushi Confidential recipes

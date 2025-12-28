@@ -5,12 +5,41 @@ import { Badge } from "@/components/ui/badge";
 import { Plus, Search, Edit, Trash2, Loader2 } from "lucide-react";
 import { trpc } from "@/lib/trpc";
 import { useState, useMemo } from "react";
+import { RecipeEditModal } from "@/components/RecipeEditModal";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Recipes() {
   const [searchQuery, setSearchQuery] = useState("");
+  const [editingRecipe, setEditingRecipe] = useState<any>(null);
+  const { toast } = useToast();
+  const utils = trpc.useUtils();
   
   // Fetch recipes from database
   const { data: recipes, isLoading } = trpc.recipes.list.useQuery();
+  
+  // Delete mutation
+  const deleteMutation = trpc.recipes.delete.useMutation({
+    onSuccess: () => {
+      toast({
+        title: "Recipe deleted",
+        description: "The recipe has been removed successfully.",
+      });
+      utils.recipes.list.invalidate();
+    },
+    onError: (error) => {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to delete recipe",
+        variant: "destructive",
+      });
+    },
+  });
+  
+  const handleDelete = (recipeId: number, recipeName: string) => {
+    if (confirm(`Are you sure you want to delete "${recipeName}"? This action cannot be undone.`)) {
+      deleteMutation.mutate({ recipeId });
+    }
+  };
 
   // Filter recipes based on search
   const filteredRecipes = useMemo(() => {
@@ -168,11 +197,22 @@ export default function Recipes() {
                       <span className="font-medium">${parseFloat(recipe.sellingPrice || "0").toFixed(2)}</span>
                     </div>
                     <div className="flex gap-2 pt-2">
-                      <Button variant="outline" size="sm" className="flex-1">
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        className="flex-1"
+                        onClick={() => setEditingRecipe(recipe)}
+                      >
                         <Edit className="mr-2 h-3 w-3" />
                         Edit
                       </Button>
-                      <Button variant="outline" size="sm" className="flex-1">
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        className="flex-1"
+                        onClick={() => handleDelete(recipe.id, recipe.name)}
+                        disabled={deleteMutation.isPending}
+                      >
                         <Trash2 className="mr-2 h-3 w-3" />
                         Delete
                       </Button>
@@ -224,6 +264,15 @@ export default function Recipes() {
             </CardContent>
           </Card>
         </div>
+      )}
+      
+      {/* Edit Modal */}
+      {editingRecipe && (
+        <RecipeEditModal
+          recipe={editingRecipe}
+          open={!!editingRecipe}
+          onOpenChange={(open) => !open && setEditingRecipe(null)}
+        />
       )}
     </div>
   );

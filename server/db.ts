@@ -523,3 +523,89 @@ export async function getSalesDateRange(locationId: number) {
 
   return result[0] || null;
 }
+
+/**
+ * Update a recipe
+ */
+export async function updateRecipe(
+  recipeId: number,
+  updates: {
+    name?: string;
+    description?: string;
+    category?: string;
+    servings?: number;
+    prepTime?: number;
+    cookTime?: number;
+    sellingPrice?: string;
+  }
+) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  await db
+    .update(recipes)
+    .set(updates)
+    .where(eq(recipes.id, recipeId));
+
+  return { success: true };
+}
+
+/**
+ * Update recipe ingredients (delete all and re-insert)
+ */
+export async function updateRecipeIngredients(
+  recipeId: number,
+  ingredients: Array<{
+    ingredientId: number;
+    quantity: number;
+    unit: string;
+  }>
+) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  // Delete existing ingredients
+  await db
+    .delete(recipeIngredients)
+    .where(eq(recipeIngredients.recipeId, recipeId));
+
+  // Insert new ingredients
+  if (ingredients.length > 0) {
+    await db.insert(recipeIngredients).values(
+      ingredients.map(ing => ({
+        recipeId,
+        ingredientId: ing.ingredientId,
+        quantity: ing.quantity.toString(),
+        unit: ing.unit,
+      }))
+    );
+  }
+
+  return { success: true };
+}
+
+/**
+ * Delete a recipe and its ingredients
+ */
+export async function deleteRecipe(recipeId: number) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  // Delete recipe ingredients first (foreign key constraint)
+  await db
+    .delete(recipeIngredients)
+    .where(eq(recipeIngredients.recipeId, recipeId));
+
+  // Delete recipe
+  await db
+    .delete(recipes)
+    .where(eq(recipes.id, recipeId));
+
+  return { success: true };
+}

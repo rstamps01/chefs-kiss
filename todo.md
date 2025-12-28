@@ -288,3 +288,12 @@
 - [ ] Debug prep planning forecast generation hang issue
 - [ ] Test prep planning calculations with real recipe data
 - [ ] Verify ingredient quantity aggregation across multiple recipes
+
+## Recipe Page Real Data Integration (Current Sprint)
+- [x] Add database query helpers for recipes with ingredients
+- [x] Create tRPC endpoints for recipe listing and details
+- [x] Update Recipes page to fetch real data from database
+- [x] Display actual Sushi Confidential recipes (27 items total)
+- [x] Show ingredient counts and costs from database
+- [x] Calculate food cost percentage from actual ingredient costs
+- [x] Test recipe display with seeded data

@@ -119,6 +119,7 @@ export async function getRecipesWithIngredients(restaurantId: number) {
           quantity: recipeIngredients.quantity,
           unit: recipeIngredients.unit,
           category: ingredients.category,
+          costPerUnit: ingredients.costPerUnit,
         })
         .from(recipeIngredients)
         .leftJoin(ingredients, eq(recipeIngredients.ingredientId, ingredients.id))

@@ -497,3 +497,15 @@
 - [x] Verified all 59 recipes show correct costs (56-72% margins)
 - [x] Verified ALL "Missing unit conversions" warnings resolved (0 warnings)
 - [x] Documented final verification results
+
+## Universal Unit Conversion System (Completed)
+- [x] Analyzed current ingredient-specific conversion system (871 conversions, 832 duplicates)
+- [x] Designed universal unit-level conversion architecture (two-tier system)
+- [x] Created new unitConversions table (without ingredientId)
+- [x] Migrated existing conversion data to universal system (15 universal + 6 ingredient-specific)
+- [x] Updated getConversionFactor to use universal conversions (4-level priority lookup)
+- [x] Kept ingredient-specific conversion logic for special cases (produce weight→count)
+- [x] Tested all 59 recipes - all costs and margins match pre-migration values
+- [x] Cleaned up ingredientConversions table (deleted 865 duplicate rows)
+- [x] Documented new universal conversion system architecture
+- [x] Verified 97.6% reduction in database rows (871 → 21)

@@ -347,7 +347,26 @@ export const ingredientUnits = mysqlTable("ingredientUnits", {
 }));
 
 /**
- * Ingredient-specific unit conversions (e.g., 1 salmon piece = 6 oz)
+ * Universal unit conversions (apply to all ingredients)
+ * e.g., 1 oz = 0.0625 lb, 1 cup = 0.0625 gallon
+ */
+export const unitConversions = mysqlTable("unitConversions", {
+  id: int("id").autoincrement().primaryKey(),
+  restaurantId: int("restaurantId").notNull(),
+  fromUnit: varchar("fromUnit", { length: 50 }).notNull(), // 'oz'
+  toUnit: varchar("toUnit", { length: 50 }).notNull(), // 'lb'
+  conversionFactor: decimal("conversionFactor", { precision: 15, scale: 6 }).notNull(), // 0.0625 (1 oz = 0.0625 lb)
+  notes: text("notes"), // "Standard weight conversion"
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+}, (table) => ({
+  restaurantIdx: index("restaurant_idx").on(table.restaurantId),
+  uniqueConversion: unique("unique_conversion").on(table.restaurantId, table.fromUnit, table.toUnit),
+}));
+
+/**
+ * Ingredient-specific unit conversions (optional overrides)
+ * e.g., 1 green onion piece = 1 oz (varies by ingredient)
  */
 export const ingredientConversions = mysqlTable("ingredientConversions", {
   id: int("id").autoincrement().primaryKey(),

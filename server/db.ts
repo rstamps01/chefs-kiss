@@ -1,6 +1,6 @@
 import { eq, and } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users, recipes, ingredients, recipeIngredients, restaurants, locations, recipeCategories, ingredientUnits, unitCategories, ingredientConversions } from "../drizzle/schema";
+import { InsertUser, users, recipes, ingredients, recipeIngredients, restaurants, locations, recipeCategories, ingredientUnits, unitCategories, ingredientConversions, unitConversions } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -1142,6 +1142,7 @@ export async function deleteIngredientConversion(conversionId: number) {
 
 /**
  * Get conversion factor between two units for a specific ingredient
+ * Priority: ingredient-specific conversions → universal conversions
  * Returns null if no conversion exists
  */
 export async function getConversionFactor(
@@ -1154,8 +1155,8 @@ export async function getConversionFactor(
     throw new Error("Database not available");
   }
 
-  // Check for direct conversion
-  const direct = await db
+  // Priority 1: Check for ingredient-specific conversion (direct)
+  const ingredientDirect = await db
     .select()
     .from(ingredientConversions)
     .where(
@@ -1167,12 +1168,12 @@ export async function getConversionFactor(
     )
     .limit(1);
 
-  if (direct.length > 0) {
-    return parseFloat(direct[0].conversionFactor);
+  if (ingredientDirect.length > 0) {
+    return parseFloat(ingredientDirect[0].conversionFactor);
   }
 
-  // Check for reverse conversion (toUnit -> fromUnit)
-  const reverse = await db
+  // Priority 2: Check for ingredient-specific conversion (reverse)
+  const ingredientReverse = await db
     .select()
     .from(ingredientConversions)
     .where(
@@ -1184,9 +1185,40 @@ export async function getConversionFactor(
     )
     .limit(1);
 
-  if (reverse.length > 0) {
-    // Return reciprocal of reverse conversion
-    return 1 / parseFloat(reverse[0].conversionFactor);
+  if (ingredientReverse.length > 0) {
+    return 1 / parseFloat(ingredientReverse[0].conversionFactor);
+  }
+
+  // Priority 3: Check for universal conversion (direct)
+  const universalDirect = await db
+    .select()
+    .from(unitConversions)
+    .where(
+      and(
+        eq(unitConversions.fromUnit, fromUnit),
+        eq(unitConversions.toUnit, toUnit)
+      )
+    )
+    .limit(1);
+
+  if (universalDirect.length > 0) {
+    return parseFloat(universalDirect[0].conversionFactor);
+  }
+
+  // Priority 4: Check for universal conversion (reverse)
+  const universalReverse = await db
+    .select()
+    .from(unitConversions)
+    .where(
+      and(
+        eq(unitConversions.fromUnit, toUnit),
+        eq(unitConversions.toUnit, fromUnit)
+      )
+    )
+    .limit(1);
+
+  if (universalReverse.length > 0) {
+    return 1 / parseFloat(universalReverse[0].conversionFactor);
   }
 
   // No conversion found

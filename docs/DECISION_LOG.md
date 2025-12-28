@@ -459,29 +459,30 @@ Use MySQL (provided by Manus platform).
 
 ---
 
-### DEC-011: CSV Import for POS Data (Not Direct API)
+### DEC-011: CSV Import for POS Data (Not Direct API in MVP)
 
 **Date:** December 27, 2024  
 **Status:** Accepted  
-**Decider:** Product Team
+**Decider:** Product Team  
+**Updated:** December 28, 2024 (POS priority changed to Heartland)
 
 **Context:**
 Need to decide how users will import POS data. Options include direct API integration or CSV upload.
 
 **Decision:**
-Start with CSV upload, add direct API integration in Phase 2.
+Start with CSV upload in MVP, add direct API integration in Phase 2 starting with Heartland POS (Global Payments REST API).
 
 **Rationale:**
 1. **Universal compatibility** - All POS systems can export CSV
-2. **Faster MVP** - No need to integrate 5+ POS APIs
+2. **Faster MVP** - No need to integrate multiple POS APIs initially
 3. **User control** - Users can clean data before import
 4. **No API keys needed** - Simpler onboarding
 5. **Proven approach** - Many tools use CSV import
 
 **Alternatives Considered:**
-1. **Direct API integration** - Deferred to Phase 2 because:
-   - Requires integrating Toast, Square, Clover, Lightspeed, etc.
-   - Each API is different (weeks of work)
+1. **Direct API integration in MVP** - Deferred to Phase 2 because:
+   - Requires integrating multiple POS APIs (weeks of work)
+   - Each API is different (Heartland, Toast, Square, Clover, Lightspeed, etc.)
    - Requires users to provide API keys
    - Not all POS systems have APIs
 
@@ -490,15 +491,24 @@ Start with CSV upload, add direct API integration in Phase 2.
    - Poor user experience
    - Not scalable
 
+**Phase 2 POS Integration Strategy:**
+- **First Priority:** Heartland POS (Global Payments REST API)
+  - Target customer using Genius for Restaurants
+  - Well-documented REST API
+  - SDK support available
+- **Future Integrations:** Toast, Square, Clover, Lightspeed (prioritized by customer demand)
+- **Architecture:** Multi-POS adapter pattern to support multiple systems
+
 **Consequences:**
 - ✅ Faster MVP
 - ✅ Works with any POS system
 - ✅ Simpler onboarding
-- ❌ Manual step for users
-- ❌ Less "automated" than direct API
-- ❌ Data may be stale
+- ✅ Clear path to automation with Heartland integration
+- ❌ Manual step for users in MVP
+- ❌ Less "automated" than direct API (initially)
+- ❌ Data may be stale (until Phase 2)
 
-**Related:** None
+**Related:** DEC-015 (Heartland POS Priority)
 
 ---
 
@@ -624,6 +634,69 @@ Build responsive web app (PWA), not native mobile apps.
 - ❌ Can't use native device features (not needed)
 
 **Related:** DEC-007 (React + Tailwind)
+
+---
+
+### DEC-015: Heartland POS as First API Integration Priority
+
+**Date:** December 28, 2024  
+**Status:** Accepted  
+**Decider:** Product Team
+
+**Context:**
+Need to prioritize which POS system API to integrate first in Phase 2. Multiple options available including Toast (largest market share), Square (popular with small businesses), and Heartland (target customer requirement).
+
+**Decision:**
+Prioritize Heartland POS (Global Payments REST API) as the first direct POS integration, specifically targeting the Genius for Restaurants platform.
+
+**Rationale:**
+1. **Target Customer Requirement** - Homeland POC customer is switching to Genius for Restaurants
+2. **Well-Documented API** - Global Payments REST API has comprehensive documentation
+3. **SDK Support** - Multiple SDKs available (Node.js, Python, etc.)
+4. **Enterprise-Grade** - Heartland/Global Payments is a major payment processor
+5. **Clear Use Case** - Immediate customer validation opportunity
+
+**Alternatives Considered:**
+1. **Toast POS** - Deferred because:
+   - Largest market share but no immediate customer need
+   - Complex API with many endpoints
+   - Would take longer to validate
+
+2. **Square POS** - Deferred because:
+   - Popular with small businesses
+   - Good API but no immediate customer requirement
+   - Can add later based on demand
+
+3. **Clover POS** - Deferred because:
+   - Good API documentation
+   - No immediate customer need
+   - Can add later
+
+**Implementation Strategy:**
+- Use Global Payments REST API (not legacy Portico)
+- Implement adapter pattern for multi-POS support
+- Focus on transaction/sales data endpoints first
+- Support both Heartland and Genius platforms (same API)
+
+**API Resources:**
+- Heartland Products: https://www.heartland.us/products/point-of-sale
+- Genius Release Notes: https://support.heartlandhelpcenter.com/hc/en-us/articles/39534425338765
+- Developer Overview: https://developer.globalpayments.com/heartland/getting-started/overview
+- SDK Reference: https://developer.globalpayments.com/heartland/integration-options/sdk/overview
+- REST API Docs: https://developer.globalpayments.com/docs/payments/overview
+- GitHub: https://github.com/globalpayments
+- Legacy Portico: https://cert.api2.heartlandportico.com/Gateway/PorticoDevGuide/build/PorticoDeveloperGuide/
+
+**Consequences:**
+- ✅ Immediate customer validation
+- ✅ Well-documented API reduces risk
+- ✅ SDK support speeds development
+- ✅ Enterprise credibility
+- ✅ Clear success criteria (Homeland POC)
+- ❌ Smaller market share than Toast
+- ❌ May need to add other POS systems later
+
+**Related:** DEC-011 (CSV Import Strategy)
 
 ---
 

@@ -250,9 +250,9 @@
 ### POS Data Import 📋
 
 **Status:** Planned (Priority 1)  
-**Target:** January 10, 2025
+**Target:** January 10, 2025 (CSV), January 20, 2025 (Heartland API)
 
-**Scope:**
+**Scope - Phase 1 (CSV Import):**
 - CSV file upload
 - Automatic field mapping
 - Data validation
@@ -260,17 +260,34 @@
 - Batch import support
 - Error handling and reporting
 
+**Scope - Phase 2 (Heartland POS API):**
+- **Heartland/Genius POS integration** (Global Payments REST API)
+- Automatic transaction sync
+- Real-time sales data
+- Multi-POS adapter pattern for future integrations
+- Future: Toast, Square, Clover (prioritized by customer demand)
+
 **API Endpoints (Planned):**
 - `pos.uploadCsv` - Upload CSV file
 - `pos.mapFields` - Map CSV columns to database fields
 - `pos.importData` - Import mapped data
 - `pos.getImportHistory` - View import history
+- `pos.connectHeartland` - Connect Heartland POS (Phase 2)
+- `pos.syncHeartland` - Sync Heartland transactions (Phase 2)
 
 **Files (To Create):**
-- `server/pos-import.ts` - Import logic
+- `server/pos-import.ts` - CSV import logic
+- `server/pos-heartland.ts` - Heartland API integration (Phase 2)
+- `server/pos-adapter.ts` - Multi-POS adapter pattern (Phase 2)
 - `client/src/pages/POSImport.tsx` - Import UI
 
-**Dependencies:** None
+**Heartland API Resources:**
+- Developer Guide: https://developer.globalpayments.com/heartland/getting-started/overview
+- REST API Docs: https://developer.globalpayments.com/docs/payments/overview
+- SDK Reference: https://developer.globalpayments.com/heartland/integration-options/sdk/overview
+- GitHub: https://github.com/globalpayments
+
+**Dependencies:** None (CSV), Heartland API credentials (Phase 2)
 
 ---
 

@@ -182,6 +182,110 @@ git commit -m "feat: descriptive commit message"
 - Create Manus checkpoint (if on platform)
 - Merge to main branch
 
+### POS Integration Workflow
+
+**Priority Order:**
+1. **Heartland POS / Global Payments REST API** (First implementation)
+2. Toast POS
+3. Square
+4. Clover
+5. Generic CSV import (universal fallback)
+
+**Heartland Integration Steps:**
+
+**1. Setup & Authentication:**
+- Install SDK: `pnpm add @globalpayments/api`
+- Request sandbox credentials from Heartland (merchant account required)
+- Store credentials in environment variables:
+  - `HEARTLAND_API_KEY` or `HEARTLAND_PUBLIC_KEY` + `HEARTLAND_SECRET_KEY`
+  - `HEARTLAND_API_URL` (sandbox vs production)
+- Implement OAuth 2.0 flow if using OAuth (alternative to API key)
+
+**2. Database Preparation:**
+- Ensure `pos_integrations` table has Heartland-specific fields
+- Add `rawData` JSONB column to `sales_data` for storing original transaction data
+- Create migration if schema changes needed
+
+**3. Adapter Implementation:**
+- Create `server/adapters/heartland.ts` with:
+  - `HeartlandAdapter` class implementing `POSAdapter` interface
+  - `authenticate()` - Validate credentials
+  - `fetchTransactions(startDate, endDate)` - Retrieve sales data
+  - `normalizeTransaction(rawData)` - Convert to Chef's Kiss schema
+  - `syncSalesData(locationId)` - Full sync workflow
+
+**4. API Integration:**
+- Use Global Payments SDK to call:
+  - `/transactions` endpoint for sales data
+  - `/reports` endpoint for daily summaries
+  - `/batches` endpoint for settlement data
+- Handle pagination (transactions may span multiple pages)
+- Implement error handling and retry logic
+- Log all API calls for debugging
+
+**5. Data Normalization:**
+- Map Heartland transaction fields to Chef's Kiss schema:
+  - `transaction_date` → `sales_data.date` (convert to UTC)
+  - `amount` → `sales_data.totalSales`
+  - `line_items[]` → `item_sales` table
+  - `guest_count` → `sales_data.customerCount`
+- Store original JSON in `sales_data.rawData` for future re-processing
+- Handle timezone conversions (POS local time → UTC)
+
+**6. Incremental Sync:**
+- Track last sync timestamp in `pos_integrations.lastSyncAt`
+- Fetch only transactions after `lastSyncAt`
+- Update `lastSyncAt` after successful sync
+- Handle overlapping date ranges to avoid gaps
+
+**7. Testing:**
+- Unit tests for adapter methods
+- Integration tests with sandbox API
+- Test error scenarios (auth failure, network timeout, invalid data)
+- Test timezone edge cases (midnight transactions)
+
+**8. UI Integration:**
+- Add "Connect Heartland POS" button in settings
+- Credential input form (API key or OAuth flow)
+- Sync status display (last sync time, next sync scheduled)
+- Manual sync trigger button
+- Transaction log viewer
+
+**CSV Import Workflow (Universal Fallback):**
+
+**1. Upload Interface:**
+- File upload component (accept `.csv` only)
+- Preview first 10 rows after upload
+- Detect CSV delimiter and encoding
+
+**2. Field Mapping:**
+- Display CSV columns
+- Dropdown to map each column to Chef's Kiss field:
+  - Date (required)
+  - Total Sales (required)
+  - Item Name (optional)
+  - Item Quantity (optional)
+  - Customer Count (optional)
+- Save mapping template for future uploads
+
+**3. Validation:**
+- Check required fields are mapped
+- Validate data types (date format, numeric values)
+- Show validation errors with row numbers
+- Allow user to fix and re-upload
+
+**4. Import:**
+- Parse CSV with mapped fields
+- Normalize data to Chef's Kiss schema
+- Insert into `sales_data` and `item_sales` tables
+- Show progress bar for large files
+- Display summary (X rows imported, Y errors)
+
+**5. Error Handling:**
+- Skip invalid rows, log errors
+- Allow partial import (import valid rows, report invalid ones)
+- Provide downloadable error report CSV
+
 ---
 
 ## Coding Standards

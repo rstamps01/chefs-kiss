@@ -674,6 +674,50 @@ Generated PDF reports.
 - Flow: Authorization Code with PKCE
 - Session: HTTP-only cookies
 
+### Heartland POS / Global Payments REST API (Phase 2)
+
+**Priority:** First POS integration (target customer: Homeland POC)
+
+**Base URL:** `https://apis.globalpay.com/ucp` (Production)  
+**Sandbox URL:** `https://apis-cert.globalpay.com/ucp` (Testing)
+
+**Target Platform:** Genius for Restaurants (Heartland's next-gen POS)
+
+**Key Endpoints:**
+- Transactions: `/transactions` - Retrieve sales transactions
+- Reports: `/reports` - Access sales reports and summaries
+- Batches: `/batches` - Get batch settlement data
+- Devices: `/devices` - Manage POS devices
+
+**Authentication:**
+- Method: OAuth 2.0 or API Key
+- Header: `Authorization: Bearer {access_token}`
+- Credentials: Provided by restaurant (Heartland merchant account)
+
+**Data Mapping:**
+- Transaction → `sales_data` table (daily aggregates)
+- Line items → `item_sales` table (individual items)
+- Payment info → `pos_integrations` table (connection metadata)
+
+**SDK Support:**
+- Node.js SDK: `@globalpayments/api`
+- GitHub: https://github.com/globalpayments
+
+**Documentation:**
+- Developer Guide: https://developer.globalpayments.com/heartland/getting-started/overview
+- REST API Reference: https://developer.globalpayments.com/docs/payments/overview
+- SDK Documentation: https://developer.globalpayments.com/heartland/integration-options/sdk/overview
+
+**Rate Limits:** TBD (merchant-specific)
+
+**Implementation Notes:**
+- Use adapter pattern for multi-POS support
+- Store raw transaction data for re-processing
+- Implement incremental sync (fetch only new transactions)
+- Handle timezone conversions (POS time → UTC)
+
+---
+
 ### OpenWeather API (Planned)
 
 **Base URL:** `https://api.openweathermap.org/data/2.5`

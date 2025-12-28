@@ -695,19 +695,46 @@ function ProtectedRoute({ component: Component }) {
 - Forecast data: Cache for 1 hour
 - Store in `weather_data` table
 
-### 3. POS Systems (Planned)
+### 3. POS Systems (Phase 2)
 
-**Supported Systems:**
-- Toast POS (API)
-- Square (API)
-- Clover (API)
-- Generic CSV import (any POS)
+**Integration Priority:**
+1. **Heartland POS / Global Payments REST API** (First priority - Homeland POC)
+2. Toast POS (API)
+3. Square (API)
+4. Clover (API)
+5. Generic CSV import (fallback for any POS)
 
-**Data Mapping:**
-- Sales date → `sales_data.date`
-- Total sales → `sales_data.totalSales`
-- Item sales → `item_sales` table
-- Customer count → `sales_data.customerCount`
+**Heartland/Global Payments Integration:**
+- **Target Platform:** Genius for Restaurants (Heartland's next-gen POS)
+- **API Type:** REST API with OAuth 2.0 or API Key authentication
+- **Base URL:** `https://apis.globalpay.com/ucp` (Production)
+- **Sandbox URL:** `https://apis-cert.globalpay.com/ucp` (Testing)
+- **SDK:** `@globalpayments/api` (Node.js)
+- **Key Endpoints:**
+  - `/transactions` - Retrieve sales transactions
+  - `/reports` - Access sales reports and summaries
+  - `/batches` - Get batch settlement data
+  - `/devices` - Manage POS devices
+
+**Architecture Pattern:**
+- **Adapter Pattern:** Each POS system has its own adapter implementing a common interface
+- **Normalization Layer:** Convert POS-specific data to Chef's Kiss standard schema
+- **Incremental Sync:** Fetch only new transactions since last sync
+- **Raw Data Storage:** Store original POS data for re-processing if schema changes
+
+**Data Mapping (All POS Systems):**
+- Transaction date/time → `sales_data.date` (converted to UTC)
+- Total sales amount → `sales_data.totalSales`
+- Line items → `item_sales` table (individual menu items)
+- Customer/guest count → `sales_data.customerCount`
+- Payment method → `pos_integrations` metadata
+- Server/employee info → Future enhancement
+
+**CSV Import Fallback:**
+- User uploads CSV export from any POS
+- Field mapping UI (user maps CSV columns to Chef's Kiss fields)
+- Validation and preview before import
+- Same normalization as API integrations
 
 ---
 

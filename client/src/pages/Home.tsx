@@ -14,7 +14,7 @@ export default function Home() {
       <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
         <div className="container flex h-16 items-center justify-between">
           <div className="flex items-center gap-3">
-            <img src="/logo.png" alt="Chef's Kiss" className="h-12" style={{ maxWidth: '200px' }} />
+            <img src="/logo.png" alt="Chef's Kiss" className="h-24" style={{ maxWidth: '400px' }} />
           </div>
           <div className="flex items-center gap-4">
             {isAuthenticated ? (

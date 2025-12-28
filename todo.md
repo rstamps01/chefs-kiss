@@ -241,3 +241,8 @@
 - [x] Increase logo size in Home page header
 - [x] Increase logo size in Home page hero section
 - [x] Test visual hierarchy and prominence
+
+## Logo Size Doubling (Current Sprint)
+- [x] Double sidebar logo size (h-12 → h-24)
+- [x] Double header logo size (h-12 → h-24)
+- [x] Test layout and visual balance

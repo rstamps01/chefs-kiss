@@ -15,6 +15,13 @@
       "when": 1766827321861,
       "tag": "0001_spooky_purifiers",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1766915268305,
+      "tag": "0002_brief_gwen_stacy",
+      "breakpoints": true
     }
   ]
 }

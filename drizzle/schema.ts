@@ -295,6 +295,39 @@ export const reports = mysqlTable("reports", {
   createdAtIdx: index("created_at_idx").on(table.createdAt),
 }));
 
+/**
+ * Recipe categories (configurable in settings)
+ */
+export const recipeCategories = mysqlTable("recipeCategories", {
+  id: int("id").autoincrement().primaryKey(),
+  restaurantId: int("restaurantId").notNull(),
+  name: varchar("name", { length: 100 }).notNull(),
+  isActive: boolean("isActive").default(true).notNull(),
+  displayOrder: int("displayOrder").default(0),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+}, (table) => ({
+  restaurantIdx: index("restaurant_idx").on(table.restaurantId),
+  uniqueNamePerRestaurant: unique("unique_name_per_restaurant").on(table.restaurantId, table.name),
+}));
+
+/**
+ * Ingredient units (configurable in settings)
+ */
+export const ingredientUnits = mysqlTable("ingredientUnits", {
+  id: int("id").autoincrement().primaryKey(),
+  restaurantId: int("restaurantId").notNull(),
+  name: varchar("name", { length: 50 }).notNull(), // 'lb', 'oz', 'pieces', etc.
+  displayName: varchar("displayName", { length: 100 }).notNull(), // 'Pounds (lb)', 'Ounces (oz)', etc.
+  isActive: boolean("isActive").default(true).notNull(),
+  displayOrder: int("displayOrder").default(0),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+}, (table) => ({
+  restaurantIdx: index("restaurant_idx").on(table.restaurantId),
+  uniqueNamePerRestaurant: unique("unique_name_per_restaurant").on(table.restaurantId, table.name),
+}));
+
 // ============================================================================
 // TYPE EXPORTS
 // ============================================================================
@@ -328,3 +361,9 @@ export type InsertPrepPlan = typeof prepPlans.$inferInsert;
 
 export type Report = typeof reports.$inferSelect;
 export type InsertReport = typeof reports.$inferInsert;
+
+export type RecipeCategory = typeof recipeCategories.$inferSelect;
+export type InsertRecipeCategory = typeof recipeCategories.$inferInsert;
+
+export type IngredientUnit = typeof ingredientUnits.$inferSelect;
+export type InsertIngredientUnit = typeof ingredientUnits.$inferInsert;

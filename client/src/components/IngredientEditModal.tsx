@@ -32,6 +32,9 @@ export function IngredientEditModal({ open, onOpenChange, ingredient }: Ingredie
   const [costPerUnit, setCostPerUnit] = useState("");
   const [supplier, setSupplier] = useState("");
 
+  // Fetch active units
+  const { data: activeUnits = [] } = trpc.ingredientUnits.listActive.useQuery();
+
   useEffect(() => {
     if (ingredient) {
       setName(ingredient.name);
@@ -134,18 +137,11 @@ export function IngredientEditModal({ open, onOpenChange, ingredient }: Ingredie
                 <SelectValue placeholder="Select unit type" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="pieces">Pieces</SelectItem>
-                <SelectItem value="oz">Ounces (oz)</SelectItem>
-                <SelectItem value="lb">Pounds (lb)</SelectItem>
-                <SelectItem value="kg">Kilograms (kg)</SelectItem>
-                <SelectItem value="g">Grams (g)</SelectItem>
-                <SelectItem value="roll">Roll</SelectItem>
-                <SelectItem value="cup">Cup</SelectItem>
-                <SelectItem value="tbsp">Tablespoon</SelectItem>
-                <SelectItem value="tsp">Teaspoon</SelectItem>
-                <SelectItem value="ml">Milliliters (ml)</SelectItem>
-                <SelectItem value="l">Liters (l)</SelectItem>
-                <SelectItem value="each">Each</SelectItem>
+                {activeUnits.map((u) => (
+                  <SelectItem key={u.id} value={u.name}>
+                    {u.displayName}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>

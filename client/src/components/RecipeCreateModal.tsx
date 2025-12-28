@@ -35,8 +35,9 @@ export function RecipeCreateModal({ open, onOpenChange, onSuccess }: RecipeCreat
     { ingredientId: 0, quantity: "", unit: "" },
   ]);
 
-  // Fetch available ingredients
+  // Fetch available ingredients and categories
   const { data: availableIngredients = [] } = trpc.ingredients.list.useQuery();
+  const { data: activeCategories = [] } = trpc.recipeCategories.listActive.useQuery();
 
   // Create mutation
   const createMutation = trpc.recipes.create.useMutation({
@@ -188,13 +189,18 @@ export function RecipeCreateModal({ open, onOpenChange, onSuccess }: RecipeCreat
           {/* Category */}
           <div>
             <Label htmlFor="category">Category *</Label>
-            <Input
-              id="category"
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              placeholder="e.g., Sushi Rolls, Nigiri, Specialty"
-              required
-            />
+            <Select value={category} onValueChange={setCategory} required>
+              <SelectTrigger>
+                <SelectValue placeholder="Select a category" />
+              </SelectTrigger>
+              <SelectContent>
+                {activeCategories.map((cat) => (
+                  <SelectItem key={cat.id} value={cat.name}>
+                    {cat.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
 
           {/* Servings and Price */}

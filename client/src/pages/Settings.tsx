@@ -4,7 +4,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
-import { Building2, User, Bell, Key } from "lucide-react";
+import { Building2, User, Bell, Key, Tags } from "lucide-react";
+import { CategoriesUnitsManager } from "@/components/CategoriesUnitsManager";
 
 export default function Settings() {
   return (
@@ -33,6 +34,10 @@ export default function Settings() {
           <TabsTrigger value="integrations">
             <Key className="mr-2 h-4 w-4" />
             Integrations
+          </TabsTrigger>
+          <TabsTrigger value="categories-units">
+            <Tags className="mr-2 h-4 w-4" />
+            Categories & Units
           </TabsTrigger>
         </TabsList>
 
@@ -235,6 +240,20 @@ export default function Settings() {
                 Download all your restaurant data including sales, forecasts, recipes, and reports.
               </p>
               <Button variant="outline">Export All Data</Button>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="categories-units" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Recipe Categories & Ingredient Units</CardTitle>
+              <CardDescription>
+                Manage the categories and units available when creating recipes and ingredients
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <CategoriesUnitsManager />
             </CardContent>
           </Card>
         </TabsContent>

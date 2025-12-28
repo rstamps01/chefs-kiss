@@ -19,8 +19,9 @@ export function RecipeEditModal({ recipe, open, onOpenChange }: RecipeEditModalP
   const { toast } = useToast();
   const utils = trpc.useUtils();
   
-  // Fetch available ingredients
+  // Fetch available ingredients and categories
   const { data: availableIngredients } = trpc.ingredients.list.useQuery();
+  const { data: activeCategories = [] } = trpc.recipeCategories.listActive.useQuery();
   
   // Form state
   const [name, setName] = useState(recipe.name);
@@ -161,11 +162,18 @@ export function RecipeEditModal({ recipe, open, onOpenChange }: RecipeEditModalP
             <div className="grid grid-cols-2 gap-4">
               <div className="grid gap-2">
                 <Label htmlFor="category">Category</Label>
-                <Input
-                  id="category"
-                  value={category}
-                  onChange={(e) => setCategory(e.target.value)}
-                />
+                <Select value={category} onValueChange={setCategory}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a category" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {activeCategories.map((cat) => (
+                      <SelectItem key={cat.id} value={cat.name}>
+                        {cat.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
 
               <div className="grid gap-2">

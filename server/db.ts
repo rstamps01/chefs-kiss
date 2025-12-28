@@ -1,6 +1,6 @@
-import { eq } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users, recipes, ingredients, recipeIngredients, restaurants, locations } from "../drizzle/schema";
+import { InsertUser, users, recipes, ingredients, recipeIngredients, restaurants, locations, recipeCategories, ingredientUnits } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -705,6 +705,279 @@ export async function deleteIngredient(ingredientId: number) {
   await db
     .delete(ingredients)
     .where(eq(ingredients.id, ingredientId));
+
+  return { success: true };
+}
+
+// ============================================================================
+// RECIPE CATEGORIES
+// ============================================================================
+
+/**
+ * Get all recipe categories for a restaurant
+ */
+export async function getRecipeCategories(restaurantId: number) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  const categories = await db
+    .select()
+    .from(recipeCategories)
+    .where(eq(recipeCategories.restaurantId, restaurantId))
+    .orderBy(recipeCategories.displayOrder, recipeCategories.name);
+
+  return categories;
+}
+
+/**
+ * Get only active recipe categories
+ */
+export async function getActiveRecipeCategories(restaurantId: number) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  const categories = await db
+    .select()
+    .from(recipeCategories)
+    .where(
+      and(
+        eq(recipeCategories.restaurantId, restaurantId),
+        eq(recipeCategories.isActive, true)
+      )
+    )
+    .orderBy(recipeCategories.displayOrder, recipeCategories.name);
+
+  return categories;
+}
+
+/**
+ * Create a new recipe category
+ */
+export async function createRecipeCategory(data: {
+  restaurantId: number;
+  name: string;
+  isActive?: boolean;
+  displayOrder?: number;
+}) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  const [result] = await db.insert(recipeCategories).values({
+    restaurantId: data.restaurantId,
+    name: data.name,
+    isActive: data.isActive ?? true,
+    displayOrder: data.displayOrder ?? 0,
+  }).$returningId();
+
+  return { id: result.id, success: true };
+}
+
+/**
+ * Update a recipe category
+ */
+export async function updateRecipeCategory(
+  categoryId: number,
+  data: {
+    name?: string;
+    isActive?: boolean;
+    displayOrder?: number;
+  }
+) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  const updateData: Record<string, any> = {};
+  
+  if (data.name !== undefined) updateData.name = data.name;
+  if (data.isActive !== undefined) updateData.isActive = data.isActive;
+  if (data.displayOrder !== undefined) updateData.displayOrder = data.displayOrder;
+
+  await db
+    .update(recipeCategories)
+    .set(updateData)
+    .where(eq(recipeCategories.id, categoryId));
+
+  return { success: true };
+}
+
+/**
+ * Delete a recipe category
+ */
+export async function deleteRecipeCategory(categoryId: number) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  // Check if category is used in any recipes
+  const usageCheck = await db
+    .select()
+    .from(recipes)
+    .where(eq(recipes.category, 
+      db.select({ name: recipeCategories.name })
+        .from(recipeCategories)
+        .where(eq(recipeCategories.id, categoryId))
+        .limit(1)
+        .as('categoryName')
+    ))
+    .limit(1);
+
+  if (usageCheck.length > 0) {
+    throw new Error("Cannot delete category: it is used in one or more recipes");
+  }
+
+  await db
+    .delete(recipeCategories)
+    .where(eq(recipeCategories.id, categoryId));
+
+  return { success: true };
+}
+
+// ============================================================================
+// INGREDIENT UNITS
+// ============================================================================
+
+/**
+ * Get all ingredient units for a restaurant
+ */
+export async function getIngredientUnits(restaurantId: number) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  const units = await db
+    .select()
+    .from(ingredientUnits)
+    .where(eq(ingredientUnits.restaurantId, restaurantId))
+    .orderBy(ingredientUnits.displayOrder, ingredientUnits.name);
+
+  return units;
+}
+
+/**
+ * Get only active ingredient units
+ */
+export async function getActiveIngredientUnits(restaurantId: number) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  const units = await db
+    .select()
+    .from(ingredientUnits)
+    .where(
+      and(
+        eq(ingredientUnits.restaurantId, restaurantId),
+        eq(ingredientUnits.isActive, true)
+      )
+    )
+    .orderBy(ingredientUnits.displayOrder, ingredientUnits.name);
+
+  return units;
+}
+
+/**
+ * Create a new ingredient unit
+ */
+export async function createIngredientUnit(data: {
+  restaurantId: number;
+  name: string;
+  displayName: string;
+  isActive?: boolean;
+  displayOrder?: number;
+}) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  const [result] = await db.insert(ingredientUnits).values({
+    restaurantId: data.restaurantId,
+    name: data.name,
+    displayName: data.displayName,
+    isActive: data.isActive ?? true,
+    displayOrder: data.displayOrder ?? 0,
+  }).$returningId();
+
+  return { id: result.id, success: true };
+}
+
+/**
+ * Update an ingredient unit
+ */
+export async function updateIngredientUnit(
+  unitId: number,
+  data: {
+    name?: string;
+    displayName?: string;
+    isActive?: boolean;
+    displayOrder?: number;
+  }
+) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  const updateData: Record<string, any> = {};
+  
+  if (data.name !== undefined) updateData.name = data.name;
+  if (data.displayName !== undefined) updateData.displayName = data.displayName;
+  if (data.isActive !== undefined) updateData.isActive = data.isActive;
+  if (data.displayOrder !== undefined) updateData.displayOrder = data.displayOrder;
+
+  await db
+    .update(ingredientUnits)
+    .set(updateData)
+    .where(eq(ingredientUnits.id, unitId));
+
+  return { success: true };
+}
+
+/**
+ * Delete an ingredient unit
+ */
+export async function deleteIngredientUnit(unitId: number) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  // Get the unit name first
+  const unit = await db
+    .select()
+    .from(ingredientUnits)
+    .where(eq(ingredientUnits.id, unitId))
+    .limit(1);
+
+  if (unit.length === 0) {
+    throw new Error("Unit not found");
+  }
+
+  // Check if unit is used in any ingredients
+  const usageCheck = await db
+    .select()
+    .from(ingredients)
+    .where(eq(ingredients.unit, unit[0].name))
+    .limit(1);
+
+  if (usageCheck.length > 0) {
+    throw new Error("Cannot delete unit: it is used in one or more ingredients");
+  }
+
+  await db
+    .delete(ingredientUnits)
+    .where(eq(ingredientUnits.id, unitId));
 
   return { success: true };
 }

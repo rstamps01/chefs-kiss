@@ -2,7 +2,7 @@ import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
-import { getUserRestaurant, getRecipesWithIngredients, getIngredients, getRestaurantLocations, createRecipe, addRecipeIngredients, updateRecipe, updateRecipeIngredients, deleteRecipe, createIngredient, updateIngredient, deleteIngredient, importSalesData, checkExistingSalesData, getSalesAnalytics, getDailySalesData, getSalesByDayOfWeek, getSalesDateRange } from "./db";
+import { getUserRestaurant, getRecipesWithIngredients, getIngredients, getRestaurantLocations, createRecipe, addRecipeIngredients, updateRecipe, updateRecipeIngredients, deleteRecipe, createIngredient, updateIngredient, deleteIngredient, importSalesData, checkExistingSalesData, getSalesAnalytics, getDailySalesData, getSalesByDayOfWeek, getSalesDateRange, getRecipeCategories, getActiveRecipeCategories, createRecipeCategory, updateRecipeCategory, deleteRecipeCategory, getIngredientUnits, getActiveIngredientUnits, createIngredientUnit, updateIngredientUnit, deleteIngredientUnit } from "./db";
 import { generateForecast } from "./forecasting";
 import { generatePrepPlan, generateMultiDayPrepPlan } from "./prep-planning";
 import { z } from "zod";
@@ -401,6 +401,114 @@ export const appRouter = router({
         }
         
         return await generateForecast(input.locationId, input.daysAhead);
+      }),
+  }),
+
+  // Recipe Categories endpoints
+  recipeCategories: router({
+    list: protectedProcedure.query(async ({ ctx }) => {
+      const restaurant = await getUserRestaurant(ctx.user.id);
+      if (!restaurant) {
+        return [];
+      }
+      return await getRecipeCategories(restaurant.id);
+    }),
+    listActive: protectedProcedure.query(async ({ ctx }) => {
+      const restaurant = await getUserRestaurant(ctx.user.id);
+      if (!restaurant) {
+        return [];
+      }
+      return await getActiveRecipeCategories(restaurant.id);
+    }),
+    create: protectedProcedure
+      .input(z.object({
+        name: z.string().min(1),
+        isActive: z.boolean().optional(),
+        displayOrder: z.number().int().optional(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        const restaurant = await getUserRestaurant(ctx.user.id);
+        if (!restaurant) {
+          throw new Error("Restaurant not found");
+        }
+        
+        return await createRecipeCategory({
+          restaurantId: restaurant.id,
+          ...input,
+        });
+      }),
+    update: protectedProcedure
+      .input(z.object({
+        categoryId: z.number(),
+        name: z.string().min(1).optional(),
+        isActive: z.boolean().optional(),
+        displayOrder: z.number().int().optional(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        const { categoryId, ...data } = input;
+        return await updateRecipeCategory(categoryId, data);
+      }),
+    delete: protectedProcedure
+      .input(z.object({
+        categoryId: z.number(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        return await deleteRecipeCategory(input.categoryId);
+      }),
+  }),
+
+  // Ingredient Units endpoints
+  ingredientUnits: router({
+    list: protectedProcedure.query(async ({ ctx }) => {
+      const restaurant = await getUserRestaurant(ctx.user.id);
+      if (!restaurant) {
+        return [];
+      }
+      return await getIngredientUnits(restaurant.id);
+    }),
+    listActive: protectedProcedure.query(async ({ ctx }) => {
+      const restaurant = await getUserRestaurant(ctx.user.id);
+      if (!restaurant) {
+        return [];
+      }
+      return await getActiveIngredientUnits(restaurant.id);
+    }),
+    create: protectedProcedure
+      .input(z.object({
+        name: z.string().min(1),
+        displayName: z.string().min(1),
+        isActive: z.boolean().optional(),
+        displayOrder: z.number().int().optional(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        const restaurant = await getUserRestaurant(ctx.user.id);
+        if (!restaurant) {
+          throw new Error("Restaurant not found");
+        }
+        
+        return await createIngredientUnit({
+          restaurantId: restaurant.id,
+          ...input,
+        });
+      }),
+    update: protectedProcedure
+      .input(z.object({
+        unitId: z.number(),
+        name: z.string().min(1).optional(),
+        displayName: z.string().min(1).optional(),
+        isActive: z.boolean().optional(),
+        displayOrder: z.number().int().optional(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        const { unitId, ...data } = input;
+        return await updateIngredientUnit(unitId, data);
+      }),
+    delete: protectedProcedure
+      .input(z.object({
+        unitId: z.number(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        return await deleteIngredientUnit(input.unitId);
       }),
   }),
 

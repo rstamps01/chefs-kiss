@@ -328,20 +328,22 @@
 - [x] Add form validation for required fields
 - [x] Test recipe creation with new menu items
 
-## Ingredient Management System (Current Sprint)
-- [x] Review current ingredients table schema
-- [x] Add backend CRUD endpoints for ingredients (create, update, delete, list)
-- [x] Create IngredientCreateModal component with form
-- [x] Create IngredientEditModal component with form
-- [x] Add "New Ingredient" button to trigger creation modal
-- [x] Add Ingredients tab to Recipe Management page
-- [x] Build ingredient listing view with grid/table layout
-- [x] Add unit type dropdown (pieces, oz, roll, etc.)
-- [x] Implement edit button on each ingredient card
-- [x] Implement delete button with confirmation dialog
-- [x] Add form validation for required fields (name, unit type, cost)
-- [x] Test ingredient creation workflow
-- [x] Test ingredient editing workflow
-- [x] Test ingredient deletion workflow
-- [x] Verify new ingredients appear in recipe creation/editing dropdowns
-- [x] Test complete end-to-end workflow: create ingredient → use in recipe
+## Dynamic Category & Unit Management System (Current Sprint)
+- [x] Design database schema (recipeCategories and ingredientUnits tables)
+- [x] Add backend CRUD endpoints for recipe categories (create, update, delete, list, listActive)
+- [x] Add backend CRUD endpoints for ingredient units (create, update, delete, list, listActive)
+- [x] Create seed script to populate initial 8 categories and 12 units
+- [x] Add Categories & Units tab to Settings page
+- [x] Create CategoriesUnitsManager component with sub-tabs
+- [x] Implement recipe categories management UI (add/edit/delete/toggle)
+- [x] Implement ingredient units management UI (add/edit/delete/toggle)
+- [x] Add active/inactive toggle switches for visibility control
+- [x] Update RecipeCreateModal to use dynamic category dropdown
+- [x] Update RecipeEditModal to use dynamic category dropdown
+- [x] Update IngredientCreateModal to use dynamic unit dropdown
+- [x] Update IngredientEditModal to use dynamic unit dropdown
+- [x] Test Settings UI for categories and units management
+- [x] Test recipe creation with dynamic categories
+- [x] Test ingredient creation with dynamic units
+- [x] Verify only active items appear in dropdowns
+- [x] Test complete end-to-end workflow: Settings → Forms integration

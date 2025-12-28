@@ -2,7 +2,7 @@ import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
-import { getUserRestaurant, getRecipesWithIngredients, getIngredients, getRestaurantLocations, createRecipe, addRecipeIngredients, importSalesData, checkExistingSalesData } from "./db";
+import { getUserRestaurant, getRecipesWithIngredients, getIngredients, getRestaurantLocations, createRecipe, addRecipeIngredients, importSalesData, checkExistingSalesData, getSalesAnalytics, getDailySalesData, getSalesByDayOfWeek, getSalesDateRange } from "./db";
 import { z } from "zod";
 
 export const appRouter = router({
@@ -197,6 +197,95 @@ export const appRouter = router({
           imported: result.inserted,
           warnings: validation.warnings,
         };
+      }),
+  }),
+
+  // Analytics endpoints
+  analytics: router({
+    summary: protectedProcedure
+      .input(z.object({
+        locationId: z.number(),
+        startDate: z.string().optional(),
+        endDate: z.string().optional(),
+      }))
+      .query(async ({ ctx, input }) => {
+        // Verify user owns this location
+        const restaurant = await getUserRestaurant(ctx.user.id);
+        if (!restaurant) {
+          throw new Error("Restaurant not found");
+        }
+        
+        const locations = await getRestaurantLocations(restaurant.id);
+        const location = locations.find(loc => loc.id === input.locationId);
+        if (!location) {
+          throw new Error("Location not found or access denied");
+        }
+        
+        return await getSalesAnalytics(input.locationId, input.startDate, input.endDate);
+      }),
+    
+    dailySales: protectedProcedure
+      .input(z.object({
+        locationId: z.number(),
+        startDate: z.string().optional(),
+        endDate: z.string().optional(),
+      }))
+      .query(async ({ ctx, input }) => {
+        // Verify user owns this location
+        const restaurant = await getUserRestaurant(ctx.user.id);
+        if (!restaurant) {
+          throw new Error("Restaurant not found");
+        }
+        
+        const locations = await getRestaurantLocations(restaurant.id);
+        const location = locations.find(loc => loc.id === input.locationId);
+        if (!location) {
+          throw new Error("Location not found or access denied");
+        }
+        
+        return await getDailySalesData(input.locationId, input.startDate, input.endDate);
+      }),
+    
+    salesByDayOfWeek: protectedProcedure
+      .input(z.object({
+        locationId: z.number(),
+        startDate: z.string().optional(),
+        endDate: z.string().optional(),
+      }))
+      .query(async ({ ctx, input }) => {
+        // Verify user owns this location
+        const restaurant = await getUserRestaurant(ctx.user.id);
+        if (!restaurant) {
+          throw new Error("Restaurant not found");
+        }
+        
+        const locations = await getRestaurantLocations(restaurant.id);
+        const location = locations.find(loc => loc.id === input.locationId);
+        if (!location) {
+          throw new Error("Location not found or access denied");
+        }
+        
+        return await getSalesByDayOfWeek(input.locationId, input.startDate, input.endDate);
+      }),
+    
+    dateRange: protectedProcedure
+      .input(z.object({
+        locationId: z.number(),
+      }))
+      .query(async ({ ctx, input }) => {
+        // Verify user owns this location
+        const restaurant = await getUserRestaurant(ctx.user.id);
+        if (!restaurant) {
+          throw new Error("Restaurant not found");
+        }
+        
+        const locations = await getRestaurantLocations(restaurant.id);
+        const location = locations.find(loc => loc.id === input.locationId);
+        if (!location) {
+          throw new Error("Location not found or access denied");
+        }
+        
+        return await getSalesDateRange(input.locationId);
       }),
   }),
 });

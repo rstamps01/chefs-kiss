@@ -374,3 +374,151 @@ export async function checkExistingSalesData(
   // Return only dates that are in the input array
   return existingDates.filter(date => dates.includes(date));
 }
+
+// ============================================================================
+// ANALYTICS QUERIES
+// ============================================================================
+
+/**
+ * Get sales analytics summary for a location
+ */
+export async function getSalesAnalytics(
+  locationId: number,
+  startDate?: string,
+  endDate?: string
+) {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get sales analytics: database not available");
+    return null;
+  }
+
+  const { salesData } = await import("../drizzle/schema");
+  const { and, sql, sum, avg, count, min, max } = await import("drizzle-orm");
+
+  // Build date filter conditions
+  const conditions = [eq(salesData.locationId, locationId)];
+  if (startDate) {
+    conditions.push(sql`${salesData.date} >= ${startDate}`);
+  }
+  if (endDate) {
+    conditions.push(sql`${salesData.date} <= ${endDate}`);
+  }
+
+  // Get aggregate statistics
+  const stats = await db
+    .select({
+      totalSales: sum(salesData.totalSales),
+      totalOrders: sum(salesData.totalOrders),
+      avgOrderValue: avg(salesData.averageOrderValue),
+      minSales: min(salesData.totalSales),
+      maxSales: max(salesData.totalSales),
+      recordCount: count(),
+    })
+    .from(salesData)
+    .where(and(...conditions));
+
+  return stats[0] || null;
+}
+
+/**
+ * Get daily sales data for charting
+ */
+export async function getDailySalesData(
+  locationId: number,
+  startDate?: string,
+  endDate?: string
+) {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get daily sales: database not available");
+    return [];
+  }
+
+  const { salesData } = await import("../drizzle/schema");
+  const { and, sql, desc } = await import("drizzle-orm");
+
+  const conditions = [eq(salesData.locationId, locationId)];
+  if (startDate) {
+    conditions.push(sql`${salesData.date} >= ${startDate}`);
+  }
+  if (endDate) {
+    conditions.push(sql`${salesData.date} <= ${endDate}`);
+  }
+
+  return await db
+    .select({
+      date: salesData.date,
+      totalSales: salesData.totalSales,
+      totalOrders: salesData.totalOrders,
+      averageOrderValue: salesData.averageOrderValue,
+      lunchSales: salesData.lunchSales,
+      dinnerSales: salesData.dinnerSales,
+      dayOfWeek: salesData.dayOfWeek,
+    })
+    .from(salesData)
+    .where(and(...conditions))
+    .orderBy(salesData.date);
+}
+
+/**
+ * Get sales aggregated by day of week
+ */
+export async function getSalesByDayOfWeek(
+  locationId: number,
+  startDate?: string,
+  endDate?: string
+) {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get sales by day: database not available");
+    return [];
+  }
+
+  const { salesData } = await import("../drizzle/schema");
+  const { and, sql, sum, avg, count } = await import("drizzle-orm");
+
+  const conditions = [eq(salesData.locationId, locationId)];
+  if (startDate) {
+    conditions.push(sql`${salesData.date} >= ${startDate}`);
+  }
+  if (endDate) {
+    conditions.push(sql`${salesData.date} <= ${endDate}`);
+  }
+
+  return await db
+    .select({
+      dayOfWeek: salesData.dayOfWeek,
+      avgSales: avg(salesData.totalSales),
+      totalSales: sum(salesData.totalSales),
+      avgOrders: avg(salesData.totalOrders),
+      recordCount: count(),
+    })
+    .from(salesData)
+    .where(and(...conditions))
+    .groupBy(salesData.dayOfWeek)
+    .orderBy(salesData.dayOfWeek);
+}
+
+/**
+ * Get date range of available sales data for a location
+ */
+export async function getSalesDateRange(locationId: number) {
+  const db = await getDb();
+  if (!db) {
+    return null;
+  }
+
+  const { salesData } = await import("../drizzle/schema");
+  const { min, max } = await import("drizzle-orm");
+
+  const result = await db
+    .select({
+      minDate: min(salesData.date),
+      maxDate: max(salesData.date),
+    })
+    .from(salesData)
+    .where(eq(salesData.locationId, locationId));
+
+  return result[0] || null;
+}

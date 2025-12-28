@@ -1,0 +1,30 @@
+{
+  "query": "SELECT date, totalSales FROM sales_data WHERE locationId = 1 ORDER BY date DESC LIMIT 5;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 49cxSE1jUeHq7LY.root --database KMmUaMc2BgFeVkUfVYZGPD --execute SELECT date, totalSales FROM sales_data WHERE locationId = 1 ORDER BY date DESC LIMIT 5;",
+  "rows": [
+    {
+      "date": "2025-12-27",
+      "totalSales": "3455.00"
+    },
+    {
+      "date": "2025-12-26",
+      "totalSales": "3260.00"
+    },
+    {
+      "date": "2025-12-25",
+      "totalSales": "2050.00"
+    },
+    {
+      "date": "2025-12-24",
+      "totalSales": "2240.00"
+    },
+    {
+      "date": "2025-12-23",
+      "totalSales": "1845.00"
+    }
+  ],
+  "messages": [],
+  "stdout": "date\ttotalSales\n2025-12-27\t3455.00\n2025-12-26\t3260.00\n2025-12-25\t2050.00\n2025-12-24\t2240.00\n2025-12-23\t1845.00\n",
+  "stderr": "",
+  "execution_time_ms": 56
+}

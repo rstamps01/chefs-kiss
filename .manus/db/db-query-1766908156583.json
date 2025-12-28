@@ -1,0 +1,15 @@
+{
+  "query": "SELECT COUNT(*) as count, MIN(date) as min_date, MAX(date) as max_date FROM sales_data WHERE locationId = 1;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 49cxSE1jUeHq7LY.root --database KMmUaMc2BgFeVkUfVYZGPD --execute SELECT COUNT(*) as count, MIN(date) as min_date, MAX(date) as max_date FROM sales_data WHERE locationId = 1;",
+  "rows": [
+    {
+      "count": "34",
+      "min_date": "2023-12-31",
+      "max_date": "2025-12-27"
+    }
+  ],
+  "messages": [],
+  "stdout": "count\tmin_date\tmax_date\n34\t2023-12-31\t2025-12-27\n",
+  "stderr": "",
+  "execution_time_ms": 80
+}

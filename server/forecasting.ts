@@ -45,17 +45,21 @@ export async function generateForecast(
     throw new Error("Database not available");
   }
 
-  const historicalData = await db
+  // Fetch all sales data for this location and filter in memory
+  // This avoids potential date comparison issues with Drizzle ORM
+  const allData = await db
     .select()
     .from(salesData)
-    .where(
-      and(
-        eq(salesData.locationId, locationId),
-        gte(salesData.date, startDate),
-        lte(salesData.date, endDate)
-      )
-    )
+    .where(eq(salesData.locationId, locationId))
     .orderBy(salesData.date);
+
+  // Filter to last 90 days in JavaScript
+  const startDateStr = startDate.toISOString().split('T')[0];
+  const endDateStr = endDate.toISOString().split('T')[0];
+  const historicalData = allData.filter((record) => {
+    const recordDate = typeof record.date === 'string' ? record.date : record.date.toISOString().split('T')[0];
+    return recordDate >= startDateStr && recordDate <= endDateStr;
+  });
 
   if (historicalData.length < 14) {
     throw new Error("Insufficient historical data for forecasting (minimum 14 days required)");
@@ -67,12 +71,13 @@ export async function generateForecast(
   // Calculate trend
   const trend = calculateTrend(historicalData);
 
-  // Generate forecasts
+  // Generate forecasts starting from tomorrow
   const forecasts: ForecastPoint[] = [];
-  const lastDate = new Date(historicalData[historicalData.length - 1].date);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0); // Reset to midnight for consistent date comparison
 
   for (let i = 1; i <= daysAhead; i++) {
-    const forecastDate = new Date(lastDate);
+    const forecastDate = new Date(today);
     forecastDate.setDate(forecastDate.getDate() + i);
     const dayOfWeek = forecastDate.getDay();
     const dayName = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"][dayOfWeek];

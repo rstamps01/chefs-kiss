@@ -285,9 +285,14 @@
 - [x] Add all 23 Sushi Confidential recipes to database
 - [x] Link recipe ingredients with quantities (pieces per roll)
 - [x] Set default serving sizes and selling prices for each roll
-- [ ] Debug prep planning forecast generation hang issue
-- [ ] Test prep planning calculations with real recipe data
-- [ ] Verify ingredient quantity aggregation across multiple recipes
+- [x] Debug prep planning forecast generation hang issue
+- [x] Identify root cause of infinite loop in forecast generation (date comparison bug)
+- [x] Fix database query or algorithm causing hang (fetch all + filter in JS)
+- [x] Fix forecast date calculation to start from today instead of last historical date
+- [x] Test prep planning with Sushi Confidential recipes
+- [x] Verify ingredient quantity calculations are accurate
+- [x] Test prep planning calculations with real recipe data
+- [x] Verify ingredient quantity aggregation across multiple recipes
 
 ## Recipe Page Real Data Integration (Current Sprint)
 - [x] Add database query helpers for recipes with ingredients

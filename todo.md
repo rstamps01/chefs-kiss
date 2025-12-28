@@ -279,3 +279,12 @@
 - [x] Add recipe breakdown showing which dishes drive ingredient needs
 - [x] Test prep calculations with sample forecast data
 - [x] Write unit tests for prep calculation engine
+
+## Sushi Confidential Recipe Data Entry (Current Sprint)
+- [x] Create database seed script for ingredients (salmon, tuna, yellowtail, albacore, shrimp)
+- [x] Add all 23 Sushi Confidential recipes to database
+- [x] Link recipe ingredients with quantities (pieces per roll)
+- [x] Set default serving sizes and selling prices for each roll
+- [ ] Debug prep planning forecast generation hang issue
+- [ ] Test prep planning calculations with real recipe data
+- [ ] Verify ingredient quantity aggregation across multiple recipes

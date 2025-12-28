@@ -35,9 +35,10 @@ export function RecipeCreateModal({ open, onOpenChange, onSuccess }: RecipeCreat
     { ingredientId: 0, quantity: "", unit: "" },
   ]);
 
-  // Fetch available ingredients and categories
+  // Fetch available ingredients, categories, and units
   const { data: availableIngredients = [] } = trpc.ingredients.list.useQuery();
   const { data: activeCategories = [] } = trpc.recipeCategories.listActive.useQuery();
+  const { data: activeUnits = [] } = trpc.ingredientUnits.listActive.useQuery();
 
   // Create mutation
   const createMutation = trpc.recipes.create.useMutation({
@@ -275,13 +276,23 @@ export function RecipeCreateModal({ open, onOpenChange, onSuccess }: RecipeCreat
                     />
                   </div>
 
-                  <div className="w-28">
+                  <div className="w-32">
                     <Label className="text-xs">Unit</Label>
-                    <Input
+                    <Select
                       value={ingredient.unit}
-                      onChange={(e) => updateIngredient(index, "unit", e.target.value)}
-                      placeholder="pieces, oz"
-                    />
+                      onValueChange={(value) => updateIngredient(index, "unit", value)}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select unit" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {activeUnits.map((unit) => (
+                          <SelectItem key={unit.id} value={unit.name}>
+                            {unit.displayName}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
 
                   <Button

@@ -22,8 +22,9 @@ export function IngredientCreateModal({ open, onOpenChange }: IngredientCreateMo
   const [costPerUnit, setCostPerUnit] = useState("");
   const [supplier, setSupplier] = useState("");
 
-  // Fetch active units
+  // Fetch active units and categories
   const { data: activeUnits = [] } = trpc.ingredientUnits.listActive.useQuery();
+  const { data: activeCategories = [] } = trpc.recipeCategories.listActive.useQuery();
 
   const createMutation = trpc.ingredients.create.useMutation({
     onSuccess: () => {
@@ -106,12 +107,18 @@ export function IngredientCreateModal({ open, onOpenChange }: IngredientCreateMo
 
           <div className="space-y-2">
             <Label htmlFor="category">Category</Label>
-            <Input
-              id="category"
-              placeholder="e.g., Seafood, Vegetables, Sauces"
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-            />
+            <Select value={category} onValueChange={setCategory}>
+              <SelectTrigger id="category">
+                <SelectValue placeholder="Select a category" />
+              </SelectTrigger>
+              <SelectContent>
+                {activeCategories.map((cat) => (
+                  <SelectItem key={cat.id} value={cat.name}>
+                    {cat.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
 
           <div className="space-y-2">

@@ -347,3 +347,13 @@
 - [x] Test ingredient creation with dynamic units
 - [x] Verify only active items appear in dropdowns
 - [x] Test complete end-to-end workflow: Settings → Forms integration
+
+## Dropdown Consistency Enhancements (Current Sprint)
+- [x] Update RecipeCreateModal ingredient inputs to use unit dropdown (instead of text input)
+- [x] Update RecipeEditModal ingredient inputs to use unit dropdown (instead of text input)
+- [x] Update IngredientCreateModal to use category dropdown (instead of text input)
+- [x] Update IngredientEditModal to use category dropdown (instead of text input)
+- [x] Test recipe creation with unit dropdown for ingredients
+- [x] Test recipe editing with unit dropdown for ingredients
+- [x] Test ingredient creation with category dropdown
+- [x] Test ingredient editing with category dropdown

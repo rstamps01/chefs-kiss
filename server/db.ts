@@ -185,7 +185,7 @@ export async function getRecipesWithIngredients(restaurantId: number) {
 }
 
 /**
- * Get all ingredients for a restaurant
+ * Get all ingredients for a restaurant with unit display names
  */
 export async function getIngredients(restaurantId: number) {
   const db = await getDb();
@@ -194,10 +194,26 @@ export async function getIngredients(restaurantId: number) {
     return [];
   }
 
-  return await db
-    .select()
+  const results = await db
+    .select({
+      id: ingredients.id,
+      restaurantId: ingredients.restaurantId,
+      name: ingredients.name,
+      category: ingredients.category,
+      unit: ingredients.unit,
+      unitDisplayName: ingredientUnits.displayName,
+      costPerUnit: ingredients.costPerUnit,
+      supplier: ingredients.supplier,
+      shelfLife: ingredients.shelfLife,
+      minStock: ingredients.minStock,
+      createdAt: ingredients.createdAt,
+      updatedAt: ingredients.updatedAt,
+    })
     .from(ingredients)
+    .leftJoin(ingredientUnits, eq(ingredients.unit, ingredientUnits.id))
     .where(eq(ingredients.restaurantId, restaurantId));
+
+  return results;
 }
 
 /**

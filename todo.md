@@ -509,3 +509,11 @@
 - [x] Cleaned up ingredientConversions table (deleted 865 duplicate rows)
 - [x] Documented new universal conversion system architecture
 - [x] Verified 97.6% reduction in database rows (871 → 21)
+
+## Ingredient Unit Display Fix (Completed)
+- [x] Investigated why Ingredients tab showed numeric unit IDs instead of display names
+- [x] Found ingredient listing query in backend routers (getIngredients function)
+- [x] Added LEFT JOIN to ingredientUnits table to fetch displayName
+- [x] Updated frontend to display unit displayName instead of unit ID (2 locations)
+- [x] Tested ingredient listing - all 64 ingredients show correct display names
+- [x] Verified units display as (lb), (oz), (pc), etc. instead of numeric IDs

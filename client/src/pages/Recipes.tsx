@@ -406,7 +406,7 @@ export default function Recipes() {
                       </div>
                       {ingredient.costPerUnit && (
                         <Badge variant="secondary">
-                          ${parseFloat(ingredient.costPerUnit).toFixed(2)}/{ingredient.unit}
+                          ${parseFloat(ingredient.costPerUnit).toFixed(2)}/{ingredient.unitDisplayName || ingredient.unit}
                         </Badge>
                       )}
                     </div>
@@ -415,7 +415,7 @@ export default function Recipes() {
                     <div className="space-y-3">
                       <div className="flex justify-between text-sm">
                         <span className="text-muted-foreground">Unit Type:</span>
-                        <span className="font-medium">{ingredient.unit}</span>
+                        <span className="font-medium">{ingredient.unitDisplayName || ingredient.unit}</span>
                       </div>
                       {ingredient.costPerUnit && (
                         <div className="flex justify-between text-sm">

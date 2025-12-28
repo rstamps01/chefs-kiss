@@ -231,67 +231,86 @@ export function RecipeEditModal({ recipe, open, onOpenChange }: RecipeEditModalP
             )}
 
             <div className="space-y-3">
-              {ingredients.map((ingredient, index) => (
-                <div key={index} className="flex gap-2 items-end">
-                  <div className="flex-1 grid gap-2">
-                    <Label className="text-xs">Ingredient</Label>
-                    <Select
-                      value={ingredient.ingredientId.toString()}
-                      onValueChange={(value) => updateIngredient(index, "ingredientId", parseInt(value))}
+              {ingredients.map((ingredient, index) => {
+                // Calculate cost for this ingredient
+                const ingredientData = availableIngredients?.find(ing => ing.id === ingredient.ingredientId);
+                let ingredientCost = 0;
+                if (ingredientData?.costPerUnit) {
+                  // Simple calculation: quantity * costPerUnit
+                  // In production, this should use conversion factors
+                  ingredientCost = ingredient.quantity * parseFloat(ingredientData.costPerUnit);
+                }
+
+                return (
+                  <div key={index} className="grid grid-cols-[2fr_1fr_1.5fr_1fr_auto] gap-2 items-end">
+                    <div className="grid gap-2">
+                      <Label className="text-xs">Ingredient</Label>
+                      <Select
+                        value={ingredient.ingredientId.toString()}
+                        onValueChange={(value) => updateIngredient(index, "ingredientId", parseInt(value))}
+                      >
+                        <SelectTrigger className="truncate">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {availableIngredients?.map((ing) => (
+                            <SelectItem key={ing.id} value={ing.id.toString()}>
+                              {ing.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="grid gap-2">
+                      <Label className="text-xs">Quantity</Label>
+                      <Input
+                        type="number"
+                        min="0"
+                        step="0.1"
+                        value={ingredient.quantity}
+                        onChange={(e) => updateIngredient(index, "quantity", parseFloat(e.target.value))}
+                      />
+                    </div>
+
+                    <div className="grid gap-2">
+                      <Label className="text-xs">Unit</Label>
+                      <Select
+                        value={ingredient.unit}
+                        onValueChange={(value) => updateIngredient(index, "unit", value)}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select unit" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {activeUnits.map((unit) => (
+                            <SelectItem key={unit.id} value={unit.name}>
+                              {unit.displayName}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div className="grid gap-2">
+                      <Label className="text-xs">Cost</Label>
+                      <div className="h-10 px-3 flex items-center text-sm text-muted-foreground bg-muted rounded-md">
+                        ${ingredientCost.toFixed(2)}
+                      </div>
+                    </div>
+
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="icon"
+                      onClick={() => removeIngredient(index)}
+                      className="mt-6"
                     >
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {availableIngredients?.map((ing) => (
-                          <SelectItem key={ing.id} value={ing.id.toString()}>
-                            {ing.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
                   </div>
-
-                  <div className="w-24 grid gap-2">
-                    <Label className="text-xs">Quantity</Label>
-                    <Input
-                      type="number"
-                      min="0"
-                      step="0.1"
-                      value={ingredient.quantity}
-                      onChange={(e) => updateIngredient(index, "quantity", parseFloat(e.target.value))}
-                    />
-                  </div>
-
-                  <div className="w-32 grid gap-2">
-                    <Label className="text-xs">Unit</Label>
-                    <Select
-                      value={ingredient.unit}
-                      onValueChange={(value) => updateIngredient(index, "unit", value)}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select unit" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {activeUnits.map((unit) => (
-                          <SelectItem key={unit.id} value={unit.name}>
-                            {unit.displayName}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="icon"
-                    onClick={() => removeIngredient(index)}
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
 

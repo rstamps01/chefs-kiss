@@ -517,3 +517,12 @@
 - [x] Updated frontend to display unit displayName instead of unit ID (2 locations)
 - [x] Tested ingredient listing - all 64 ingredients show correct display names
 - [x] Verified units display as (lb), (oz), (pc), etc. instead of numeric IDs
+
+## Edit Recipe Modal Layout Fix (Completed)
+- [x] Found Edit Recipe modal component (RecipeEditModal.tsx)
+- [x] Analyzed current ingredient row layout causing overlap (flex-1 on dropdown)
+- [x] Redesigned layout using CSS Grid (grid-cols-[2fr_1fr_1.5fr_1fr_auto]) to prevent overlap
+- [x] Added truncate class to ingredient dropdown for long names
+- [x] Added calculated cost column showing cost per ingredient line item
+- [x] Implemented cost calculation (quantity × costPerUnit) for reference during editing
+- [x] Adjusted delete button margin (mt-6) to align with other fields

@@ -235,3 +235,9 @@
 - [x] Update page title and meta tags
 - [x] Add branding package to GitHub repository
 - [x] Update README with branding credits
+
+## Logo Size Enhancement (Current Sprint)
+- [x] Increase logo size in DashboardLayout sidebar
+- [x] Increase logo size in Home page header
+- [x] Increase logo size in Home page hero section
+- [x] Test visual hierarchy and prominence

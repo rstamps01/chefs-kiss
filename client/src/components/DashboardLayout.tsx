@@ -21,15 +21,20 @@ import {
 } from "@/components/ui/sidebar";
 import { getLoginUrl } from "@/const";
 import { useIsMobile } from "@/hooks/useMobile";
-import { LayoutDashboard, LogOut, PanelLeft, Users } from "lucide-react";
+import { BarChart3, TrendingUp, ChefHat, FileText, Settings as SettingsIcon, LogOut, PanelLeft, Home } from "lucide-react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
 import { DashboardLayoutSkeleton } from './DashboardLayoutSkeleton';
 import { Button } from "./ui/button";
 
 const menuItems = [
-  { icon: LayoutDashboard, label: "Page 1", path: "/" },
-  { icon: Users, label: "Page 2", path: "/some-path" },
+  { icon: Home, label: "Overview", path: "/dashboard" },
+  { icon: BarChart3, label: "Analytics", path: "/dashboard" },
+  { icon: TrendingUp, label: "Forecasting", path: "/forecasting" },
+  { icon: ChefHat, label: "Prep Planning", path: "/prep-planning" },
+  { icon: ChefHat, label: "Recipes", path: "/recipes" },
+  { icon: FileText, label: "Reports", path: "/reports" },
+  { icon: SettingsIcon, label: "Settings", path: "/settings" },
 ];
 
 const SIDEBAR_WIDTH_KEY = "sidebar-width";
@@ -170,11 +175,14 @@ function DashboardLayoutContent({
               </button>
               {!isCollapsed ? (
                 <div className="flex items-center gap-2 min-w-0">
-                  <span className="font-semibold tracking-tight truncate">
-                    Navigation
+                  <img src="/chef-logo.png" alt="Chef's Kiss" className="h-8 w-8 shrink-0" />
+                  <span className="font-bold tracking-tight truncate" style={{ fontFamily: "'Poppins', sans-serif" }}>
+                    Chef's Kiss
                   </span>
                 </div>
-              ) : null}
+              ) : (
+                <img src="/chef-logo.png" alt="Chef's Kiss" className="h-8 w-8" />
+              )}
             </div>
           </SidebarHeader>
 

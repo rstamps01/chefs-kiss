@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users } from "../drizzle/schema";
+import { InsertUser, users, recipes, ingredients, recipeIngredients, restaurants, locations } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -89,4 +89,161 @@ export async function getUserByOpenId(openId: string) {
   return result.length > 0 ? result[0] : undefined;
 }
 
-// TODO: add feature queries here as your schema grows.
+// ============================================================================
+// RECIPE & INGREDIENT QUERIES
+// ============================================================================
+
+/**
+ * Get all recipes with their ingredients
+ */
+export async function getRecipesWithIngredients(restaurantId: number) {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get recipes: database not available");
+    return [];
+  }
+
+  // Get all recipes for the restaurant
+  const allRecipes = await db
+    .select()
+    .from(recipes)
+    .where(eq(recipes.restaurantId, restaurantId));
+
+  // For each recipe, get its ingredients
+  const recipesWithIngredients = await Promise.all(
+    allRecipes.map(async (recipe) => {
+      const recipeIngs = await db
+        .select({
+          ingredientId: recipeIngredients.ingredientId,
+          ingredientName: ingredients.name,
+          quantity: recipeIngredients.quantity,
+          unit: recipeIngredients.unit,
+          category: ingredients.category,
+        })
+        .from(recipeIngredients)
+        .leftJoin(ingredients, eq(recipeIngredients.ingredientId, ingredients.id))
+        .where(eq(recipeIngredients.recipeId, recipe.id));
+
+      return {
+        ...recipe,
+        ingredients: recipeIngs,
+      };
+    })
+  );
+
+  return recipesWithIngredients;
+}
+
+/**
+ * Get all ingredients for a restaurant
+ */
+export async function getIngredients(restaurantId: number) {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get ingredients: database not available");
+    return [];
+  }
+
+  return await db
+    .select()
+    .from(ingredients)
+    .where(eq(ingredients.restaurantId, restaurantId));
+}
+
+/**
+ * Get user's restaurant
+ */
+export async function getUserRestaurant(userId: number) {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get restaurant: database not available");
+    return undefined;
+  }
+
+  const result = await db
+    .select()
+    .from(restaurants)
+    .where(eq(restaurants.ownerId, userId))
+    .limit(1);
+
+  return result.length > 0 ? result[0] : undefined;
+}
+
+/**
+ * Get restaurant locations
+ */
+export async function getRestaurantLocations(restaurantId: number) {
+  const db = await getDb();
+  if (!db) {
+    console.warn("[Database] Cannot get locations: database not available");
+    return [];
+  }
+
+  return await db
+    .select()
+    .from(locations)
+    .where(eq(locations.restaurantId, restaurantId));
+}
+
+/**
+ * Create a new recipe
+ */
+export async function createRecipe(data: {
+  restaurantId: number;
+  name: string;
+  category: string;
+  servings: number;
+  prepTime?: number;
+  cookTime?: number;
+  sellingPrice: number;
+  description?: string;
+}) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  const [result] = await db.insert(recipes).values({
+    restaurantId: data.restaurantId,
+    name: data.name,
+    category: data.category,
+    servings: data.servings,
+    prepTime: data.prepTime,
+    cookTime: data.cookTime,
+    sellingPrice: data.sellingPrice.toString(),
+    description: data.description,
+    isActive: true,
+  }).$returningId();
+
+  return result.id;
+}
+
+/**
+ * Add ingredients to a recipe
+ */
+export async function addRecipeIngredients(data: {
+  recipeId: number;
+  ingredients: Array<{
+    ingredientId: number;
+    quantity: number;
+    unit: string;
+  }>;
+}) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  if (data.ingredients.length === 0) {
+    return;
+  }
+
+  await db.insert(recipeIngredients).values(
+    data.ingredients.map(ing => ({
+      recipeId: data.recipeId,
+      ingredientId: ing.ingredientId,
+      quantity: ing.quantity.toString(),
+      unit: ing.unit,
+    }))
+  );
+}

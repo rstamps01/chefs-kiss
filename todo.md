@@ -267,3 +267,15 @@
 - [x] Implement date range selector for forecast period
 - [x] Test forecasting with sample data
 - [x] Write unit tests for forecasting algorithm
+
+## Prep Planning Module (Current Sprint)
+- [x] Design prep calculation logic (forecast → recipes → ingredients)
+- [x] Implement backend prep calculator using forecast and recipe data
+- [x] Create tRPC endpoints for prep recommendations
+- [x] Build PrepPlanning page with ingredient quantity recommendations
+- [x] Add date selector for prep planning period
+- [x] Display ingredient quantities with units and waste reduction metrics
+- [x] Implement adjustable safety buffer (e.g., +10% for uncertainty)
+- [x] Add recipe breakdown showing which dishes drive ingredient needs
+- [x] Test prep calculations with sample forecast data
+- [x] Write unit tests for prep calculation engine

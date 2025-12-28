@@ -4,6 +4,7 @@ import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
 import { getUserRestaurant, getRecipesWithIngredients, getIngredients, getRestaurantLocations, createRecipe, addRecipeIngredients, importSalesData, checkExistingSalesData, getSalesAnalytics, getDailySalesData, getSalesByDayOfWeek, getSalesDateRange } from "./db";
 import { generateForecast } from "./forecasting";
+import { generatePrepPlan, generateMultiDayPrepPlan } from "./prep-planning";
 import { z } from "zod";
 
 export const appRouter = router({
@@ -311,6 +312,54 @@ export const appRouter = router({
         }
         
         return await generateForecast(input.locationId, input.daysAhead);
+      }),
+  }),
+
+  // Prep Planning endpoints
+  prepPlanning: router({
+    generate: protectedProcedure
+      .input(z.object({
+        locationId: z.number(),
+        targetDate: z.string(),
+        safetyBufferPercent: z.number().min(0).max(50).default(10),
+      }))
+      .query(async ({ ctx, input }) => {
+        // Verify user owns this location
+        const restaurant = await getUserRestaurant(ctx.user.id);
+        if (!restaurant) {
+          throw new Error("Restaurant not found");
+        }
+        
+        const locations = await getRestaurantLocations(restaurant.id);
+        const location = locations.find(loc => loc.id === input.locationId);
+        if (!location) {
+          throw new Error("Location not found or access denied");
+        }
+        
+        return await generatePrepPlan(input.locationId, input.targetDate, input.safetyBufferPercent);
+      }),
+    
+    multiDay: protectedProcedure
+      .input(z.object({
+        locationId: z.number(),
+        startDate: z.string(),
+        days: z.number().int().min(1).max(7),
+        safetyBufferPercent: z.number().min(0).max(50).default(10),
+      }))
+      .query(async ({ ctx, input }) => {
+        // Verify user owns this location
+        const restaurant = await getUserRestaurant(ctx.user.id);
+        if (!restaurant) {
+          throw new Error("Restaurant not found");
+        }
+        
+        const locations = await getRestaurantLocations(restaurant.id);
+        const location = locations.find(loc => loc.id === input.locationId);
+        if (!location) {
+          throw new Error("Location not found or access denied");
+        }
+        
+        return await generateMultiDayPrepPlan(input.locationId, input.startDate, input.days, input.safetyBufferPercent);
       }),
   }),
 });

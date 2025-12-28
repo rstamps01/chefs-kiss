@@ -609,3 +609,102 @@ export async function deleteRecipe(recipeId: number) {
 
   return { success: true };
 }
+
+// ============================================================================
+// INGREDIENT MANAGEMENT QUERIES
+// ============================================================================
+
+/**
+ * Create a new ingredient
+ */
+export async function createIngredient(data: {
+  restaurantId: number;
+  name: string;
+  category?: string;
+  unit: string;
+  costPerUnit?: number;
+  supplier?: string;
+  shelfLife?: number;
+  minStock?: number;
+}) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  const [result] = await db.insert(ingredients).values({
+    restaurantId: data.restaurantId,
+    name: data.name,
+    category: data.category,
+    unit: data.unit,
+    costPerUnit: data.costPerUnit?.toString(),
+    supplier: data.supplier,
+    shelfLife: data.shelfLife,
+    minStock: data.minStock?.toString(),
+  }).$returningId();
+
+  return result.id;
+}
+
+/**
+ * Update an existing ingredient
+ */
+export async function updateIngredient(ingredientId: number, data: {
+  name?: string;
+  category?: string;
+  unit?: string;
+  costPerUnit?: number;
+  supplier?: string;
+  shelfLife?: number;
+  minStock?: number;
+}) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  const updateData: Record<string, any> = {};
+  
+  if (data.name !== undefined) updateData.name = data.name;
+  if (data.category !== undefined) updateData.category = data.category;
+  if (data.unit !== undefined) updateData.unit = data.unit;
+  if (data.costPerUnit !== undefined) updateData.costPerUnit = data.costPerUnit.toString();
+  if (data.supplier !== undefined) updateData.supplier = data.supplier;
+  if (data.shelfLife !== undefined) updateData.shelfLife = data.shelfLife;
+  if (data.minStock !== undefined) updateData.minStock = data.minStock.toString();
+
+  await db
+    .update(ingredients)
+    .set(updateData)
+    .where(eq(ingredients.id, ingredientId));
+
+  return { success: true };
+}
+
+/**
+ * Delete an ingredient
+ */
+export async function deleteIngredient(ingredientId: number) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  // First check if ingredient is used in any recipes
+  const usageCheck = await db
+    .select()
+    .from(recipeIngredients)
+    .where(eq(recipeIngredients.ingredientId, ingredientId))
+    .limit(1);
+
+  if (usageCheck.length > 0) {
+    throw new Error("Cannot delete ingredient: it is used in one or more recipes");
+  }
+
+  // Delete ingredient
+  await db
+    .delete(ingredients)
+    .where(eq(ingredients.id, ingredientId));
+
+  return { success: true };
+}

@@ -2,7 +2,7 @@ import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
-import { getUserRestaurant, getRecipesWithIngredients, getIngredients, getRestaurantLocations, createRecipe, addRecipeIngredients, updateRecipe, updateRecipeIngredients, deleteRecipe, importSalesData, checkExistingSalesData, getSalesAnalytics, getDailySalesData, getSalesByDayOfWeek, getSalesDateRange } from "./db";
+import { getUserRestaurant, getRecipesWithIngredients, getIngredients, getRestaurantLocations, createRecipe, addRecipeIngredients, updateRecipe, updateRecipeIngredients, deleteRecipe, createIngredient, updateIngredient, deleteIngredient, importSalesData, checkExistingSalesData, getSalesAnalytics, getDailySalesData, getSalesByDayOfWeek, getSalesDateRange } from "./db";
 import { generateForecast } from "./forecasting";
 import { generatePrepPlan, generateMultiDayPrepPlan } from "./prep-planning";
 import { z } from "zod";
@@ -125,6 +125,53 @@ export const appRouter = router({
       }
       return await getIngredients(restaurant.id);
     }),
+    create: protectedProcedure
+      .input(z.object({
+        name: z.string().min(1),
+        category: z.string().optional(),
+        unit: z.string().min(1),
+        costPerUnit: z.number().positive().optional(),
+        supplier: z.string().optional(),
+        shelfLife: z.number().int().positive().optional(),
+        minStock: z.number().positive().optional(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        const restaurant = await getUserRestaurant(ctx.user.id);
+        if (!restaurant) {
+          throw new Error("Restaurant not found");
+        }
+        
+        const ingredientId = await createIngredient({
+          restaurantId: restaurant.id,
+          ...input,
+        });
+        
+        return { success: true, ingredientId };
+      }),
+    update: protectedProcedure
+      .input(z.object({
+        ingredientId: z.number().int().positive(),
+        name: z.string().min(1).optional(),
+        category: z.string().optional(),
+        unit: z.string().min(1).optional(),
+        costPerUnit: z.number().positive().optional(),
+        supplier: z.string().optional(),
+        shelfLife: z.number().int().positive().optional(),
+        minStock: z.number().positive().optional(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        const { ingredientId, ...updates } = input;
+        await updateIngredient(ingredientId, updates);
+        return { success: true };
+      }),
+    delete: protectedProcedure
+      .input(z.object({
+        ingredientId: z.number().int().positive(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        await deleteIngredient(input.ingredientId);
+        return { success: true };
+      }),
   }),
   
   restaurant: router({

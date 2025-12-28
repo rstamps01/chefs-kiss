@@ -327,3 +327,21 @@
 - [x] Implement ingredient selection with quantity inputs
 - [x] Add form validation for required fields
 - [x] Test recipe creation with new menu items
+
+## Ingredient Management System (Current Sprint)
+- [x] Review current ingredients table schema
+- [x] Add backend CRUD endpoints for ingredients (create, update, delete, list)
+- [x] Create IngredientCreateModal component with form
+- [x] Create IngredientEditModal component with form
+- [x] Add "New Ingredient" button to trigger creation modal
+- [x] Add Ingredients tab to Recipe Management page
+- [x] Build ingredient listing view with grid/table layout
+- [x] Add unit type dropdown (pieces, oz, roll, etc.)
+- [x] Implement edit button on each ingredient card
+- [x] Implement delete button with confirmation dialog
+- [x] Add form validation for required fields (name, unit type, cost)
+- [x] Test ingredient creation workflow
+- [x] Test ingredient editing workflow
+- [x] Test ingredient deletion workflow
+- [x] Verify new ingredients appear in recipe creation/editing dropdowns
+- [x] Test complete end-to-end workflow: create ingredient → use in recipe

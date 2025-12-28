@@ -6,6 +6,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
+import { QuickAddUnitDialog } from "@/components/QuickAddUnitDialog";
+import { QuickAddCategoryDialog } from "@/components/QuickAddCategoryDialog";
 
 interface IngredientCreateModalProps {
   open: boolean;
@@ -107,34 +109,40 @@ export function IngredientCreateModal({ open, onOpenChange }: IngredientCreateMo
 
           <div className="space-y-2">
             <Label htmlFor="category">Category</Label>
-            <Select value={category} onValueChange={setCategory}>
-              <SelectTrigger id="category">
-                <SelectValue placeholder="Select a category" />
-              </SelectTrigger>
-              <SelectContent>
-                {activeCategories.map((cat) => (
-                  <SelectItem key={cat.id} value={cat.name}>
-                    {cat.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <div className="flex gap-2">
+              <Select value={category} onValueChange={setCategory}>
+                <SelectTrigger id="category">
+                  <SelectValue placeholder="Select a category" />
+                </SelectTrigger>
+                <SelectContent>
+                  {activeCategories.map((cat) => (
+                    <SelectItem key={cat.id} value={cat.name}>
+                      {cat.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <QuickAddCategoryDialog onCategoryAdded={(name) => setCategory(name)} />
+            </div>
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="unit">Unit Type *</Label>
-            <Select value={unit} onValueChange={setUnit} required>
-              <SelectTrigger id="unit">
-                <SelectValue placeholder="Select unit type" />
-              </SelectTrigger>
-              <SelectContent>
-                {activeUnits.map((u) => (
-                  <SelectItem key={u.id} value={u.name}>
-                    {u.displayName}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <div className="flex gap-2">
+              <Select value={unit} onValueChange={setUnit} required>
+                <SelectTrigger id="unit">
+                  <SelectValue placeholder="Select unit type" />
+                </SelectTrigger>
+                <SelectContent>
+                  {activeUnits.map((u) => (
+                    <SelectItem key={u.id} value={u.name}>
+                      {u.displayName}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <QuickAddUnitDialog onUnitAdded={(name) => setUnit(name)} />
+            </div>
           </div>
 
           <div className="space-y-2">

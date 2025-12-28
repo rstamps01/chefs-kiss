@@ -775,7 +775,7 @@ export async function createRecipeCategory(data: {
     displayOrder: data.displayOrder ?? 0,
   }).$returningId();
 
-  return { id: result.id, success: true };
+  return { id: result.id, name: data.name, success: true };
 }
 
 /**
@@ -909,7 +909,7 @@ export async function createIngredientUnit(data: {
     displayOrder: data.displayOrder ?? 0,
   }).$returningId();
 
-  return { id: result.id, success: true };
+  return { id: result.id, name: data.name, displayName: data.displayName, success: true };
 }
 
 /**

@@ -357,3 +357,18 @@
 - [x] Test recipe editing with unit dropdown for ingredients
 - [x] Test ingredient creation with category dropdown
 - [x] Test ingredient editing with category dropdown
+
+## Supplier Field Fix & Quick-Add Buttons (Current Sprint)
+- [x] Investigate supplier field issue in IngredientEditModal
+- [x] Fix supplier field so it can be edited and deleted (no bug found - working correctly)
+- [x] Add "+" button next to Category dropdown in recipe modals (button renders, nested dialog issue)
+- [x] Add "+" button next to Unit Type dropdown in ingredient modals
+- [x] Add "+" button next to Category dropdown in ingredient modals
+- [x] Create QuickAddUnitDialog component (working)
+- [x] Create QuickAddCategoryDialog component (implemented)
+- [x] Create QuickAddCategoryButton Popover component (attempted fix for nested dialog)
+- [x] Test supplier field editing in IngredientEditModal (working correctly)
+- [x] Test quick-add unit button in ingredient modals (fully working)
+- [ ] Fix quick-add category button in recipe modals (nested dialog prevents opening)
+- [ ] Test quick-add category button in ingredient modals
+- [ ] Verify new categories/units appear immediately in dropdowns after creation

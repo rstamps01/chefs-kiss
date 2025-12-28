@@ -1,6 +1,6 @@
 import { eq, and } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users, recipes, ingredients, recipeIngredients, restaurants, locations, recipeCategories, ingredientUnits } from "../drizzle/schema";
+import { InsertUser, users, recipes, ingredients, recipeIngredients, restaurants, locations, recipeCategories, ingredientUnits, unitCategories, ingredientConversions } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -980,4 +980,166 @@ export async function deleteIngredientUnit(unitId: number) {
     .where(eq(ingredientUnits.id, unitId));
 
   return { success: true };
+}
+
+
+// ============================================================================
+// UNIT CATEGORIES
+// ============================================================================
+
+export async function getUnitCategories() {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  return db.select().from(unitCategories);
+}
+
+// ============================================================================
+// INGREDIENT CONVERSIONS
+// ============================================================================
+
+export async function getIngredientConversions(restaurantId: number) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  return db
+    .select()
+    .from(ingredientConversions)
+    .where(eq(ingredientConversions.restaurantId, restaurantId));
+}
+
+export async function getIngredientConversionsByIngredient(ingredientId: number) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  return db
+    .select()
+    .from(ingredientConversions)
+    .where(eq(ingredientConversions.ingredientId, ingredientId));
+}
+
+export async function createIngredientConversion(data: {
+  restaurantId: number;
+  ingredientId: number;
+  fromUnit: string;
+  toUnit: string;
+  conversionFactor: string;
+  notes?: string;
+}) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  const [result] = await db.insert(ingredientConversions).values(data);
+  
+  // Return the created conversion
+  const created = await db
+    .select()
+    .from(ingredientConversions)
+    .where(eq(ingredientConversions.id, Number(result.insertId)))
+    .limit(1);
+
+  return created[0];
+}
+
+export async function updateIngredientConversion(
+  conversionId: number,
+  data: {
+    fromUnit?: string;
+    toUnit?: string;
+    conversionFactor?: string;
+    notes?: string;
+  }
+) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  await db
+    .update(ingredientConversions)
+    .set(data)
+    .where(eq(ingredientConversions.id, conversionId));
+
+  // Return updated conversion
+  const updated = await db
+    .select()
+    .from(ingredientConversions)
+    .where(eq(ingredientConversions.id, conversionId))
+    .limit(1);
+
+  return updated[0];
+}
+
+export async function deleteIngredientConversion(conversionId: number) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  await db
+    .delete(ingredientConversions)
+    .where(eq(ingredientConversions.id, conversionId));
+
+  return true;
+}
+
+/**
+ * Get conversion factor between two units for a specific ingredient
+ * Returns null if no conversion exists
+ */
+export async function getConversionFactor(
+  ingredientId: number,
+  fromUnit: string,
+  toUnit: string
+): Promise<number | null> {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  // Check for direct conversion
+  const direct = await db
+    .select()
+    .from(ingredientConversions)
+    .where(
+      and(
+        eq(ingredientConversions.ingredientId, ingredientId),
+        eq(ingredientConversions.fromUnit, fromUnit),
+        eq(ingredientConversions.toUnit, toUnit)
+      )
+    )
+    .limit(1);
+
+  if (direct.length > 0) {
+    return parseFloat(direct[0].conversionFactor);
+  }
+
+  // Check for reverse conversion (toUnit -> fromUnit)
+  const reverse = await db
+    .select()
+    .from(ingredientConversions)
+    .where(
+      and(
+        eq(ingredientConversions.ingredientId, ingredientId),
+        eq(ingredientConversions.fromUnit, toUnit),
+        eq(ingredientConversions.toUnit, fromUnit)
+      )
+    )
+    .limit(1);
+
+  if (reverse.length > 0) {
+    // Return reciprocal of reverse conversion
+    return 1 / parseFloat(reverse[0].conversionFactor);
+  }
+
+  // No conversion found
+  return null;
 }

@@ -372,3 +372,33 @@
 - [ ] Fix quick-add category button in recipe modals (nested dialog prevents opening)
 - [ ] Test quick-add category button in ingredient modals
 - [ ] Verify new categories/units appear immediately in dropdowns after creation
+
+## Unit Conversion System - Phase 1 & 2 (Current Sprint)
+
+### Phase 1: Unit System Foundation
+- [x] Add unitCategories table (Weight, Volume, Count, Custom)
+- [x] Enhance ingredientUnits table with categoryId, conversionFactor, isStandard
+- [x] Add ingredientConversions table for ingredient-specific conversions
+- [x] Push database schema changes
+- [x] Create seed script for standard units with conversion factors
+- [x] Seed Weight units (lb, oz, kg, g) with gram base conversions
+- [x] Seed Volume units (gal, cup, tbsp, tsp, ml, l) with ml base conversions
+- [x] Seed Count units (dozen, each) with each base conversions
+- [x] Mark existing custom units (piece, roll, sheet) as non-standard
+- [x] Run seed script to populate unit data
+
+### Phase 2: Custom Conversion Management
+- [x] Add backend CRUD functions for unit categories
+- [x] Add backend CRUD functions for ingredient conversions
+- [x] Add tRPC endpoints for unit categories
+- [x] Add tRPC endpoints for ingredient conversions (list, create, update, delete)
+- [x] Create Unit Conversions tab in Settings page
+- [x] Build conversion setup form (ingredient selector, from/to unit, factor)
+- [x] Build conversion list view showing all defined conversions
+- [x] Add edit/delete functionality for conversions
+- [x] Add validation to prevent duplicate conversions
+- [x] Test creating conversion (1 salmon piece = 8 oz)
+- [x] Test editing existing conversion
+- [x] Test deleting conversion
+- [x] Verify conversions appear in list immediately after creation
+- [x] Write vitest tests for unit conversion system (6 tests, all passing)

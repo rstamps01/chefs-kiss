@@ -312,20 +312,57 @@ export const recipeCategories = mysqlTable("recipeCategories", {
 }));
 
 /**
- * Ingredient units (configurable in settings)
+ * Unit categories for grouping compatible units
+ */
+export const unitCategories = mysqlTable("unitCategories", {
+  id: int("id").autoincrement().primaryKey(),
+  name: varchar("name", { length: 50 }).notNull(), // 'Weight', 'Volume', 'Count', 'Custom'
+  baseUnit: varchar("baseUnit", { length: 50 }), // 'g', 'ml', 'each', null for Custom
+  description: text("description"),
+  canAutoConvert: boolean("canAutoConvert").default(false).notNull(), // true for Weight/Volume/Count
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+}, (table) => ({
+  uniqueName: unique("unique_category_name").on(table.name),
+}));
+
+/**
+ * Ingredient units (configurable in settings) with conversion support
  */
 export const ingredientUnits = mysqlTable("ingredientUnits", {
   id: int("id").autoincrement().primaryKey(),
   restaurantId: int("restaurantId").notNull(),
   name: varchar("name", { length: 50 }).notNull(), // 'lb', 'oz', 'pieces', etc.
   displayName: varchar("displayName", { length: 100 }).notNull(), // 'Pounds (lb)', 'Ounces (oz)', etc.
+  categoryId: int("categoryId"), // references unitCategories.id
+  conversionFactor: decimal("conversionFactor", { precision: 15, scale: 6 }), // to base unit (e.g., 1 lb = 453.592 g)
+  isStandard: boolean("isStandard").default(false).notNull(), // true for lb/oz/cup, false for piece/roll
   isActive: boolean("isActive").default(true).notNull(),
   displayOrder: int("displayOrder").default(0),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 }, (table) => ({
   restaurantIdx: index("restaurant_idx").on(table.restaurantId),
+  categoryIdx: index("category_idx").on(table.categoryId),
   uniqueNamePerRestaurant: unique("unique_name_per_restaurant").on(table.restaurantId, table.name),
+}));
+
+/**
+ * Ingredient-specific unit conversions (e.g., 1 salmon piece = 6 oz)
+ */
+export const ingredientConversions = mysqlTable("ingredientConversions", {
+  id: int("id").autoincrement().primaryKey(),
+  restaurantId: int("restaurantId").notNull(),
+  ingredientId: int("ingredientId").notNull(), // references ingredients.id
+  fromUnit: varchar("fromUnit", { length: 50 }).notNull(), // 'piece'
+  toUnit: varchar("toUnit", { length: 50 }).notNull(), // 'oz'
+  conversionFactor: decimal("conversionFactor", { precision: 15, scale: 6 }).notNull(), // 6.0 (1 piece = 6 oz)
+  notes: text("notes"), // "Based on 6oz portions"
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+}, (table) => ({
+  restaurantIdx: index("restaurant_idx").on(table.restaurantId),
+  ingredientIdx: index("ingredient_idx").on(table.ingredientId),
+  uniqueConversionPerIngredient: unique("unique_conversion_per_ingredient").on(table.restaurantId, table.ingredientId, table.fromUnit, table.toUnit),
 }));
 
 // ============================================================================
@@ -360,6 +397,12 @@ export type PrepPlan = typeof prepPlans.$inferSelect;
 export type InsertPrepPlan = typeof prepPlans.$inferInsert;
 
 export type Report = typeof reports.$inferSelect;
+
+export type UnitCategory = typeof unitCategories.$inferSelect;
+export type InsertUnitCategory = typeof unitCategories.$inferInsert;
+
+export type IngredientConversion = typeof ingredientConversions.$inferSelect;
+export type InsertIngredientConversion = typeof ingredientConversions.$inferInsert;
 export type InsertReport = typeof reports.$inferInsert;
 
 export type RecipeCategory = typeof recipeCategories.$inferSelect;

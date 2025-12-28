@@ -54,9 +54,17 @@ Chef's Kiss is a comprehensive restaurant resource planning tool designed specif
 
 ```
 restaurant-resource-planner/
+├── branding/                    # Official branding package
+│   ├── logos/                  # Logo variations (primary, horizontal, stacked)
+│   ├── icons/                  # App icons (iOS, Android, web)
+│   ├── web/                    # Web assets (favicons, headers)
+│   ├── social_media/           # Social media assets
+│   ├── print/                  # Print-ready assets
+│   └── brand_guide/            # Complete brand style guide
 ├── client/                      # Frontend application
 │   ├── public/                  # Static assets
-│   │   └── chef-logo.png       # Chef's Kiss logo
+│   │   ├── logo.png           # Chef's Kiss horizontal logo
+│   │   └── favicon.ico        # Site favicon
 │   ├── src/
 │   │   ├── _core/              # Core utilities and hooks
 │   │   ├── components/         # Reusable UI components
@@ -345,12 +353,28 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ---
 
+## 🎨 Branding
+
+The Chef's Kiss brand identity features an elegant chef silhouette with the iconic "chef's kiss" gesture, paired with classic serif typography. The complete branding package is available in the `/branding` directory.
+
+### Brand Assets
+- **Logo Variations**: Primary, horizontal, stacked, wordmark-only
+- **Color Palette**: Monochromatic (Black #000000, White #FFFFFF)
+- **Typography**: Didot/Bodoni-style serif for wordmark, Helvetica Neue/Lato for body text
+- **Formats**: PNG with transparent backgrounds
+- **Usage Guidelines**: See `/branding/brand_guide/style_guide.md`
+
+All branding assets are provided in both black (for light backgrounds) and white (for dark backgrounds) versions.
+
+---
+
 ## 🙏 Acknowledgments
 
 - **Manus Platform** - Hosting and infrastructure
 - **shadcn/ui** - Component library
 - **Drizzle ORM** - Database toolkit
 - **OpenWeather** - Weather data API
+- **Chart.js** - Data visualization
 - **Sushi Confidential Campbell** - Inspiration and case study
 
 ---

@@ -14,8 +14,7 @@ export default function Home() {
       <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
         <div className="container flex h-16 items-center justify-between">
           <div className="flex items-center gap-3">
-            <img src="/chef-logo.png" alt="Chef's Kiss" className="h-10 w-10" />
-            <span className="font-bold text-2xl" style={{ fontFamily: "'Poppins', sans-serif" }}>Chef's Kiss</span>
+            <img src="/logo.png" alt="Chef's Kiss" className="h-10" style={{ maxWidth: '150px' }} />
           </div>
           <div className="flex items-center gap-4">
             {isAuthenticated ? (
@@ -38,9 +37,8 @@ export default function Home() {
             <h1 className="text-5xl font-bold tracking-tight">
               Intelligent Operations for <span className="text-primary">Data-Driven</span> Restaurants
             </h1>
-            <div className="flex items-center justify-center gap-3 mt-4">
-              <img src="/chef-logo.png" alt="Chef's Kiss" className="h-16 w-16" />
-              <span className="text-4xl font-bold" style={{ fontFamily: "'Poppins', sans-serif" }}>Chef's Kiss</span>
+            <div className="flex items-center justify-center mt-4">
+              <img src="/logo.png" alt="Chef's Kiss" className="h-20" style={{ maxWidth: '300px' }} />
             </div>
             <p className="text-xl text-muted-foreground">
               Transform your POS data into actionable insights. Optimize prep planning, reduce waste, 

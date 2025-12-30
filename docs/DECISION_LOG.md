@@ -751,3 +751,255 @@ Why was this decision made?
 
 **Last Reviewed:** December 28, 2024  
 **Next Review:** March 28, 2025
+
+
+### DEC-020: Universal Unit Conversion System
+
+**Date:** December 30, 2024  
+**Status:** Accepted  
+**Decider:** Development Team
+
+**Context:**
+Initial implementation stored unit conversions per ingredient (e.g., "oz → lb for Salmon", "oz → lb for Tuna"), resulting in 871 total conversions with 832 duplicates. This was inefficient and difficult to maintain.
+
+**Decision:**
+Implement two-tier conversion system:
+1. **Universal conversions** (15 standard types) - defined once, apply to all ingredients
+2. **Ingredient-specific conversions** (optional) - only for special cases like produce weight→count
+
+**Rationale:**
+1. **97.6% database reduction** - 871 → 21 conversions
+2. **Zero maintenance** - New ingredients automatically inherit all 15 universal conversions
+3. **No manual setup** - Standard units work out of the box
+4. **Flexibility** - Ingredient-specific overrides for special cases
+5. **Scalability** - Adding new standard conversions benefits all ingredients immediately
+
+**Alternatives Considered:**
+1. **Keep ingredient-specific conversions** - Rejected because:
+   - 832 duplicate rows
+   - Manual setup for every new ingredient
+   - Difficult to maintain consistency
+   - Poor scalability
+
+2. **Single-tier universal only** - Rejected because:
+   - Can't handle special cases (e.g., produce weight→count)
+   - Less flexible for unique ingredients
+   - Would require workarounds
+
+**Consequences:**
+- ✅ 97.6% fewer database rows
+- ✅ Zero setup for new ingredients
+- ✅ Easier to maintain and update
+- ✅ Better performance (fewer joins)
+- ❌ Slightly more complex lookup logic (4-level priority)
+- ❌ Need to document which conversions are universal vs ingredient-specific
+
+**Related:** DEC-021 (Piece-Based Fish Pricing)
+
+---
+
+### DEC-021: Piece-Based Fish Pricing
+
+**Date:** December 30, 2024  
+**Status:** Accepted  
+**Decider:** Development Team
+
+**Context:**
+Sashimi-grade fish (Tuna, Salmon, Yellowtail, Albacore) were initially stored as $20-25/lb, but recipes used "pieces". This caused extremely high costs ($100+ per recipe) and negative margins (-400% to -700%).
+
+**Decision:**
+Store sashimi-grade fish in "pieces" unit with per-piece costs instead of pounds.
+
+**Conversion Formula:**
+- Cost per piece = (Cost per lb ÷ 16 oz/lb) × 0.60 oz/piece
+- Example: $20/lb → $0.75/piece
+
+**Rationale:**
+1. **Matches kitchen operations** - Sushi restaurants portion fish by pieces, not weight
+2. **Accurate cost calculations** - Recipes specify "2 pieces salmon", not "1.2 oz salmon"
+3. **Realistic margins** - After fix, margins went from -400% to +60%
+4. **Easier recipe creation** - Chefs think in pieces, not ounces
+5. **Industry standard** - Sushi industry prices fish by piece for portioning
+
+**Alternatives Considered:**
+1. **Keep pound-based pricing with conversions** - Rejected because:
+   - Requires complex weight→count conversions
+   - Doesn't match how chefs actually work
+   - More error-prone
+   - Less intuitive
+
+2. **Use ounces instead of pieces** - Rejected because:
+   - Chefs don't measure fish by weight during service
+   - Adds extra conversion step
+   - Less intuitive for recipe creation
+
+**Consequences:**
+- ✅ Accurate recipe costs (87-92% reduction)
+- ✅ Realistic profit margins (56-72%)
+- ✅ Matches kitchen workflow
+- ✅ Easier recipe creation
+- ❌ Need to convert existing pound-based costs to piece-based
+- ❌ Requires documenting standard piece weight (0.60 oz)
+
+**Related:** DEC-020 (Universal Unit Conversions)
+
+---
+
+### DEC-022: CSS Grid for Edit Recipe Modal Layout
+
+**Date:** December 30, 2024  
+**Status:** Accepted  
+**Decider:** Development Team
+
+**Context:**
+Edit Recipe modal used flex layout for ingredient rows. Long ingredient names (e.g., "Charred Scallion Sauce", "Crab Stick (Kani Kama)") overlapped with Quantity field, making the modal unusable.
+
+**Decision:**
+Replace flex layout with CSS Grid using 5-column structure:
+- Column 1: Ingredient (2fr)
+- Column 2: Quantity (1fr)
+- Column 3: Unit (1.5fr)
+- Column 4: Cost (1fr)
+- Column 5: Delete button (auto)
+
+**Rationale:**
+1. **Prevents overlap** - Fixed column widths prevent text overflow
+2. **Adds cost visibility** - New cost column shows per-ingredient costs
+3. **Better alignment** - Grid ensures consistent spacing
+4. **Graceful truncation** - Long names truncate with ellipsis
+5. **Responsive** - Grid adapts to container width
+
+**Alternatives Considered:**
+1. **Keep flex layout with max-width** - Rejected because:
+   - Still causes overlap on small screens
+   - Doesn't add cost column
+   - Less predictable layout
+
+2. **Use table layout** - Rejected because:
+   - Less flexible for responsive design
+   - Harder to style
+   - More semantic overhead
+
+**Consequences:**
+- ✅ No more text overlap
+- ✅ Per-ingredient cost visibility
+- ✅ Better visual alignment
+- ✅ Easier to maintain
+- ❌ Slightly more complex CSS
+- ❌ Need to test on various screen sizes
+
+**Related:** None
+
+---
+
+### DEC-023: GitHub as Primary Source Control
+
+**Date:** December 30, 2024  
+**Status:** Accepted  
+**Decider:** Development Team
+
+**Context:**
+Development happens in two environments:
+1. **Manus** - Cloud-based development with built-in git
+2. **Cursor/Local** - Local development with git
+
+Need to establish single source of truth for code synchronization.
+
+**Decision:**
+Use GitHub repository (https://github.com/rstamps01/chefs-kiss.git) as primary source control. All changes in Manus or Cursor must be pushed to GitHub.
+
+**Sync Workflow:**
+1. **Manus → GitHub**: After each checkpoint, push changes to GitHub
+2. **Cursor → GitHub**: Commit and push changes regularly
+3. **GitHub → Manus**: Pull latest changes before starting work
+4. **GitHub → Cursor**: Pull latest changes before starting work
+
+**Rationale:**
+1. **Single source of truth** - Prevents code conflicts
+2. **Version history** - GitHub provides complete change history
+3. **Collaboration** - Multiple developers can work on same codebase
+4. **Backup** - Code is backed up in GitHub
+5. **CI/CD ready** - GitHub Actions for automated testing and deployment
+
+**Alternatives Considered:**
+1. **Manus git as primary** - Rejected because:
+   - Not accessible outside Manus
+   - No collaboration features
+   - No CI/CD integration
+
+2. **Separate repos for Manus and Cursor** - Rejected because:
+   - Code divergence risk
+   - Manual synchronization required
+   - Confusing for team members
+
+**Consequences:**
+- ✅ Single source of truth
+- ✅ Complete version history
+- ✅ Collaboration-ready
+- ✅ CI/CD integration possible
+- ❌ Requires discipline to push regularly
+- ❌ Need to document sync workflow
+
+**Related:** None
+
+---
+
+### DEC-024: AI Automation Roadmap (Prophet + XGBoost + LLM Agent)
+
+**Date:** December 30, 2024  
+**Status:** Accepted  
+**Decider:** Product Team
+
+**Context:**
+Current forecasting uses simple historical averages (70-80% accuracy). Need to implement AI-powered automation for:
+1. Prep sheet automation
+2. Projected sales modeling
+3. Smarter labor scheduling
+
+**Decision:**
+Implement three-tier AI system:
+1. **Prophet + XGBoost** for time series forecasting (85-95% accuracy)
+2. **Weather + Event Integration** for contextual adjustments
+3. **LLM Agent** (Manus built-in) for conversational interface
+
+**Rationale:**
+1. **Proven accuracy** - Prophet + XGBoost achieves 85-95% accuracy in production
+2. **Weather correlation** - 15-20% sales impact from weather (Sushi Confidential data)
+3. **Event impact** - Local events drive 10-30% sales spikes
+4. **Conversational UX** - LLM agent provides natural language interface
+5. **ROI** - $56,700 annual savings for $1M revenue restaurant
+
+**Alternatives Considered:**
+1. **Simple ML (Linear Regression)** - Rejected because:
+   - Lower accuracy (75-85%)
+   - Can't handle seasonality well
+   - No weather/event integration
+
+2. **ARIMA/SARIMA** - Rejected because:
+   - Requires manual parameter tuning
+   - Less accurate than Prophet
+   - Harder to integrate external factors
+
+3. **Deep Learning (LSTM/Transformer)** - Rejected because:
+   - Requires large datasets (3+ years)
+   - Overkill for this use case
+   - Harder to interpret results
+   - Higher computational costs
+
+**Consequences:**
+- ✅ 85-95% forecast accuracy (vs 70-80% current)
+- ✅ Automated prep sheet generation
+- ✅ Proactive labor scheduling recommendations
+- ✅ Natural language interface
+- ✅ $56,700 annual savings (projected)
+- ❌ Requires 6-12 months historical data
+- ❌ Adds Python ML environment complexity
+- ❌ Requires weather API integration
+- ❌ Requires event data integration (PredictHQ)
+
+**Related:** DEC-004 (Weather Integration), DEC-005 (LLM Analytics)
+
+---
+
+**Last Updated:** December 30, 2024  
+**Next Review:** January 15, 2025

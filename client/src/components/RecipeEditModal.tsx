@@ -36,11 +36,13 @@ export function RecipeEditModal({ recipe, open, onOpenChange }: RecipeEditModalP
     ingredientName: string;
     quantity: number;
     unit: string;
+    convertedCost?: string; // Backend-calculated cost with conversions
   }>>(recipe.ingredients.map((ing: any) => ({
     ingredientId: ing.ingredientId,
     ingredientName: ing.ingredientName,
     quantity: parseFloat(ing.quantity),
     unit: ing.unit,
+    convertedCost: ing.convertedCost, // Preserve backend-calculated cost
   })));
 
   // Reset form when recipe changes
@@ -55,6 +57,7 @@ export function RecipeEditModal({ recipe, open, onOpenChange }: RecipeEditModalP
       ingredientName: ing.ingredientName,
       quantity: parseFloat(ing.quantity),
       unit: ing.unit,
+      convertedCost: ing.convertedCost, // Preserve backend-calculated cost
     })));
   }, [recipe]);
 
@@ -232,17 +235,20 @@ export function RecipeEditModal({ recipe, open, onOpenChange }: RecipeEditModalP
 
             <div className="space-y-3">
               {ingredients.map((ingredient, index) => {
-                // Calculate cost for this ingredient
+                // Use backend-calculated cost if available, otherwise calculate estimate
                 const ingredientData = availableIngredients?.find(ing => ing.id === ingredient.ingredientId);
                 let ingredientCost = 0;
-                if (ingredientData?.costPerUnit) {
-                  // Simple calculation: quantity * costPerUnit
-                  // In production, this should use conversion factors
+                
+                // If we have the backend-calculated cost from initial load, use it
+                if (ingredient.convertedCost) {
+                  ingredientCost = parseFloat(ingredient.convertedCost);
+                } else if (ingredientData?.costPerUnit) {
+                  // Fallback: simple calculation (may not be accurate without conversions)
                   ingredientCost = ingredient.quantity * parseFloat(ingredientData.costPerUnit);
                 }
 
                 return (
-                  <div key={index} className="grid grid-cols-[2fr_1fr_1.5fr_1fr_auto] gap-2 items-end">
+                  <div key={index} className="grid grid-cols-[1.5fr_0.8fr_1fr_0.8fr_auto] gap-2 items-end">
                     <div className="grid gap-2">
                       <Label className="text-xs">Ingredient</Label>
                       <Select

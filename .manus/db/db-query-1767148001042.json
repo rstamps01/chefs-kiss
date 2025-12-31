@@ -1,0 +1,16 @@
+{
+  "query": "SELECT id, name, unit, costPerUnit FROM ingredients WHERE name LIKE '%Scallops%' LIMIT 5;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 49cxSE1jUeHq7LY.root --database KMmUaMc2BgFeVkUfVYZGPD --execute SELECT id, name, unit, costPerUnit FROM ingredients WHERE name LIKE '%Scallops%' LIMIT 5;",
+  "rows": [
+    {
+      "id": "150002",
+      "name": "Scallops (Hokkaido Hotate)",
+      "unit": "lb",
+      "costPerUnit": "19.2000"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\tunit\tcostPerUnit\n150002\tScallops (Hokkaido Hotate)\tlb\t19.2000\n",
+  "stderr": "",
+  "execution_time_ms": 109
+}

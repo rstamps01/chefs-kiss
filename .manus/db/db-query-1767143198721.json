@@ -1,0 +1,28 @@
+{
+  "query": "\nSELECT \n    i.id,\n    i.name,\n    i.unit,\n    i.costPerUnit,\n    ic.fromUnit,\n    ic.toUnit,\n    ic.conversionFactor\nFROM ingredients i\nLEFT JOIN ingredientConversions ic ON i.id = ic.ingredientId\nWHERE i.name LIKE '%Scallops%';\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 49cxSE1jUeHq7LY.root --database KMmUaMc2BgFeVkUfVYZGPD --execute \nSELECT \n    i.id,\n    i.name,\n    i.unit,\n    i.costPerUnit,\n    ic.fromUnit,\n    ic.toUnit,\n    ic.conversionFactor\nFROM ingredients i\nLEFT JOIN ingredientConversions ic ON i.id = ic.ingredientId\nWHERE i.name LIKE '%Scallops%';\n",
+  "rows": [
+    {
+      "id": "150002",
+      "name": "Scallops (Hokkaido Hotate)",
+      "unit": "lb",
+      "costPerUnit": "19.2000",
+      "fromUnit": "pc",
+      "toUnit": "oz",
+      "conversionFactor": "1.500000"
+    },
+    {
+      "id": "150002",
+      "name": "Scallops (Hokkaido Hotate)",
+      "unit": "lb",
+      "costPerUnit": "19.2000",
+      "fromUnit": "oz",
+      "toUnit": "pieces",
+      "conversionFactor": "1.000000"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\tunit\tcostPerUnit\tfromUnit\ttoUnit\tconversionFactor\n150002\tScallops (Hokkaido Hotate)\tlb\t19.2000\tpc\toz\t1.500000\n150002\tScallops (Hokkaido Hotate)\tlb\t19.2000\toz\tpieces\t1.000000\n",
+  "stderr": "",
+  "execution_time_ms": 60
+}

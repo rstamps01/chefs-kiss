@@ -1,0 +1,18 @@
+{
+  "query": "\nSELECT id, name, unit, CAST(unit AS CHAR) as unit_str, costPerUnit, restaurantId\nFROM ingredients \nWHERE name LIKE '%Scallops%';\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 49cxSE1jUeHq7LY.root --database KMmUaMc2BgFeVkUfVYZGPD --execute \nSELECT id, name, unit, CAST(unit AS CHAR) as unit_str, costPerUnit, restaurantId\nFROM ingredients \nWHERE name LIKE '%Scallops%';\n",
+  "rows": [
+    {
+      "id": "150002",
+      "name": "Scallops (Hokkaido Hotate)",
+      "unit": "lb",
+      "unit_str": "lb",
+      "costPerUnit": "19.2000",
+      "restaurantId": "1"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\tunit\tunit_str\tcostPerUnit\trestaurantId\n150002\tScallops (Hokkaido Hotate)\tlb\tlb\t19.2000\t1\n",
+  "stderr": "",
+  "execution_time_ms": 61
+}

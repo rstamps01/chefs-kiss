@@ -1,0 +1,9 @@
+{
+  "query": "\nUPDATE ingredients \nSET unit = 'lb', \n    costPerUnit = 19.20\nWHERE name LIKE '%Scallops%';\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 49cxSE1jUeHq7LY.root --database KMmUaMc2BgFeVkUfVYZGPD --execute \nUPDATE ingredients \nSET unit = 'lb', \n    costPerUnit = 19.20\nWHERE name LIKE '%Scallops%';\n",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 64
+}

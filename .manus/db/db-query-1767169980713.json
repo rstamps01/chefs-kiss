@@ -1,0 +1,14 @@
+{
+  "query": "SELECT id, name FROM restaurants;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 49cxSE1jUeHq7LY.root --database KMmUaMc2BgFeVkUfVYZGPD --execute SELECT id, name FROM restaurants;",
+  "rows": [
+    {
+      "id": "1",
+      "name": "Sushi Confidential"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\n1\tSushi Confidential\n",
+  "stderr": "",
+  "execution_time_ms": 61
+}

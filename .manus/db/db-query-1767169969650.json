@@ -1,0 +1,40 @@
+{
+  "query": "SELECT \n  'Test Shrimp Recipe' as recipe_type,\n  r.id,\n  r.name,\n  r.restaurantId\nFROM recipes r\nWHERE r.name = 'Test Shrimp Recipe'\nUNION ALL\nSELECT \n  'Other Recipes' as recipe_type,\n  r.id,\n  r.name,\n  r.restaurantId\nFROM recipes r\nWHERE r.name != 'Test Shrimp Recipe'\nLIMIT 5;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 49cxSE1jUeHq7LY.root --database KMmUaMc2BgFeVkUfVYZGPD --execute SELECT \n  'Test Shrimp Recipe' as recipe_type,\n  r.id,\n  r.name,\n  r.restaurantId\nFROM recipes r\nWHERE r.name = 'Test Shrimp Recipe'\nUNION ALL\nSELECT \n  'Other Recipes' as recipe_type,\n  r.id,\n  r.name,\n  r.restaurantId\nFROM recipes r\nWHERE r.name != 'Test Shrimp Recipe'\nLIMIT 5;",
+  "rows": [
+    {
+      "recipe_type": "Other Recipes",
+      "id": "60001",
+      "name": "RSM Full",
+      "restaurantId": "1"
+    },
+    {
+      "recipe_type": "Other Recipes",
+      "id": "60002",
+      "name": "RSM Half",
+      "restaurantId": "1"
+    },
+    {
+      "recipe_type": "Other Recipes",
+      "id": "60003",
+      "name": "Geisha Girl",
+      "restaurantId": "1"
+    },
+    {
+      "recipe_type": "Other Recipes",
+      "id": "60004",
+      "name": "Shishito-Kamikaze",
+      "restaurantId": "1"
+    },
+    {
+      "recipe_type": "Other Recipes",
+      "id": "60005",
+      "name": "Salmon Sushi Rollito",
+      "restaurantId": "1"
+    }
+  ],
+  "messages": [],
+  "stdout": "recipe_type\tid\tname\trestaurantId\nOther Recipes\t60001\tRSM Full\t1\nOther Recipes\t60002\tRSM Half\t1\nOther Recipes\t60003\tGeisha Girl\t1\nOther Recipes\t60004\tShishito-Kamikaze\t1\nOther Recipes\t60005\tSalmon Sushi Rollito\t1\n",
+  "stderr": "",
+  "execution_time_ms": 58
+}

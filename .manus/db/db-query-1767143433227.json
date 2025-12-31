@@ -1,0 +1,28 @@
+{
+  "query": "\nSELECT \n    ic.id,\n    ic.ingredientId,\n    i.name as ingredient_name,\n    ic.fromUnit,\n    ic.toUnit,\n    ic.conversionFactor,\n    ic.notes\nFROM ingredientConversions ic\nJOIN ingredients i ON ic.ingredientId = i.id\nWHERE i.name LIKE '%Scallops%'\nORDER BY ic.id;\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 49cxSE1jUeHq7LY.root --database KMmUaMc2BgFeVkUfVYZGPD --execute \nSELECT \n    ic.id,\n    ic.ingredientId,\n    i.name as ingredient_name,\n    ic.fromUnit,\n    ic.toUnit,\n    ic.conversionFactor,\n    ic.notes\nFROM ingredientConversions ic\nJOIN ingredients i ON ic.ingredientId = i.id\nWHERE i.name LIKE '%Scallops%'\nORDER BY ic.id;\n",
+  "rows": [
+    {
+      "id": "90002",
+      "ingredientId": "150002",
+      "ingredient_name": "Scallops (Hokkaido Hotate)",
+      "fromUnit": "oz",
+      "toUnit": "pieces",
+      "conversionFactor": "1.000000",
+      "notes": "NULL"
+    },
+    {
+      "id": "90003",
+      "ingredientId": "150002",
+      "ingredient_name": "Scallops (Hokkaido Hotate)",
+      "fromUnit": "pc",
+      "toUnit": "oz",
+      "conversionFactor": "1.500000",
+      "notes": "U10 Hokkaido scallops: 1 piece = 1.5 oz"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tingredientId\tingredient_name\tfromUnit\ttoUnit\tconversionFactor\tnotes\n90002\t150002\tScallops (Hokkaido Hotate)\toz\tpieces\t1.000000\tNULL\n90003\t150002\tScallops (Hokkaido Hotate)\tpc\toz\t1.500000\tU10 Hokkaido scallops: 1 piece = 1.5 oz\n",
+  "stderr": "",
+  "execution_time_ms": 55
+}

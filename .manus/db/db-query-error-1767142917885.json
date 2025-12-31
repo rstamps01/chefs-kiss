@@ -1,0 +1,8 @@
+{
+  "query": "\nSELECT \n  i.id,\n  i.name,\n  i.cost_per_unit,\n  u.name as unit_name,\n  i.unit as unit_id,\n  i.category\nFROM ingredients i\nLEFT JOIN ingredient_units u ON i.unit = u.id\nWHERE i.category IN ('Seafood', 'Fish', 'Meat', 'Protein')\n   OR i.name LIKE '%Tuna%'\n   OR i.name LIKE '%Salmon%'\n   OR i.name LIKE '%Scallop%'\n   OR i.name LIKE '%Yellowtail%'\n   OR i.name LIKE '%Albacore%'\n   OR i.name LIKE '%Shrimp%'\n   OR i.name LIKE '%Crab%'\n   OR i.name LIKE '%Eel%'\nORDER BY i.name;\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 49cxSE1jUeHq7LY.root --database KMmUaMc2BgFeVkUfVYZGPD --execute \nSELECT \n  i.id,\n  i.name,\n  i.cost_per_unit,\n  u.name as unit_name,\n  i.unit as unit_id,\n  i.category\nFROM ingredients i\nLEFT JOIN ingredient_units u ON i.unit = u.id\nWHERE i.category IN ('Seafood', 'Fish', 'Meat', 'Protein')\n   OR i.name LIKE '%Tuna%'\n   OR i.name LIKE '%Salmon%'\n   OR i.name LIKE '%Scallop%'\n   OR i.name LIKE '%Yellowtail%'\n   OR i.name LIKE '%Albacore%'\n   OR i.name LIKE '%Shrimp%'\n   OR i.name LIKE '%Crab%'\n   OR i.name LIKE '%Eel%'\nORDER BY i.name;\n",
+  "returncode": 1,
+  "logs": [
+    "ERROR 1146 (42S02) at line 2: Table 'kmmuamc2bgfevkufvyzgpd.ingredient_units' doesn't exist"
+  ]
+}

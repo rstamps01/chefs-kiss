@@ -1,0 +1,160 @@
+{
+  "query": "\nSELECT * FROM unitConversions ORDER BY fromUnit, toUnit;\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 49cxSE1jUeHq7LY.root --database KMmUaMc2BgFeVkUfVYZGPD --execute \nSELECT * FROM unitConversions ORDER BY fromUnit, toUnit;\n",
+  "rows": [
+    {
+      "id": "7",
+      "restaurantId": "1",
+      "fromUnit": "cup",
+      "toUnit": "gallon",
+      "conversionFactor": "0.062500",
+      "notes": "Standard conversion (migrated from 64 ingredients)",
+      "createdAt": "2025-12-28 20:03:16",
+      "updatedAt": "2025-12-28 20:03:16"
+    },
+    {
+      "id": "5",
+      "restaurantId": "1",
+      "fromUnit": "cup",
+      "toUnit": "lb",
+      "conversionFactor": "0.500000",
+      "notes": "Standard conversion (migrated from 64 ingredients)",
+      "createdAt": "2025-12-28 20:03:16",
+      "updatedAt": "2025-12-28 20:03:16"
+    },
+    {
+      "id": "4",
+      "restaurantId": "1",
+      "fromUnit": "g",
+      "toUnit": "kg",
+      "conversionFactor": "0.001000",
+      "notes": "Standard conversion (migrated from 64 ingredients)",
+      "createdAt": "2025-12-28 20:03:16",
+      "updatedAt": "2025-12-28 20:03:16"
+    },
+    {
+      "id": "1",
+      "restaurantId": "1",
+      "fromUnit": "g",
+      "toUnit": "lb",
+      "conversionFactor": "0.002205",
+      "notes": "Standard conversion (migrated from 64 ingredients)",
+      "createdAt": "2025-12-28 20:03:16",
+      "updatedAt": "2025-12-28 20:03:16"
+    },
+    {
+      "id": "3",
+      "restaurantId": "1",
+      "fromUnit": "ml",
+      "toUnit": "l",
+      "conversionFactor": "0.001000",
+      "notes": "Standard conversion (migrated from 64 ingredients)",
+      "createdAt": "2025-12-28 20:03:16",
+      "updatedAt": "2025-12-28 20:03:16"
+    },
+    {
+      "id": "9",
+      "restaurantId": "1",
+      "fromUnit": "oz",
+      "toUnit": "cup",
+      "conversionFactor": "0.125000",
+      "notes": "Standard conversion (migrated from 64 ingredients)",
+      "createdAt": "2025-12-28 20:03:16",
+      "updatedAt": "2025-12-28 20:03:16"
+    },
+    {
+      "id": "10",
+      "restaurantId": "1",
+      "fromUnit": "oz",
+      "toUnit": "gallon",
+      "conversionFactor": "0.007813",
+      "notes": "Standard conversion (migrated from 64 ingredients)",
+      "createdAt": "2025-12-28 20:03:16",
+      "updatedAt": "2025-12-28 20:03:16"
+    },
+    {
+      "id": "13",
+      "restaurantId": "1",
+      "fromUnit": "oz",
+      "toUnit": "kg",
+      "conversionFactor": "0.028350",
+      "notes": "Standard conversion (migrated from 64 ingredients)",
+      "createdAt": "2025-12-28 20:03:16",
+      "updatedAt": "2025-12-28 20:03:16"
+    },
+    {
+      "id": "8",
+      "restaurantId": "1",
+      "fromUnit": "oz",
+      "toUnit": "lb",
+      "conversionFactor": "0.062500",
+      "notes": "Standard conversion (migrated from 64 ingredients)",
+      "createdAt": "2025-12-28 20:03:16",
+      "updatedAt": "2025-12-28 20:03:16"
+    },
+    {
+      "id": "14",
+      "restaurantId": "1",
+      "fromUnit": "pieces",
+      "toUnit": "lb",
+      "conversionFactor": "0.037500",
+      "notes": "Standard conversion (migrated from 19 ingredients)",
+      "createdAt": "2025-12-28 20:03:16",
+      "updatedAt": "2025-12-28 20:03:16"
+    },
+    {
+      "id": "15",
+      "restaurantId": "1",
+      "fromUnit": "pieces",
+      "toUnit": "oz",
+      "conversionFactor": "0.600000",
+      "notes": "Standard conversion (migrated from 14 ingredients)",
+      "createdAt": "2025-12-28 20:03:16",
+      "updatedAt": "2025-12-28 20:03:16"
+    },
+    {
+      "id": "2",
+      "restaurantId": "1",
+      "fromUnit": "tbsp",
+      "toUnit": "cup",
+      "conversionFactor": "0.062500",
+      "notes": "Standard conversion (migrated from 64 ingredients)",
+      "createdAt": "2025-12-28 20:03:16",
+      "updatedAt": "2025-12-28 20:03:16"
+    },
+    {
+      "id": "12",
+      "restaurantId": "1",
+      "fromUnit": "tbsp",
+      "toUnit": "oz",
+      "conversionFactor": "0.500000",
+      "notes": "Standard conversion (migrated from 64 ingredients)",
+      "createdAt": "2025-12-28 20:03:16",
+      "updatedAt": "2025-12-28 20:03:16"
+    },
+    {
+      "id": "6",
+      "restaurantId": "1",
+      "fromUnit": "tsp",
+      "toUnit": "oz",
+      "conversionFactor": "0.167000",
+      "notes": "Standard conversion (migrated from 64 ingredients)",
+      "createdAt": "2025-12-28 20:03:16",
+      "updatedAt": "2025-12-28 20:03:16"
+    },
+    {
+      "id": "11",
+      "restaurantId": "1",
+      "fromUnit": "tsp",
+      "toUnit": "tbsp",
+      "conversionFactor": "0.333333",
+      "notes": "Standard conversion (migrated from 64 ingredients)",
+      "createdAt": "2025-12-28 20:03:16",
+      "updatedAt": "2025-12-28 20:03:16"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\trestaurantId\tfromUnit\ttoUnit\tconversionFactor\tnotes\tcreatedAt\tupdatedAt\n7\t1\tcup\tgallon\t0.062500\tStandard conversion (migrated from 64 ingredients)\t2025-12-28 20:03:16\t2025-12-28 20:03:16\n5\t1\tcup\tlb\t0.500000\tStandard conversion (migrated from 64 ingredients)\t2025-12-28 20:03:16\t2025-12-28 20:03:16\n4\t1\tg\tkg\t0.001000\tStandard conversion (migrated from 64 ingredients)\t2025-12-28 20:03:16\t2025-12-28 20:03:16\n1\t1\tg\tlb\t0.002205\tStandard conversion (migrated from 64 ingredients)\t2025-12-28 20:03:16\t2025-12-28 20:03:16\n3\t1\tml\tl\t0.001000\tStandard conversion (migrated from 64 ingredients)\t2025-12-28 20:03:16\t2025-12-28 20:03:16\n9\t1\toz\tcup\t0.125000\tStandard conversion (migrated from 64 ingredients)\t2025-12-28 20:03:16\t2025-12-28 20:03:16\n10\t1\toz\tgallon\t0.007813\tStandard conversion (migrated from 64 ingredients)\t2025-12-28 20:03:16\t2025-12-28 20:03:16\n13\t1\toz\tkg\t0.028350\tStandard conversion (migrated from 64 ingredients)\t2025-12-28 20:03:16\t2025-12-28 20:03:16\n8\t1\toz\tlb\t0.062500\tStandard conversion (migrated from 64 ingredients)\t2025-12-28 20:03:16\t2025-12-28 20:03:16\n14\t1\tpieces\tlb\t0.037500\tStandard conversion (migrated from 19 ingredients)\t2025-12-28 20:03:16\t2025-12-28 20:03:16\n15\t1\tpieces\toz\t0.600000\tStandard conversion (migrated from 14 ingredients)\t2025-12-28 20:03:16\t2025-12-28 20:03:16\n2\t1\ttbsp\tcup\t0.062500\tStandard conversion (migrated from 64 ingredients)\t2025-12-28 20:03:16\t2025-12-28 20:03:16\n12\t1\ttbsp\toz\t0.500000\tStandard conversion (migrated from 64 ingredients)\t2025-12-28 20:03:16\t2025-12-28 20:03:16\n6\t1\ttsp\toz\t0.167000\tStandard conversion (migrated from 64 ingredients)\t2025-12-28 20:03:16\t2025-12-28 20:03:16\n11\t1\ttsp\ttbsp\t0.333333\tStandard conversion (migrated from 64 ingredients)\t2025-12-28 20:03:16\t2025-12-28 20:03:16\n",
+  "stderr": "",
+  "execution_time_ms": 54
+}

@@ -1,7 +1,8 @@
-import { eq, and } from "drizzle-orm";
+import { eq, and, sql, desc } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
 import { InsertUser, users, recipes, ingredients, recipeIngredients, restaurants, locations, recipeCategories, ingredientUnits, unitCategories, ingredientConversions, unitConversions } from "../drizzle/schema";
 import { ENV } from './_core/env';
+import { convertUnit } from "./unitConversion";
 
 let _db: ReturnType<typeof drizzle> | null = null;
 
@@ -97,6 +98,7 @@ export async function getUserByOpenId(openId: string) {
  * Get all recipes with their ingredients
  */
 export async function getRecipesWithIngredients(restaurantId: number) {
+  console.log('[DB] DEBUG: getRecipesWithIngredients called for restaurantId:', restaurantId);
   const db = await getDb();
   if (!db) {
     console.warn("[Database] Cannot get recipes: database not available");
@@ -108,6 +110,14 @@ export async function getRecipesWithIngredients(restaurantId: number) {
     .select()
     .from(recipes)
     .where(eq(recipes.restaurantId, restaurantId));
+  
+  console.log(`[DB] DEBUG: Found ${allRecipes.length} recipes for restaurant ${restaurantId}`);
+  const testShrimp = allRecipes.find(r => r.name === 'Test Shrimp Recipe');
+  if (testShrimp) {
+    console.log('[DB] DEBUG: Test Shrimp Recipe found:', testShrimp);
+  } else {
+    console.log('[DB] DEBUG: Test Shrimp Recipe NOT found in allRecipes');
+  }
 
   // For each recipe, get its ingredients
   const recipesWithIngredients = await Promise.all(
@@ -135,32 +145,33 @@ export async function getRecipesWithIngredients(restaurantId: number) {
           let conversionApplied = false;
           let conversionWarning: string | null = null;
 
+          // Debug logging for Scallops
+          if (ing.ingredientName && ing.ingredientName.includes('Scallops')) {
+            console.log(`[DB] DEBUG SCALLOPS: ingredientId=${ing.ingredientId}, costPerUnit=${ing.costPerUnit}, unit="${ing.unit}", ingredientUnit="${ing.ingredientUnit}", ingredientName="${ing.ingredientName}"`);
+          }
+
           if (ing.ingredientId && ing.costPerUnit && ing.unit && ing.ingredientUnit) {
             const recipeUnit = ing.unit;
             const ingredientUnit = ing.ingredientUnit;
 
-            // Check if units match
-            if (recipeUnit === ingredientUnit) {
-              // No conversion needed
-              convertedCost = Number(ing.quantity) * Number(ing.costPerUnit);
-            } else {
-              // Units don't match - need conversion
-              conversionFactor = await getConversionFactor(
-                ing.ingredientId,
-                recipeUnit,
-                ingredientUnit
-              );
+            // Use mathjs for automatic unit conversion (supports multi-step conversions)
+            console.log(`[DB] DEBUG: Converting for ingredient: "${ing.ingredientName}", ${ing.quantity} ${recipeUnit} → ${ingredientUnit}`);
+            const convertedQuantity = convertUnit(
+              Number(ing.quantity),
+              recipeUnit,
+              ingredientUnit,
+              ing.ingredientName || undefined  // Pass ingredient name for piece-to-weight conversions
+            );
 
-              if (conversionFactor !== null) {
-                // Conversion found: convert recipe quantity to ingredient unit
-                const convertedQuantity = Number(ing.quantity) * conversionFactor;
-                convertedCost = convertedQuantity * Number(ing.costPerUnit);
-                conversionApplied = true;
-              } else {
-                // No conversion found - use direct multiplication with warning
-                convertedCost = Number(ing.quantity) * Number(ing.costPerUnit);
-                conversionWarning = `Missing conversion: ${recipeUnit} → ${ingredientUnit}`;
-              }
+            if (convertedQuantity !== null) {
+              // Conversion successful
+              convertedCost = convertedQuantity * Number(ing.costPerUnit);
+              conversionFactor = convertedQuantity / Number(ing.quantity);
+              conversionApplied = recipeUnit !== ingredientUnit;
+            } else {
+              // Conversion failed - use direct multiplication with warning
+              convertedCost = Number(ing.quantity) * Number(ing.costPerUnit);
+              conversionWarning = `Failed to convert: ${recipeUnit} → ${ingredientUnit}`;
             }
           }
 

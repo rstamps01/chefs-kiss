@@ -1,0 +1,9 @@
+{
+  "query": "\nINSERT INTO ingredientConversions (restaurantId, ingredientId, fromUnit, toUnit, conversionFactor, notes)\nSELECT \n    restaurantId,\n    id,\n    'pc',\n    'oz',\n    1.5,\n    'U10 Hokkaido scallops: 1 piece = 1.5 oz'\nFROM ingredients\nWHERE name LIKE '%Scallops%';\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 49cxSE1jUeHq7LY.root --database KMmUaMc2BgFeVkUfVYZGPD --execute \nINSERT INTO ingredientConversions (restaurantId, ingredientId, fromUnit, toUnit, conversionFactor, notes)\nSELECT \n    restaurantId,\n    id,\n    'pc',\n    'oz',\n    1.5,\n    'U10 Hokkaido scallops: 1 piece = 1.5 oz'\nFROM ingredients\nWHERE name LIKE '%Scallops%';\n",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 95
+}

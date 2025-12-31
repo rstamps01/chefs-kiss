@@ -1,0 +1,8 @@
+{
+  "query": "INSERT INTO recipe_ingredients (recipeId, ingredientId, quantity, unit, createdAt, updatedAt)\nSELECT \n  (SELECT id FROM recipes WHERE name = 'Test Shrimp Recipe'),\n  (SELECT id FROM ingredients WHERE name = 'Test Shrimp'),\n  10.0000,\n  'pc',\n  NOW(),\n  NOW();",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 49cxSE1jUeHq7LY.root --database KMmUaMc2BgFeVkUfVYZGPD --execute INSERT INTO recipe_ingredients (recipeId, ingredientId, quantity, unit, createdAt, updatedAt)\nSELECT \n  (SELECT id FROM recipes WHERE name = 'Test Shrimp Recipe'),\n  (SELECT id FROM ingredients WHERE name = 'Test Shrimp'),\n  10.0000,\n  'pc',\n  NOW(),\n  NOW();",
+  "returncode": 1,
+  "logs": [
+    "ERROR 1054 (42S22) at line 1: Unknown column 'updatedAt' in 'field list'"
+  ]
+}

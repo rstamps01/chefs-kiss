@@ -1,0 +1,19 @@
+{
+  "query": "SHOW TABLES LIKE '%unit%'",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 49cxSE1jUeHq7LY.root --database KMmUaMc2BgFeVkUfVYZGPD --execute SHOW TABLES LIKE '%unit%'",
+  "rows": [
+    {
+      "Tables_in_KMmUaMc2BgFeVkUfVYZGPD (%unit%)": "ingredientUnits"
+    },
+    {
+      "Tables_in_KMmUaMc2BgFeVkUfVYZGPD (%unit%)": "unitCategories"
+    },
+    {
+      "Tables_in_KMmUaMc2BgFeVkUfVYZGPD (%unit%)": "unitConversions"
+    }
+  ],
+  "messages": [],
+  "stdout": "Tables_in_KMmUaMc2BgFeVkUfVYZGPD (%unit%)\ningredientUnits\nunitCategories\nunitConversions\n",
+  "stderr": "",
+  "execution_time_ms": 48
+}

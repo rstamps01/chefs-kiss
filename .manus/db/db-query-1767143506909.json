@@ -1,0 +1,9 @@
+{
+  "query": "\nINSERT INTO ingredientConversions (restaurantId, ingredientId, fromUnit, toUnit, conversionFactor, notes)\nSELECT \n    restaurantId,\n    id,\n    'pc',\n    'lb',\n    0.09375,\n    'U10 Hokkaido scallops: 1 piece = 1.5 oz = 0.09375 lb'\nFROM ingredients\nWHERE name LIKE '%Scallops%'\nON DUPLICATE KEY UPDATE \n    conversionFactor = 0.09375, \n    notes = 'U10 Hokkaido scallops: 1 piece = 1.5 oz = 0.09375 lb';\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 49cxSE1jUeHq7LY.root --database KMmUaMc2BgFeVkUfVYZGPD --execute \nINSERT INTO ingredientConversions (restaurantId, ingredientId, fromUnit, toUnit, conversionFactor, notes)\nSELECT \n    restaurantId,\n    id,\n    'pc',\n    'lb',\n    0.09375,\n    'U10 Hokkaido scallops: 1 piece = 1.5 oz = 0.09375 lb'\nFROM ingredients\nWHERE name LIKE '%Scallops%'\nON DUPLICATE KEY UPDATE \n    conversionFactor = 0.09375, \n    notes = 'U10 Hokkaido scallops: 1 piece = 1.5 oz = 0.09375 lb';\n",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 59
+}

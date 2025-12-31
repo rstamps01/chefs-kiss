@@ -564,3 +564,11 @@
 - [x] Test with "Scallops (Hokkaido Hotate)" and other long ingredient names (all truncate properly)
 - [x] Verify no overlap occurs with any ingredient name length (tested RSM Full with 12 ingredients, Spicy Scallop Roll)
 - [x] Save checkpoint with final layout fix
+
+## Scallops Ingredient Cost Issue (Completed)
+- [x] Investigate Scallops ingredient data in database (cost per unit $1.20, storage unit should be ID 1)
+- [x] Check if unit conversion exists between "pc" and Scallops storage unit (units match, no conversion needed)
+- [x] Identify why cost calculation returns $0.00 for Scallops (unit field stored as string "pieces" instead of INT 1)
+- [x] Fix missing data or conversion factor (UPDATE ingredients SET unit = 1 WHERE name LIKE '%Scallops%')
+- [x] Test Scallops Nigiri recipe to verify cost displays correctly ($3.03 total, $2.40 for Scallops, 68% margin)
+- [x] Save checkpoint with fix

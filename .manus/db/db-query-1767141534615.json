@@ -1,0 +1,30 @@
+{
+  "query": "SELECT \n  r.name as recipe_name,\n  ri.ingredientId,\n  i.name as ingredient_name,\n  ri.quantity,\n  ri.unit as recipe_unit_value,\n  i.unit as ingredient_unit_id,\n  u.name as ingredient_unit_name,\n  i.costPerUnit\nFROM recipes r\nJOIN recipe_ingredients ri ON r.id = ri.recipeId\nJOIN ingredients i ON ri.ingredientId = i.id\nLEFT JOIN ingredientUnits u ON i.unit = u.id\nWHERE r.name LIKE '%Scallops Nigiri%';",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 49cxSE1jUeHq7LY.root --database KMmUaMc2BgFeVkUfVYZGPD --execute SELECT \n  r.name as recipe_name,\n  ri.ingredientId,\n  i.name as ingredient_name,\n  ri.quantity,\n  ri.unit as recipe_unit_value,\n  i.unit as ingredient_unit_id,\n  u.name as ingredient_unit_name,\n  i.costPerUnit\nFROM recipes r\nJOIN recipe_ingredients ri ON r.id = ri.recipeId\nJOIN ingredients i ON ri.ingredientId = i.id\nLEFT JOIN ingredientUnits u ON i.unit = u.id\nWHERE r.name LIKE '%Scallops Nigiri%';",
+  "rows": [
+    {
+      "recipe_name": "Scallops Nigiri (2pc)",
+      "ingredientId": "1",
+      "ingredient_name": "Sushi Rice",
+      "quantity": "4.0000",
+      "recipe_unit_value": "oz",
+      "ingredient_unit_id": "3",
+      "ingredient_unit_name": "lb",
+      "costPerUnit": "2.5000"
+    },
+    {
+      "recipe_name": "Scallops Nigiri (2pc)",
+      "ingredientId": "150002",
+      "ingredient_name": "Scallops (Hokkaido Hotate)",
+      "quantity": "2.0000",
+      "recipe_unit_value": "pieces",
+      "ingredient_unit_id": "pieces",
+      "ingredient_unit_name": "NULL",
+      "costPerUnit": "1.2000"
+    }
+  ],
+  "messages": [],
+  "stdout": "recipe_name\tingredientId\tingredient_name\tquantity\trecipe_unit_value\tingredient_unit_id\tingredient_unit_name\tcostPerUnit\nScallops Nigiri (2pc)\t1\tSushi Rice\t4.0000\toz\t3\tlb\t2.5000\nScallops Nigiri (2pc)\t150002\tScallops (Hokkaido Hotate)\t2.0000\tpieces\tpieces\tNULL\t1.2000\n",
+  "stderr": "",
+  "execution_time_ms": 58
+}

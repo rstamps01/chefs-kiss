@@ -1,0 +1,90 @@
+{
+  "query": "SELECT id, name, displayName FROM ingredientUnits ORDER BY name;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 49cxSE1jUeHq7LY.root --database KMmUaMc2BgFeVkUfVYZGPD --execute SELECT id, name, displayName FROM ingredientUnits ORDER BY name;",
+  "rows": [
+    {
+      "id": "7",
+      "name": "cup",
+      "displayName": "(cup)"
+    },
+    {
+      "id": "30001",
+      "name": "dozen",
+      "displayName": "(doz)"
+    },
+    {
+      "id": "12",
+      "name": "each",
+      "displayName": "(ea)"
+    },
+    {
+      "id": "5",
+      "name": "g",
+      "displayName": "(g)"
+    },
+    {
+      "id": "60002",
+      "name": "gal",
+      "displayName": "(gl)"
+    },
+    {
+      "id": "13",
+      "name": "gallon",
+      "displayName": "(gal)"
+    },
+    {
+      "id": "4",
+      "name": "kg",
+      "displayName": "(kg)"
+    },
+    {
+      "id": "11",
+      "name": "l",
+      "displayName": "(l)"
+    },
+    {
+      "id": "3",
+      "name": "lb",
+      "displayName": "(lb)"
+    },
+    {
+      "id": "10",
+      "name": "ml",
+      "displayName": "(ml)"
+    },
+    {
+      "id": "2",
+      "name": "oz",
+      "displayName": "(oz)"
+    },
+    {
+      "id": "1",
+      "name": "pieces",
+      "displayName": "(pc)"
+    },
+    {
+      "id": "6",
+      "name": "roll",
+      "displayName": "Roll"
+    },
+    {
+      "id": "14",
+      "name": "sheet",
+      "displayName": "Sheet"
+    },
+    {
+      "id": "8",
+      "name": "tbsp",
+      "displayName": "(tbsp)"
+    },
+    {
+      "id": "9",
+      "name": "tsp",
+      "displayName": "(tsp)"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\tdisplayName\n7\tcup\t(cup)\n30001\tdozen\t(doz)\n12\teach\t(ea)\n5\tg\t(g)\n60002\tgal\t(gl)\n13\tgallon\t(gal)\n4\tkg\t(kg)\n11\tl\t(l)\n3\tlb\t(lb)\n10\tml\t(ml)\n2\toz\t(oz)\n1\tpieces\t(pc)\n6\troll\tRoll\n14\tsheet\tSheet\n8\ttbsp\t(tbsp)\n9\ttsp\t(tsp)\n",
+  "stderr": "",
+  "execution_time_ms": 52
+}

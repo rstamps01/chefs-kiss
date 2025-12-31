@@ -1,0 +1,18 @@
+{
+  "query": "SELECT \n  i.id,\n  i.name,\n  i.costPerUnit,\n  i.unit as unit_value,\n  u.name as unit_name,\n  u.displayName as unit_display\nFROM ingredients i\nLEFT JOIN ingredientUnits u ON i.unit = u.id\nWHERE i.name LIKE '%Scallop%';",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 49cxSE1jUeHq7LY.root --database KMmUaMc2BgFeVkUfVYZGPD --execute SELECT \n  i.id,\n  i.name,\n  i.costPerUnit,\n  i.unit as unit_value,\n  u.name as unit_name,\n  u.displayName as unit_display\nFROM ingredients i\nLEFT JOIN ingredientUnits u ON i.unit = u.id\nWHERE i.name LIKE '%Scallop%';",
+  "rows": [
+    {
+      "id": "150002",
+      "name": "Scallops (Hokkaido Hotate)",
+      "costPerUnit": "1.2000",
+      "unit_value": "1",
+      "unit_name": "pieces",
+      "unit_display": "(pc)"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\tcostPerUnit\tunit_value\tunit_name\tunit_display\n150002\tScallops (Hokkaido Hotate)\t1.2000\t1\tpieces\t(pc)\n",
+  "stderr": "",
+  "execution_time_ms": 58
+}

@@ -557,3 +557,10 @@
 - [x] Test cost calculation with various unit types (pieces, oz, each, cup, gallon) - all working correctly
 - [x] Verify layout works with long ingredient names (Green Onion (Scallion), Crab Stick (Kani Kama)) - no overlap
 - [x] Save checkpoint with fixes
+
+## Edit Recipe Modal - Additional Layout Fix (Completed)
+- [x] Further reduce Ingredient column width to prevent overlap with very long names (reduced from 1.2fr to 1fr)
+- [x] Add text truncation with ellipsis to ingredient dropdown display (added overflow-hidden to parent container)
+- [x] Test with "Scallops (Hokkaido Hotate)" and other long ingredient names (all truncate properly)
+- [x] Verify no overlap occurs with any ingredient name length (tested RSM Full with 12 ingredients, Spicy Scallop Roll)
+- [x] Save checkpoint with final layout fix

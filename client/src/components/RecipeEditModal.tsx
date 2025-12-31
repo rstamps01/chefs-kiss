@@ -248,15 +248,15 @@ export function RecipeEditModal({ recipe, open, onOpenChange }: RecipeEditModalP
                 }
 
                 return (
-                  <div key={index} className="grid grid-cols-[1.5fr_0.8fr_1fr_0.8fr_auto] gap-2 items-end">
-                    <div className="grid gap-2">
+                  <div key={index} className="grid grid-cols-[1fr_0.8fr_1fr_0.8fr_auto] gap-2 items-end">
+                    <div className="grid gap-2 min-w-0 overflow-hidden">
                       <Label className="text-xs">Ingredient</Label>
                       <Select
                         value={ingredient.ingredientId.toString()}
                         onValueChange={(value) => updateIngredient(index, "ingredientId", parseInt(value))}
                       >
-                        <SelectTrigger className="truncate">
-                          <SelectValue />
+                        <SelectTrigger className="truncate max-w-full">
+                          <SelectValue className="truncate" />
                         </SelectTrigger>
                         <SelectContent>
                           {availableIngredients?.map((ing) => (

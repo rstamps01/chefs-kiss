@@ -1,0 +1,190 @@
+{
+  "query": "SELECT id, name, unit, costPerUnit FROM ingredients WHERE restaurantId = 1 ORDER BY name LIMIT 30",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 49cxSE1jUeHq7LY.root --database KMmUaMc2BgFeVkUfVYZGPD --execute SELECT id, name, unit, costPerUnit FROM ingredients WHERE restaurantId = 1 ORDER BY name LIMIT 30",
+  "rows": [
+    {
+      "id": "30004",
+      "name": "Albacore (sashimi grade)",
+      "unit": "oz",
+      "costPerUnit": "0.8600"
+    },
+    {
+      "id": "5",
+      "name": "Avocado",
+      "unit": "12",
+      "costPerUnit": "2.0000"
+    },
+    {
+      "id": "150042",
+      "name": "Bonito Flakes",
+      "unit": "7",
+      "costPerUnit": "1.0000"
+    },
+    {
+      "id": "30006",
+      "name": "California Roll (base)",
+      "unit": "6",
+      "costPerUnit": "4.0000"
+    },
+    {
+      "id": "150012",
+      "name": "Carrot",
+      "unit": "12",
+      "costPerUnit": "0.3000"
+    },
+    {
+      "id": "150032",
+      "name": "Charred Scallion Sauce",
+      "unit": "13",
+      "costPerUnit": "25.0000"
+    },
+    {
+      "id": "150009",
+      "name": "Cooked Salmon",
+      "unit": "2",
+      "costPerUnit": "0.9375"
+    },
+    {
+      "id": "150004",
+      "name": "Cooked Shrimp (Ebi)",
+      "unit": "2",
+      "costPerUnit": "0.8125"
+    },
+    {
+      "id": "150007",
+      "name": "Crab Stick (Kani Kama)",
+      "unit": "2",
+      "costPerUnit": "1.5625"
+    },
+    {
+      "id": "150044",
+      "name": "Cream Cheese",
+      "unit": "3",
+      "costPerUnit": "3.0000"
+    },
+    {
+      "id": "6",
+      "name": "Cucumber",
+      "unit": "12",
+      "costPerUnit": "1.5000"
+    },
+    {
+      "id": "150003",
+      "name": "Eel (Unagi)",
+      "unit": "2",
+      "costPerUnit": "1.8125"
+    },
+    {
+      "id": "150043",
+      "name": "Flamin' HOT Cheetos",
+      "unit": "7",
+      "costPerUnit": "1.0000"
+    },
+    {
+      "id": "150019",
+      "name": "Fresh Cilantro",
+      "unit": "12",
+      "costPerUnit": "0.5000"
+    },
+    {
+      "id": "60001",
+      "name": "Fresh Mango (Organic)",
+      "unit": "12",
+      "costPerUnit": "3.0000"
+    },
+    {
+      "id": "150045",
+      "name": "Fried Tofu (Inari)",
+      "unit": "3",
+      "costPerUnit": "5.0000"
+    },
+    {
+      "id": "9",
+      "name": "Ginger (Pickled)",
+      "unit": "3",
+      "costPerUnit": "8.0000"
+    },
+    {
+      "id": "150016",
+      "name": "Green Onion (Scallion)",
+      "unit": "12",
+      "costPerUnit": "1.0000"
+    },
+    {
+      "id": "150022",
+      "name": "Habanero Tobiko",
+      "unit": "12",
+      "costPerUnit": "3.5000"
+    },
+    {
+      "id": "150023",
+      "name": "Ikura (Salmon Eggs)",
+      "unit": "2",
+      "costPerUnit": "5.0000"
+    },
+    {
+      "id": "150015",
+      "name": "Jalapeño",
+      "unit": "12",
+      "costPerUnit": "0.2500"
+    },
+    {
+      "id": "150038",
+      "name": "Jalapeño-Infused Olive Oil",
+      "unit": "13",
+      "costPerUnit": "50.0000"
+    },
+    {
+      "id": "150013",
+      "name": "Lemon",
+      "unit": "12",
+      "costPerUnit": "0.5000"
+    },
+    {
+      "id": "150014",
+      "name": "Lime",
+      "unit": "12",
+      "costPerUnit": "0.4000"
+    },
+    {
+      "id": "150039",
+      "name": "Macadamia Nuts",
+      "unit": "2",
+      "costPerUnit": "1.0000"
+    },
+    {
+      "id": "150037",
+      "name": "Meyer Lemon Olive Oil",
+      "unit": "13",
+      "costPerUnit": "50.0000"
+    },
+    {
+      "id": "150018",
+      "name": "Micro Cilantro",
+      "unit": "12",
+      "costPerUnit": "2.0000"
+    },
+    {
+      "id": "150011",
+      "name": "New York Steak (Sliced)",
+      "unit": "oz",
+      "costPerUnit": "0.9400"
+    },
+    {
+      "id": "2",
+      "name": "Nori Sheets",
+      "unit": "14",
+      "costPerUnit": "0.2000"
+    },
+    {
+      "id": "150036",
+      "name": "Persian Lime Olive Oil",
+      "unit": "13",
+      "costPerUnit": "50.0000"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\tunit\tcostPerUnit\n30004\tAlbacore (sashimi grade)\toz\t0.8600\n5\tAvocado\t12\t2.0000\n150042\tBonito Flakes\t7\t1.0000\n30006\tCalifornia Roll (base)\t6\t4.0000\n150012\tCarrot\t12\t0.3000\n150032\tCharred Scallion Sauce\t13\t25.0000\n150009\tCooked Salmon\t2\t0.9375\n150004\tCooked Shrimp (Ebi)\t2\t0.8125\n150007\tCrab Stick (Kani Kama)\t2\t1.5625\n150044\tCream Cheese\t3\t3.0000\n6\tCucumber\t12\t1.5000\n150003\tEel (Unagi)\t2\t1.8125\n150043\tFlamin' HOT Cheetos\t7\t1.0000\n150019\tFresh Cilantro\t12\t0.5000\n60001\tFresh Mango (Organic)\t12\t3.0000\n150045\tFried Tofu (Inari)\t3\t5.0000\n9\tGinger (Pickled)\t3\t8.0000\n150016\tGreen Onion (Scallion)\t12\t1.0000\n150022\tHabanero Tobiko\t12\t3.5000\n150023\tIkura (Salmon Eggs)\t2\t5.0000\n150015\tJalapeño\t12\t0.2500\n150038\tJalapeño-Infused Olive Oil\t13\t50.0000\n150013\tLemon\t12\t0.5000\n150014\tLime\t12\t0.4000\n150039\tMacadamia Nuts\t2\t1.0000\n150037\tMeyer Lemon Olive Oil\t13\t50.0000\n150018\tMicro Cilantro\t12\t2.0000\n150011\tNew York Steak (Sliced)\toz\t0.9400\n2\tNori Sheets\t14\t0.2000\n150036\tPersian Lime Olive Oil\t13\t50.0000\n",
+  "stderr": "",
+  "execution_time_ms": 66
+}

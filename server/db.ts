@@ -134,7 +134,7 @@ export async function getRecipesWithIngredients(restaurantId: number) {
         })
         .from(recipeIngredients)
         .leftJoin(ingredients, eq(recipeIngredients.ingredientId, ingredients.id))
-        .leftJoin(ingredientUnits, eq(ingredients.unit, ingredientUnits.id))
+        .leftJoin(ingredientUnits, eq(ingredients.unit, ingredientUnits.name))
         .where(eq(recipeIngredients.recipeId, recipe.id));
 
       // Calculate costs with unit conversion

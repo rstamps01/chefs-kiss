@@ -1,0 +1,122 @@
+{
+  "query": "SELECT id, restaurantId, name, displayName, isActive FROM ingredientUnits ORDER BY name;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 49cxSE1jUeHq7LY.root --database KMmUaMc2BgFeVkUfVYZGPD --execute SELECT id, restaurantId, name, displayName, isActive FROM ingredientUnits ORDER BY name;",
+  "rows": [
+    {
+      "id": "7",
+      "restaurantId": "1",
+      "name": "cup",
+      "displayName": "(cup)",
+      "isActive": "1"
+    },
+    {
+      "id": "30001",
+      "restaurantId": "1",
+      "name": "dozen",
+      "displayName": "(doz)",
+      "isActive": "1"
+    },
+    {
+      "id": "12",
+      "restaurantId": "1",
+      "name": "each",
+      "displayName": "(ea)",
+      "isActive": "1"
+    },
+    {
+      "id": "5",
+      "restaurantId": "1",
+      "name": "g",
+      "displayName": "(g)",
+      "isActive": "1"
+    },
+    {
+      "id": "60002",
+      "restaurantId": "1",
+      "name": "gal",
+      "displayName": "(gl)",
+      "isActive": "0"
+    },
+    {
+      "id": "13",
+      "restaurantId": "1",
+      "name": "gallon",
+      "displayName": "(gal)",
+      "isActive": "1"
+    },
+    {
+      "id": "4",
+      "restaurantId": "1",
+      "name": "kg",
+      "displayName": "(kg)",
+      "isActive": "1"
+    },
+    {
+      "id": "11",
+      "restaurantId": "1",
+      "name": "l",
+      "displayName": "(l)",
+      "isActive": "1"
+    },
+    {
+      "id": "3",
+      "restaurantId": "1",
+      "name": "lb",
+      "displayName": "(lb)",
+      "isActive": "1"
+    },
+    {
+      "id": "10",
+      "restaurantId": "1",
+      "name": "ml",
+      "displayName": "(ml)",
+      "isActive": "1"
+    },
+    {
+      "id": "2",
+      "restaurantId": "1",
+      "name": "oz",
+      "displayName": "(oz)",
+      "isActive": "1"
+    },
+    {
+      "id": "1",
+      "restaurantId": "1",
+      "name": "pieces",
+      "displayName": "(pc)",
+      "isActive": "1"
+    },
+    {
+      "id": "6",
+      "restaurantId": "1",
+      "name": "roll",
+      "displayName": "Roll",
+      "isActive": "1"
+    },
+    {
+      "id": "14",
+      "restaurantId": "1",
+      "name": "sheet",
+      "displayName": "Sheet",
+      "isActive": "1"
+    },
+    {
+      "id": "8",
+      "restaurantId": "1",
+      "name": "tbsp",
+      "displayName": "(tbsp)",
+      "isActive": "1"
+    },
+    {
+      "id": "9",
+      "restaurantId": "1",
+      "name": "tsp",
+      "displayName": "(tsp)",
+      "isActive": "1"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\trestaurantId\tname\tdisplayName\tisActive\n7\t1\tcup\t(cup)\t1\n30001\t1\tdozen\t(doz)\t1\n12\t1\teach\t(ea)\t1\n5\t1\tg\t(g)\t1\n60002\t1\tgal\t(gl)\t0\n13\t1\tgallon\t(gal)\t1\n4\t1\tkg\t(kg)\t1\n11\t1\tl\t(l)\t1\n3\t1\tlb\t(lb)\t1\n10\t1\tml\t(ml)\t1\n2\t1\toz\t(oz)\t1\n1\t1\tpieces\t(pc)\t1\n6\t1\troll\tRoll\t1\n14\t1\tsheet\tSheet\t1\n8\t1\ttbsp\t(tbsp)\t1\n9\t1\ttsp\t(tsp)\t1\n",
+  "stderr": "",
+  "execution_time_ms": 119
+}

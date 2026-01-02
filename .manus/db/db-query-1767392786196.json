@@ -1,0 +1,9 @@
+{
+  "query": "-- Activate gal unit\nUPDATE ingredientUnits SET isActive = 1 WHERE id = 60002;\n\n-- Add pint, quart, fluid ounce\nINSERT INTO ingredientUnits (restaurantId, name, displayName, isStandard, isActive, displayOrder) \nVALUES \n  (1, 'pt', 'Pint (pt)', 1, 1, 15),\n  (1, 'qt', 'Quart (qt)', 1, 1, 16),\n  (1, 'fl oz', 'Fluid Ounce (fl oz)', 1, 1, 17);",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 49cxSE1jUeHq7LY.root --database KMmUaMc2BgFeVkUfVYZGPD --execute -- Activate gal unit\nUPDATE ingredientUnits SET isActive = 1 WHERE id = 60002;\n\n-- Add pint, quart, fluid ounce\nINSERT INTO ingredientUnits (restaurantId, name, displayName, isStandard, isActive, displayOrder) \nVALUES \n  (1, 'pt', 'Pint (pt)', 1, 1, 15),\n  (1, 'qt', 'Quart (qt)', 1, 1, 16),\n  (1, 'fl oz', 'Fluid Ounce (fl oz)', 1, 1, 17);",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 73
+}

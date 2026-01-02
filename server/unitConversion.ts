@@ -20,7 +20,7 @@ const UNIT_ALIASES: Record<string, string> = {
   
   // Weight units
   'oz': 'ounce',
-  'lb': 'pound',
+  'lb': 'lb',  // mathjs recognizes 'lb' and 'lbm', not 'pound'
   'kg': 'kilogram',
   'g': 'gram',
   
@@ -141,9 +141,11 @@ export function convertUnit(
       return null;
     }
 
-    // Special handling for "cup" conversions
-    if (fromUnit.toLowerCase() === 'cup') {
-      console.log(`[UnitConversion] DEBUG: Converting ${value} cup for ingredient: "${ingredientName || 'unknown'}"`);
+    // Special handling for "cup" conversions to weight units (requires ingredient density)
+    // Only apply this for cup → weight conversions, not cup → volume conversions
+    const weightUnits = ['ounce', 'oz', 'lb', 'lbm', 'kilogram', 'kg', 'gram', 'g'];
+    if (fromUnit.toLowerCase() === 'cup' && weightUnits.includes(normalizedTo)) {
+      console.log(`[UnitConversion] DEBUG: Converting ${value} cup to weight unit ${normalizedTo} for ingredient: "${ingredientName || 'unknown'}"`);
       if (ingredientName) {
         const cupWeight = getIngredientCupWeight(ingredientName);
         console.log(`[UnitConversion] DEBUG: Cup weight lookup result: ${cupWeight}`);

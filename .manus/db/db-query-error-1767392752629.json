@@ -1,0 +1,8 @@
+{
+  "query": "INSERT INTO ingredientUnits (restaurantId, name, displayName, isStandard, isActive, displayOrder) \nVALUES \n  (1, 'gal', 'Gallon (gal)', 1, 1, 6),\n  (1, 'pt', 'Pint (pt)', 1, 1, 7),\n  (1, 'qt', 'Quart (qt)', 1, 1, 8),\n  (1, 'fl oz', 'Fluid Ounce (fl oz)', 1, 1, 9);",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 49cxSE1jUeHq7LY.root --database KMmUaMc2BgFeVkUfVYZGPD --execute INSERT INTO ingredientUnits (restaurantId, name, displayName, isStandard, isActive, displayOrder) \nVALUES \n  (1, 'gal', 'Gallon (gal)', 1, 1, 6),\n  (1, 'pt', 'Pint (pt)', 1, 1, 7),\n  (1, 'qt', 'Quart (qt)', 1, 1, 8),\n  (1, 'fl oz', 'Fluid Ounce (fl oz)', 1, 1, 9);",
+  "returncode": 1,
+  "logs": [
+    "ERROR 1062 (23000) at line 1: Duplicate entry '?' for key 'ingredientUnits.unique_name_per_restaurant'"
+  ]
+}

@@ -895,3 +895,14 @@ All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb
 - [x] Ensure piece-based conversions work for all weight units (oz, lb, kg, g)
 - [x] Test complete conversion matrix (all volume↔volume, all weight↔weight)
 - [x] Update CONVERSION_TEST_RESULTS.md with validation results
+
+## Unit Conversion Issues - Round 2 (Current Sprint)
+- [x] Fix missing volume units in dropdown (gallon, pint, quart, fluid ounce)
+- [x] Fix cup → volume conversions (currently failing)
+- [x] Fix lb → weight conversions (currently failing)
+- [x] Fix weight → lb conversions (currently failing)
+- [x] Test all volume unit conversions after fixes
+- [x] Test all weight unit conversions after fixes
+- [x] Fixed lb unit alias mapping (changed from 'pound' to 'lb' for mathjs compatibility)
+- [x] Added missing volume units to ingredientUnits table (gal, pt, qt, fl oz)
+- [x] Fixed cup conversion logic to only apply special handling for cup→weight, not cup→volume

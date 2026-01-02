@@ -1,0 +1,100 @@
+{
+  "query": "SELECT id, name, displayName, isActive FROM ingredientUnits WHERE isActive = 1 ORDER BY name;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 49cxSE1jUeHq7LY.root --database KMmUaMc2BgFeVkUfVYZGPD --execute SELECT id, name, displayName, isActive FROM ingredientUnits WHERE isActive = 1 ORDER BY name;",
+  "rows": [
+    {
+      "id": "7",
+      "name": "cup",
+      "displayName": "(cup)",
+      "isActive": "1"
+    },
+    {
+      "id": "30001",
+      "name": "dozen",
+      "displayName": "(doz)",
+      "isActive": "1"
+    },
+    {
+      "id": "12",
+      "name": "each",
+      "displayName": "(ea)",
+      "isActive": "1"
+    },
+    {
+      "id": "5",
+      "name": "g",
+      "displayName": "(g)",
+      "isActive": "1"
+    },
+    {
+      "id": "13",
+      "name": "gallon",
+      "displayName": "(gal)",
+      "isActive": "1"
+    },
+    {
+      "id": "4",
+      "name": "kg",
+      "displayName": "(kg)",
+      "isActive": "1"
+    },
+    {
+      "id": "11",
+      "name": "l",
+      "displayName": "(l)",
+      "isActive": "1"
+    },
+    {
+      "id": "3",
+      "name": "lb",
+      "displayName": "(lb)",
+      "isActive": "1"
+    },
+    {
+      "id": "10",
+      "name": "ml",
+      "displayName": "(ml)",
+      "isActive": "1"
+    },
+    {
+      "id": "2",
+      "name": "oz",
+      "displayName": "(oz)",
+      "isActive": "1"
+    },
+    {
+      "id": "1",
+      "name": "pieces",
+      "displayName": "(pc)",
+      "isActive": "1"
+    },
+    {
+      "id": "6",
+      "name": "roll",
+      "displayName": "Roll",
+      "isActive": "1"
+    },
+    {
+      "id": "14",
+      "name": "sheet",
+      "displayName": "Sheet",
+      "isActive": "1"
+    },
+    {
+      "id": "8",
+      "name": "tbsp",
+      "displayName": "(tbsp)",
+      "isActive": "1"
+    },
+    {
+      "id": "9",
+      "name": "tsp",
+      "displayName": "(tsp)",
+      "isActive": "1"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\tdisplayName\tisActive\n7\tcup\t(cup)\t1\n30001\tdozen\t(doz)\t1\n12\teach\t(ea)\t1\n5\tg\t(g)\t1\n13\tgallon\t(gal)\t1\n4\tkg\t(kg)\t1\n11\tl\t(l)\t1\n3\tlb\t(lb)\t1\n10\tml\t(ml)\t1\n2\toz\t(oz)\t1\n1\tpieces\t(pc)\t1\n6\troll\tRoll\t1\n14\tsheet\tSheet\t1\n8\ttbsp\t(tbsp)\t1\n9\ttsp\t(tsp)\t1\n",
+  "stderr": "",
+  "execution_time_ms": 58
+}

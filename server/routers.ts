@@ -158,6 +158,7 @@ export const appRouter = router({
         supplier: z.string().optional(),
         shelfLife: z.number().int().positive().optional(),
         minStock: z.number().positive().optional(),
+        pieceWeightOz: z.number().positive().optional(),
       }))
       .mutation(async ({ ctx, input }) => {
         const { ingredientId, ...updates } = input;

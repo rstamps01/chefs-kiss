@@ -6,46 +6,8 @@ const math: MathJsInstance = create(all);
 // Track initialized custom units to avoid duplicates
 const initializedUnits = new Set<string>();
 
-// Store ingredient-specific piece weights (oz per piece)
-// Used for automatic piece → ounce conversions in recipe cost calculations
-const ingredientPieceWeights: Record<string, number> = {
-  // Scallops (already converted to oz pricing)
-  'Scallops (Hokkaido Hotate)': 1.5,  // 1 scallop piece = 1.5 oz
-  
-  // Shrimp (various preparations)
-  'Test Shrimp': 0.5,                  // 1 test shrimp piece = 0.5 oz (for testing)
-  'Shrimp': 0.5,                       // 1 shrimp piece = 0.5 oz (16-20 count)
-  'Shrimp Tempura': 0.5,               // 1 tempura shrimp = 0.5 oz
-  'Cooked Shrimp (Ebi)': 0.5,          // 1 cooked shrimp = 0.5 oz
-  'Shrimp (cooked)': 0.5,              // 1 cooked shrimp = 0.5 oz
-  
-  // Salmon (various cuts)
-  'Salmon': 1.5,                       // 1 salmon piece = 1.5 oz (standard cut)
-  'Salmon (sashimi grade)': 1.5,       // 1 sashimi piece = 1.5 oz
-  'Cooked Salmon': 1.5,                // 1 cooked piece = 1.5 oz
-  'Smoked Salmon': 1.0,                // 1 smoked slice = 1.0 oz (thin sliced)
-  'Salmon Belly': 2.0,                 // 1 belly piece = 2.0 oz (fattier, larger)
-  
-  // Tuna
-  'Tuna (sashimi grade)': 1.5,         // 1 sashimi piece = 1.5 oz
-  'Tuna (Ahi)': 1.5,                   // 1 ahi piece = 1.5 oz
-  'Tuna (Yellowfin)': 1.5,             // 1 yellowfin piece = 1.5 oz
-  
-  // Other Fish
-  'Yellowtail': 1.5,                   // 1 yellowtail piece = 1.5 oz
-  'Yellowtail (sashimi grade)': 1.5,   // 1 sashimi piece = 1.5 oz
-  'Albacore': 1.5,                     // 1 albacore piece = 1.5 oz
-  'Albacore (sashimi grade)': 1.5,     // 1 sashimi piece = 1.5 oz
-  'Eel (Unagi)': 1.5,                  // 1 eel piece = 1.5 oz (pre-cooked)
-  
-  // Crab
-  'Crab Stick (Kani Kama)': 0.75,      // 1 crab stick = 0.75 oz
-  'Snow Crab': 2.0,                    // 1 crab portion = 2.0 oz (leg meat)
-  'Soft-Shell Crab': 3.0,              // 1 whole crab = 3.0 oz (small to medium)
-  
-  // Meat
-  'New York Steak (Sliced)': 2.5,      // 1 steak slice = 2.5 oz (thin-sliced for sushi rolls)
-};
+// Piece weights are now stored in the database (ingredients.piece_weight_oz column)
+// This allows users to configure piece weights through the UI instead of hardcoding them here
 
 // Store ingredient-specific cup weights (oz per cup)
 // Used for automatic cup → ounce conversions in recipe cost calculations
@@ -53,6 +15,26 @@ const ingredientPieceWeights: Record<string, number> = {
 const ingredientCupWeights: Record<string, number> = {
   'Sushi Rice': 6.5,                   // 1 cup cooked sushi rice = 6.5 oz (standard culinary measurement)
 };
+
+/**
+ * Get the weight in ounces for one piece of an ingredient
+ * Now accepts the piece weight directly from the database instead of looking up a hardcoded dictionary
+ * 
+ * @param pieceWeightOz - Weight in ounces per piece from database (nullable)
+ * @returns Weight in ounces per piece, or null if not defined
+ * 
+ * @example
+ * getIngredientPieceWeight(1.5) // returns 1.5
+ * getIngredientPieceWeight(null) // returns null
+ * getIngredientPieceWeight(0) // returns null (invalid weight)
+ */
+export function getIngredientPieceWeight(pieceWeightOz: number | null | undefined): number | null {
+  // Handle null, undefined, zero, and negative values
+  if (pieceWeightOz == null || pieceWeightOz <= 0) {
+    return null;
+  }
+  return pieceWeightOz;
+}
 
 /**
  * Get the weight in ounces for one cup of an ingredient
@@ -70,22 +52,6 @@ export function getIngredientCupWeight(ingredientName: string): number | null {
 }
 
 /**
- * Get the weight in ounces for one piece of an ingredient
- * Supports exact name matching for ingredient-specific piece weights
- * 
- * @param ingredientName - Name of the ingredient (must match exactly)
- * @returns Weight in ounces per piece, or null if not defined
- * 
- * @example
- * getIngredientPieceWeight('Scallops (Hokkaido Hotate)') // returns 1.5
- * getIngredientPieceWeight('Shrimp Tempura') // returns 0.5
- * getIngredientPieceWeight('Unknown Ingredient') // returns null
- */
-export function getIngredientPieceWeight(ingredientName: string): number | null {
-  return ingredientPieceWeights[ingredientName] ?? null;
-}
-
-/**
  * Initialize custom ingredient-specific units
  * This is now a no-op since we handle piece conversions dynamically
  */
@@ -96,18 +62,20 @@ export function initializeCustomIngredientUnits() {
 /**
  * Convert a quantity from one unit to another
  * Supports automatic multi-step conversions (e.g., pieces → oz → lb)
- * Special handling for ingredient-specific piece conversions
+ * Special handling for ingredient-specific piece conversions using database values
  * 
  * @param value - Numeric value to convert
  * @param fromUnit - Source unit (e.g., 'pc', 'oz', 'cup')
  * @param toUnit - Target unit (e.g., 'lb', 'kg', 'ml')
- * @param ingredientName - Optional ingredient name for piece-to-weight conversions
+ * @param pieceWeightOz - Optional piece weight from database (for pc conversions)
+ * @param ingredientName - Optional ingredient name (for cup conversions only)
  * @returns Converted value or null if conversion fails
  */
 export function convertUnit(
   value: number,
   fromUnit: string,
   toUnit: string,
+  pieceWeightOz?: number | null,
   ingredientName?: string
 ): number | null {
   try {
@@ -152,11 +120,11 @@ export function convertUnit(
 
     // Special handling for "pc" (pieces) conversions
     if (fromUnit.toLowerCase() === 'pc') {
-      console.log(`[UnitConversion] DEBUG: Converting ${value} pc for ingredient: "${ingredientName || 'unknown'}"`);
-      if (ingredientName) {
-        const pieceWeight = getIngredientPieceWeight(ingredientName);
+      console.log(`[UnitConversion] DEBUG: Converting ${value} pc with pieceWeightOz: ${pieceWeightOz}`);
+      const pieceWeight = getIngredientPieceWeight(pieceWeightOz);
+      if (pieceWeight !== null) {
         console.log(`[UnitConversion] DEBUG: Piece weight lookup result: ${pieceWeight}`);
-        if (pieceWeight !== null) {
+        {
           // Convert pieces to ounces first
           const valueInOz = value * pieceWeight;
           console.log(`[UnitConversion] DEBUG: ${value} pc × ${pieceWeight} oz/pc = ${valueInOz} oz`);

@@ -853,3 +853,18 @@ Added ingredient-specific cup weights to unitConversion.ts:
 
 **Impact:**
 All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb conversions!
+
+## Implement User-Configurable Piece Weight System (Current Task)
+- [ ] Add piece_weight_oz column to ingredients table in drizzle/schema.ts
+- [ ] Run database migration to add the column
+- [ ] Create migration script to populate piece_weight_oz with existing hardcoded values
+- [ ] Update server/db.ts to include piece_weight_oz in ingredient queries
+- [ ] Modify server/unitConversion.ts to accept pieceWeightOz parameter instead of ingredientName
+- [ ] Remove hardcoded ingredientPieceWeights dictionary from unitConversion.ts
+- [ ] Update all convertUnit() calls to pass piece_weight_oz from database
+- [ ] Add piece weight field to Edit Ingredient modal UI
+- [ ] Test editing piece weight via UI
+- [ ] Verify recipe costs recalculate correctly with new piece weights
+- [ ] Update todo.md and save checkpoint
+
+**GOAL:** Make piece weights user-configurable through the Edit Ingredient UI instead of hardcoded in the backend.

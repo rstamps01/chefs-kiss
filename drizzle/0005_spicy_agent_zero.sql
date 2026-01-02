@@ -1,0 +1,1 @@
+ALTER TABLE `ingredients` ADD `piece_weight_oz` decimal(10,4);

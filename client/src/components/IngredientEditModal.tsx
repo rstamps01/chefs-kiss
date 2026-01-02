@@ -16,6 +16,7 @@ interface Ingredient {
   unit: string;
   costPerUnit: string | null;
   supplier: string | null;
+  pieceWeightOz: number | null;
 }
 
 interface IngredientEditModalProps {
@@ -33,6 +34,7 @@ export function IngredientEditModal({ open, onOpenChange, ingredient }: Ingredie
   const [unit, setUnit] = useState("");
   const [costPerUnit, setCostPerUnit] = useState("");
   const [supplier, setSupplier] = useState("");
+  const [pieceWeightOz, setPieceWeightOz] = useState("");
 
   // Fetch active units and categories
   const { data: activeUnits = [] } = trpc.ingredientUnits.listActive.useQuery();
@@ -45,6 +47,7 @@ export function IngredientEditModal({ open, onOpenChange, ingredient }: Ingredie
       setUnit(ingredient.unit);
       setCostPerUnit(ingredient.costPerUnit || "");
       setSupplier(ingredient.supplier || "");
+      setPieceWeightOz(ingredient.pieceWeightOz?.toString() || "");
     }
   }, [ingredient]);
 
@@ -96,6 +99,7 @@ export function IngredientEditModal({ open, onOpenChange, ingredient }: Ingredie
       unit: unit.trim(),
       costPerUnit: costPerUnit ? parseFloat(costPerUnit) : undefined,
       supplier: supplier.trim() || undefined,
+      pieceWeightOz: pieceWeightOz ? parseFloat(pieceWeightOz) : undefined,
     });
   };
 
@@ -172,6 +176,25 @@ export function IngredientEditModal({ open, onOpenChange, ingredient }: Ingredie
               value={costPerUnit}
               onChange={(e) => setCostPerUnit(e.target.value)}
             />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="edit-pieceWeightOz">Piece Weight (oz)</Label>
+            <p className="text-sm text-muted-foreground">
+              Optional - Used when recipes measure this ingredient in pieces (pc)
+            </p>
+            <div className="flex items-center gap-2">
+              <Input
+                id="edit-pieceWeightOz"
+                type="number"
+                step="0.01"
+                min="0"
+                placeholder="e.g., 1.5"
+                value={pieceWeightOz}
+                onChange={(e) => setPieceWeightOz(e.target.value)}
+              />
+              <span className="text-sm text-muted-foreground whitespace-nowrap">oz per piece</span>
+            </div>
           </div>
 
           <div className="space-y-2">

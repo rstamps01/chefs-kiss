@@ -1,0 +1,17 @@
+{
+  "query": "SELECT id, name, unit, costPerUnit, piece_weight_oz FROM ingredients WHERE name LIKE '%Salmon (sashimi%' LIMIT 5;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 49cxSE1jUeHq7LY.root --database KMmUaMc2BgFeVkUfVYZGPD --execute SELECT id, name, unit, costPerUnit, piece_weight_oz FROM ingredients WHERE name LIKE '%Salmon (sashimi%' LIMIT 5;",
+  "rows": [
+    {
+      "id": "30001",
+      "name": "Salmon (sashimi grade)",
+      "unit": "oz",
+      "costPerUnit": "0.7500",
+      "piece_weight_oz": "1.5000"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\tunit\tcostPerUnit\tpiece_weight_oz\n30001\tSalmon (sashimi grade)\toz\t0.7500\t1.5000\n",
+  "stderr": "",
+  "execution_time_ms": 55
+}

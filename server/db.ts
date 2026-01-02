@@ -131,6 +131,7 @@ export async function getRecipesWithIngredients(restaurantId: number) {
           ingredientUnit: ingredientUnits.name, // Ingredient storage unit NAME (not ID)
           category: ingredients.category,
           costPerUnit: ingredients.costPerUnit,
+          pieceWeightOz: ingredients.pieceWeightOz, // Piece weight for pc→oz conversions
         })
         .from(recipeIngredients)
         .leftJoin(ingredients, eq(recipeIngredients.ingredientId, ingredients.id))
@@ -160,7 +161,8 @@ export async function getRecipesWithIngredients(restaurantId: number) {
               Number(ing.quantity),
               recipeUnit,
               ingredientUnit,
-              ing.ingredientName || undefined  // Pass ingredient name for piece-to-weight conversions
+              ing.pieceWeightOz ? Number(ing.pieceWeightOz) : null,  // Pass piece weight from database for pc conversions
+              ing.ingredientName || undefined  // Pass ingredient name for cup conversions
             );
 
             if (convertedQuantity !== null) {
@@ -215,6 +217,7 @@ export async function getIngredients(restaurantId: number) {
       unitDisplayName: ingredientUnits.displayName,
       costPerUnit: ingredients.costPerUnit,
       supplier: ingredients.supplier,
+      pieceWeightOz: ingredients.pieceWeightOz,
       shelfLife: ingredients.shelfLife,
       minStock: ingredients.minStock,
       createdAt: ingredients.createdAt,
@@ -733,6 +736,7 @@ export async function updateIngredient(ingredientId: number, data: {
   supplier?: string;
   shelfLife?: number;
   minStock?: number;
+  pieceWeightOz?: number;
 }) {
   const db = await getDb();
   if (!db) {
@@ -746,6 +750,7 @@ export async function updateIngredient(ingredientId: number, data: {
   if (data.unit !== undefined) updateData.unit = data.unit;
   if (data.costPerUnit !== undefined) updateData.costPerUnit = data.costPerUnit.toString();
   if (data.supplier !== undefined) updateData.supplier = data.supplier;
+  if (data.pieceWeightOz !== undefined) updateData.pieceWeightOz = data.pieceWeightOz;
   if (data.shelfLife !== undefined) updateData.shelfLife = data.shelfLife;
   if (data.minStock !== undefined) updateData.minStock = data.minStock.toString();
 

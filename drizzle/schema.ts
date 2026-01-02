@@ -150,6 +150,7 @@ export const ingredients = mysqlTable("ingredients", {
   category: varchar("category", { length: 100 }),
   unit: varchar("unit", { length: 50 }).notNull(), // 'lb', 'oz', 'kg', 'each', etc.
   costPerUnit: decimal("costPerUnit", { precision: 10, scale: 4 }),
+  pieceWeightOz: decimal("piece_weight_oz", { precision: 10, scale: 4 }), // Weight in oz per piece (for pc→oz conversions)
   supplier: varchar("supplier", { length: 255 }),
   shelfLife: int("shelfLife"), // days
   minStock: decimal("minStock", { precision: 10, scale: 2 }),

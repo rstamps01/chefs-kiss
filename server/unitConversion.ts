@@ -47,6 +47,28 @@ const ingredientPieceWeights: Record<string, number> = {
   'New York Steak (Sliced)': 2.5,      // 1 steak slice = 2.5 oz (thin-sliced for sushi rolls)
 };
 
+// Store ingredient-specific cup weights (oz per cup)
+// Used for automatic cup → ounce conversions in recipe cost calculations
+// Note: Cup conversions are ingredient-specific because volume-to-weight requires density
+const ingredientCupWeights: Record<string, number> = {
+  'Sushi Rice': 6.5,                   // 1 cup cooked sushi rice = 6.5 oz (standard culinary measurement)
+};
+
+/**
+ * Get the weight in ounces for one cup of an ingredient
+ * Supports exact name matching for ingredient-specific cup weights
+ * 
+ * @param ingredientName - Name of the ingredient (must match exactly)
+ * @returns Weight in ounces per cup, or null if not defined
+ * 
+ * @example
+ * getIngredientCupWeight('Sushi Rice') // returns 6.5
+ * getIngredientCupWeight('Unknown Ingredient') // returns null
+ */
+export function getIngredientCupWeight(ingredientName: string): number | null {
+  return ingredientCupWeights[ingredientName] ?? null;
+}
+
 /**
  * Get the weight in ounces for one piece of an ingredient
  * Supports exact name matching for ingredient-specific piece weights
@@ -102,6 +124,29 @@ export function convertUnit(
         return value;
       }
       // Cannot convert between "each" and weight/volume units without ingredient-specific data
+      return null;
+    }
+
+    // Special handling for "cup" conversions
+    if (fromUnit.toLowerCase() === 'cup') {
+      console.log(`[UnitConversion] DEBUG: Converting ${value} cup for ingredient: "${ingredientName || 'unknown'}"`);
+      if (ingredientName) {
+        const cupWeight = getIngredientCupWeight(ingredientName);
+        console.log(`[UnitConversion] DEBUG: Cup weight lookup result: ${cupWeight}`);
+        if (cupWeight !== null) {
+          // Convert cups to ounces first
+          const valueInOz = value * cupWeight;
+          console.log(`[UnitConversion] DEBUG: ${value} cup × ${cupWeight} oz/cup = ${valueInOz} oz`);
+          // Then convert ounces to target unit
+          const ozQuantity: Unit = math.unit(valueInOz, 'oz');
+          const converted: Unit = ozQuantity.to(toUnit);
+          const result = converted.toNumber(toUnit);
+          console.log(`[UnitConversion] DEBUG: ${valueInOz} oz → ${result} ${toUnit}`);
+          return result;
+        }
+      }
+      // If no ingredient name or cup weight not found, cannot convert "cup"
+      console.warn(`[UnitConversion] Cannot convert "cup" without ingredient-specific weight data for: ${ingredientName || 'unknown ingredient'}`);
       return null;
     }
 

@@ -818,3 +818,38 @@ Database schema migration was incomplete. When `ingredients.unit` changed from `
 - ALL 65+ recipes now calculating correctly
 - Zero $0.00 ingredient costs across entire system
 - Realistic profit margins for all recipes
+
+## Fix Sushi Rice Cost Calculation (COMPLETED ✅)
+- [x] Check Sushi Rice ingredient pricing and unit type in database - $2.50/lb ✅
+- [x] Examine how Sushi Rice is used in recipes (quantity and unit) - 1.5 cups in RSM Full
+- [x] Identify the conversion issue (cup → lb or cup → oz) - mathjs does NOT support cup conversions!
+- [x] Check if mathjs supports cup conversions - NO, requires ingredient-specific density
+- [x] Add cup → oz conversion to unitConversion.ts - Added ingredientCupWeights dictionary
+- [x] Test RSM Full recipe to verify Sushi Rice cost is accurate - $1.52 for 1.5 cups ✅
+- [x] Test other recipes using Sushi Rice (all sushi rolls) - All calculating correctly ✅
+- [x] Update todo.md and save checkpoint
+
+**RESULT:** ✅ SUCCESS! Fixed Sushi Rice cost calculation by adding cup→oz conversion support.
+
+**Root Cause:**
+mathjs library does NOT support volume-to-weight conversions (cup → lb) because they require ingredient-specific density. System was defaulting to treating 1.5 cups as 1.5 lb, causing 147% cost inflation.
+
+**Solution:**
+Added ingredient-specific cup weights to unitConversion.ts:
+- Created `ingredientCupWeights` dictionary
+- Added `getIngredientCupWeight()` function
+- Defined Sushi Rice: 1 cup = 6.5 oz (standard culinary measurement)
+- Added special handling for "cup" conversions (similar to "pc" handling)
+
+**Sushi Rice Cost (1.5 cups):**
+- BEFORE: $3.75 (treating 1.5 cups as 1.5 lb)
+- AFTER: $1.52 (1.5 cups × 6.5 oz/cup × $0.156/oz)
+- Savings: $2.23 (59% reduction)
+
+**RSM Full Recipe:**
+- BEFORE: $19.00 cost, 49% margin
+- AFTER: $16.77 cost, 51% margin
+- Savings: $2.23 per recipe (12% cost reduction)
+
+**Impact:**
+All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb conversions!

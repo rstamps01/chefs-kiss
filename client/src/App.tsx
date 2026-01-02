@@ -15,6 +15,7 @@ import Settings from "./pages/Settings";
 import RecipeIngredientsView from "./pages/RecipeIngredientsView";
 import AddRecipeForm from "./pages/AddRecipeForm";
 import DataImport from "./pages/DataImport";
+import ConversionTesting from "./pages/ConversionTesting";
 
 function Router() {
   return (
@@ -55,6 +56,11 @@ function Router() {
       <Route path="/settings">
         <DashboardLayout>
           <Settings />
+        </DashboardLayout>
+      </Route>
+      <Route path="/conversion-testing">
+        <DashboardLayout>
+          <ConversionTesting />
         </DashboardLayout>
       </Route>
       <Route path="/404" component={NotFound} />

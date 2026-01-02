@@ -85,7 +85,7 @@ export function convertUnit(
     }
 
     // Handle unsupported units that should be treated as "each" (no conversion)
-    const unsupportedUnits = ['each', 'ea', 'piece', 'pieces'];
+    const unsupportedUnits = ['each', 'ea'];
     if (unsupportedUnits.includes(fromUnit.toLowerCase()) || unsupportedUnits.includes(toUnit.toLowerCase())) {
       // If both are unsupported or same conceptually, return as-is
       if (unsupportedUnits.includes(fromUnit.toLowerCase()) && unsupportedUnits.includes(toUnit.toLowerCase())) {
@@ -119,7 +119,8 @@ export function convertUnit(
     }
 
     // Special handling for "pc" (pieces) conversions
-    if (fromUnit.toLowerCase() === 'pc') {
+    const pieceUnits = ['pc', 'piece', 'pieces'];
+    if (pieceUnits.includes(fromUnit.toLowerCase())) {
       console.log(`[UnitConversion] DEBUG: Converting ${value} pc with pieceWeightOz: ${pieceWeightOz}`);
       const pieceWeight = getIngredientPieceWeight(pieceWeightOz);
       if (pieceWeight !== null) {

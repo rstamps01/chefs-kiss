@@ -627,6 +627,89 @@ export const appRouter = router({
         return await getConversionFactor(input.ingredientId, input.fromUnit, input.toUnit);
       }),
   }),
+
+  // Unit Conversion Testing endpoints
+  conversionTesting: router({
+    testConversion: protectedProcedure
+      .input(z.object({
+        value: z.number(),
+        fromUnit: z.string().min(1),
+        toUnit: z.string().min(1),
+        ingredientId: z.number().int().positive().optional(),
+      }))
+      .query(async ({ ctx, input }) => {
+        const { convertUnit, areUnitsCompatible, getUnitType } = await import('./unitConversion');
+        const { getIngredients } = await import('./db');
+        
+        const restaurant = await getUserRestaurant(ctx.user.id);
+        if (!restaurant) {
+          throw new Error("Restaurant not found");
+        }
+
+        // Get ingredient details if provided
+        let ingredient = null;
+        let pieceWeightOz: number | null = null;
+        let ingredientName: string | undefined = undefined;
+        
+        if (input.ingredientId) {
+          const ingredients = await getIngredients(restaurant.id);
+          ingredient = ingredients.find(i => i.id === input.ingredientId);
+          if (ingredient) {
+            // Convert pieceWeightOz from string to number if present
+            pieceWeightOz = ingredient.pieceWeightOz ? parseFloat(ingredient.pieceWeightOz as any) : null;
+            ingredientName = ingredient.name;
+          }
+        }
+
+        // Attempt conversion
+        const result = convertUnit(
+          input.value,
+          input.fromUnit,
+          input.toUnit,
+          pieceWeightOz,
+          ingredientName
+        );
+
+        // Get unit types
+        const fromUnitType = getUnitType(input.fromUnit);
+        const toUnitType = getUnitType(input.toUnit);
+        const compatible = areUnitsCompatible(input.fromUnit, input.toUnit);
+
+        return {
+          success: result !== null,
+          result,
+          fromUnit: input.fromUnit,
+          toUnit: input.toUnit,
+          fromUnitType,
+          toUnitType,
+          compatible,
+          ingredientName,
+          pieceWeightOz,
+        };
+      }),
+    
+    getSupportedUnits: protectedProcedure.query(async ({ ctx }) => {
+      const restaurant = await getUserRestaurant(ctx.user.id);
+      if (!restaurant) {
+        return [];
+      }
+      return await getActiveIngredientUnits(restaurant.id);
+    }),
+    
+    getIngredientsForTesting: protectedProcedure.query(async ({ ctx }) => {
+      const restaurant = await getUserRestaurant(ctx.user.id);
+      if (!restaurant) {
+        return [];
+      }
+      const ingredients = await getIngredients(restaurant.id);
+      return ingredients.map(i => ({
+        id: i.id,
+        name: i.name,
+        unit: i.unit,
+        pieceWeightOz: i.pieceWeightOz,
+      }));
+    }),
+  }),
 });
 
 export type AppRouter = typeof appRouter;

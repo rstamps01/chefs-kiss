@@ -868,3 +868,19 @@ All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb
 - [ ] Update todo.md and save checkpoint
 
 **GOAL:** Make piece weights user-configurable through the Edit Ingredient UI instead of hardcoded in the backend.
+
+## Unit Conversion Testing System (Current Sprint)
+- [x] Analyze current unitConversion.ts capabilities and mathjs integration
+- [x] Create backend tRPC endpoint for testing unit conversions
+- [x] Build Unit Conversion Testing page with interactive form
+- [x] Add conversion matrix display showing all supported conversions
+- [x] Implement real-time conversion testing with ingredient selection
+- [x] Display conversion path and factors used
+- [x] Identify and document conversion gaps
+- [x] Test all weight conversions (oz, lb, kg, g)
+- [x] Test all volume conversions (cup, gallon, ml, l, tbsp, tsp)
+- [x] Test piece-based conversions with ingredient-specific weights
+- [x] Fix piece conversion bug (pieces/piece not recognized as valid units)
+- [x] Test count-based units (each, sheet, roll)
+- [x] Validate bidirectional conversion accuracy
+- [x] Create comprehensive CONVERSION_TEST_RESULTS.md documentation

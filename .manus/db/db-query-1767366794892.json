@@ -1,0 +1,106 @@
+{
+  "query": "SELECT \n  i.id,\n  i.name,\n  i.category,\n  u.displayName as unit,\n  i.costPerUnit,\n  i.supplier\nFROM ingredients i\nLEFT JOIN ingredientUnits u ON i.unit = u.id\nWHERE i.name IN (\n  'Smoked Salmon',\n  'Cooked Salmon',\n  'Salmon Belly',\n  'Salmon',\n  'Tuna (Ahi)',\n  'Snow Crab',\n  'Crab Stick (Kani Kama)',\n  'Soft-Shell Crab',\n  'Shrimp Tempura',\n  'Cooked Shrimp (Ebi)',\n  'Shrimp (cooked)',\n  'Eel (Unagi)'\n)\nAND i.category = 'Fish & Seafood'\nORDER BY i.name;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 49cxSE1jUeHq7LY.root --database KMmUaMc2BgFeVkUfVYZGPD --execute SELECT \n  i.id,\n  i.name,\n  i.category,\n  u.displayName as unit,\n  i.costPerUnit,\n  i.supplier\nFROM ingredients i\nLEFT JOIN ingredientUnits u ON i.unit = u.id\nWHERE i.name IN (\n  'Smoked Salmon',\n  'Cooked Salmon',\n  'Salmon Belly',\n  'Salmon',\n  'Tuna (Ahi)',\n  'Snow Crab',\n  'Crab Stick (Kani Kama)',\n  'Soft-Shell Crab',\n  'Shrimp Tempura',\n  'Cooked Shrimp (Ebi)',\n  'Shrimp (cooked)',\n  'Eel (Unagi)'\n)\nAND i.category = 'Fish & Seafood'\nORDER BY i.name;",
+  "rows": [
+    {
+      "id": "150009",
+      "name": "Cooked Salmon",
+      "category": "Fish & Seafood",
+      "unit": "(oz)",
+      "costPerUnit": "0.9375",
+      "supplier": "Seafood Distributor"
+    },
+    {
+      "id": "150004",
+      "name": "Cooked Shrimp (Ebi)",
+      "category": "Fish & Seafood",
+      "unit": "(oz)",
+      "costPerUnit": "0.8125",
+      "supplier": "Seafood Distributor"
+    },
+    {
+      "id": "150007",
+      "name": "Crab Stick (Kani Kama)",
+      "category": "Fish & Seafood",
+      "unit": "(oz)",
+      "costPerUnit": "1.5625",
+      "supplier": "Seafood Distributor"
+    },
+    {
+      "id": "150003",
+      "name": "Eel (Unagi)",
+      "category": "Fish & Seafood",
+      "unit": "(oz)",
+      "costPerUnit": "1.8125",
+      "supplier": "Seafood Distributor"
+    },
+    {
+      "id": "4",
+      "name": "Salmon",
+      "category": "Fish & Seafood",
+      "unit": "(oz)",
+      "costPerUnit": "0.9375",
+      "supplier": "NULL"
+    },
+    {
+      "id": "150001",
+      "name": "Salmon Belly",
+      "category": "Fish & Seafood",
+      "unit": "(oz)",
+      "costPerUnit": "1.7500",
+      "supplier": "Seafood Distributor"
+    },
+    {
+      "id": "30005",
+      "name": "Shrimp (cooked)",
+      "category": "Fish & Seafood",
+      "unit": "(oz)",
+      "costPerUnit": "1.0000",
+      "supplier": "NULL"
+    },
+    {
+      "id": "150005",
+      "name": "Shrimp Tempura",
+      "category": "Fish & Seafood",
+      "unit": "(oz)",
+      "costPerUnit": "1.2500",
+      "supplier": "Seafood Distributor"
+    },
+    {
+      "id": "150010",
+      "name": "Smoked Salmon",
+      "category": "Fish & Seafood",
+      "unit": "(oz)",
+      "costPerUnit": "1.2500",
+      "supplier": "Seafood Distributor"
+    },
+    {
+      "id": "150008",
+      "name": "Snow Crab",
+      "category": "Fish & Seafood",
+      "unit": "(oz)",
+      "costPerUnit": "1.3125",
+      "supplier": "Seafood Distributor"
+    },
+    {
+      "id": "150006",
+      "name": "Soft-Shell Crab",
+      "category": "Fish & Seafood",
+      "unit": "(oz)",
+      "costPerUnit": "1.8750",
+      "supplier": "Seafood Distributor"
+    },
+    {
+      "id": "3",
+      "name": "Tuna (Ahi)",
+      "category": "Fish & Seafood",
+      "unit": "(oz)",
+      "costPerUnit": "1.1250",
+      "supplier": "NULL"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\tcategory\tunit\tcostPerUnit\tsupplier\n150009\tCooked Salmon\tFish & Seafood\t(oz)\t0.9375\tSeafood Distributor\n150004\tCooked Shrimp (Ebi)\tFish & Seafood\t(oz)\t0.8125\tSeafood Distributor\n150007\tCrab Stick (Kani Kama)\tFish & Seafood\t(oz)\t1.5625\tSeafood Distributor\n150003\tEel (Unagi)\tFish & Seafood\t(oz)\t1.8125\tSeafood Distributor\n4\tSalmon\tFish & Seafood\t(oz)\t0.9375\tNULL\n150001\tSalmon Belly\tFish & Seafood\t(oz)\t1.7500\tSeafood Distributor\n30005\tShrimp (cooked)\tFish & Seafood\t(oz)\t1.0000\tNULL\n150005\tShrimp Tempura\tFish & Seafood\t(oz)\t1.2500\tSeafood Distributor\n150010\tSmoked Salmon\tFish & Seafood\t(oz)\t1.2500\tSeafood Distributor\n150008\tSnow Crab\tFish & Seafood\t(oz)\t1.3125\tSeafood Distributor\n150006\tSoft-Shell Crab\tFish & Seafood\t(oz)\t1.8750\tSeafood Distributor\n3\tTuna (Ahi)\tFish & Seafood\t(oz)\t1.1250\tNULL\n",
+  "stderr": "",
+  "execution_time_ms": 60
+}

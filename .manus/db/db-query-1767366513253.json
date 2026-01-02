@@ -1,0 +1,181 @@
+{
+  "query": "SELECT \n  i.id,\n  i.name,\n  i.category,\n  i.unit,\n  u.displayName as unitName,\n  i.costPerUnit,\n  i.supplier\nFROM ingredients i\nLEFT JOIN ingredientUnits u ON i.unit = u.id\nWHERE i.category LIKE '%Fish%' \n   OR i.category LIKE '%Seafood%'\n   OR i.name LIKE '%Salmon%'\n   OR i.name LIKE '%Tuna%'\n   OR i.name LIKE '%Yellowtail%'\n   OR i.name LIKE '%Shrimp%'\n   OR i.name LIKE '%Scallop%'\n   OR i.name LIKE '%Crab%'\n   OR i.name LIKE '%Albacore%'\nORDER BY i.name\nLIMIT 50;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 49cxSE1jUeHq7LY.root --database KMmUaMc2BgFeVkUfVYZGPD --execute SELECT \n  i.id,\n  i.name,\n  i.category,\n  i.unit,\n  u.displayName as unitName,\n  i.costPerUnit,\n  i.supplier\nFROM ingredients i\nLEFT JOIN ingredientUnits u ON i.unit = u.id\nWHERE i.category LIKE '%Fish%' \n   OR i.category LIKE '%Seafood%'\n   OR i.name LIKE '%Salmon%'\n   OR i.name LIKE '%Tuna%'\n   OR i.name LIKE '%Yellowtail%'\n   OR i.name LIKE '%Shrimp%'\n   OR i.name LIKE '%Scallop%'\n   OR i.name LIKE '%Crab%'\n   OR i.name LIKE '%Albacore%'\nORDER BY i.name\nLIMIT 50;",
+  "rows": [
+    {
+      "id": "30004",
+      "name": "Albacore (sashimi grade)",
+      "category": "Fish & Seafood",
+      "unit": "1",
+      "unitName": "(pc)",
+      "costPerUnit": "0.8625",
+      "supplier": "NULL"
+    },
+    {
+      "id": "150009",
+      "name": "Cooked Salmon",
+      "category": "Fish & Seafood",
+      "unit": "3",
+      "unitName": "(lb)",
+      "costPerUnit": "15.0000",
+      "supplier": "Seafood Distributor"
+    },
+    {
+      "id": "150004",
+      "name": "Cooked Shrimp (Ebi)",
+      "category": "Fish & Seafood",
+      "unit": "3",
+      "unitName": "(lb)",
+      "costPerUnit": "13.0000",
+      "supplier": "Seafood Distributor"
+    },
+    {
+      "id": "150007",
+      "name": "Crab Stick (Kani Kama)",
+      "category": "Fish & Seafood",
+      "unit": "3",
+      "unitName": "(lb)",
+      "costPerUnit": "25.0000",
+      "supplier": "Seafood Distributor"
+    },
+    {
+      "id": "150003",
+      "name": "Eel (Unagi)",
+      "category": "Fish & Seafood",
+      "unit": "3",
+      "unitName": "(lb)",
+      "costPerUnit": "29.0000",
+      "supplier": "Seafood Distributor"
+    },
+    {
+      "id": "150023",
+      "name": "Ikura (Salmon Eggs)",
+      "category": "Roe & Eggs",
+      "unit": "2",
+      "unitName": "(oz)",
+      "costPerUnit": "5.0000",
+      "supplier": "Seafood Distributor"
+    },
+    {
+      "id": "4",
+      "name": "Salmon",
+      "category": "Fish & Seafood",
+      "unit": "3",
+      "unitName": "(lb)",
+      "costPerUnit": "15.0000",
+      "supplier": "NULL"
+    },
+    {
+      "id": "30001",
+      "name": "Salmon (sashimi grade)",
+      "category": "Fish & Seafood",
+      "unit": "1",
+      "unitName": "(pc)",
+      "costPerUnit": "0.7500",
+      "supplier": "NULL"
+    },
+    {
+      "id": "150001",
+      "name": "Salmon Belly",
+      "category": "Fish & Seafood",
+      "unit": "3",
+      "unitName": "(lb)",
+      "costPerUnit": "28.0000",
+      "supplier": "Seafood Distributor"
+    },
+    {
+      "id": "150002",
+      "name": "Scallops (Hokkaido Hotate)",
+      "category": "Fish & Seafood",
+      "unit": "2",
+      "unitName": "(oz)",
+      "costPerUnit": "1.2000",
+      "supplier": "Seafood Distributor"
+    },
+    {
+      "id": "30005",
+      "name": "Shrimp (cooked)",
+      "category": "Fish & Seafood",
+      "unit": "3",
+      "unitName": "(lb)",
+      "costPerUnit": "16.0000",
+      "supplier": "NULL"
+    },
+    {
+      "id": "150005",
+      "name": "Shrimp Tempura",
+      "category": "Fish & Seafood",
+      "unit": "3",
+      "unitName": "(lb)",
+      "costPerUnit": "20.0000",
+      "supplier": "Seafood Distributor"
+    },
+    {
+      "id": "150010",
+      "name": "Smoked Salmon",
+      "category": "Fish & Seafood",
+      "unit": "3",
+      "unitName": "(lb)",
+      "costPerUnit": "20.0000",
+      "supplier": "Seafood Distributor"
+    },
+    {
+      "id": "150008",
+      "name": "Snow Crab",
+      "category": "Fish & Seafood",
+      "unit": "3",
+      "unitName": "(lb)",
+      "costPerUnit": "21.0000",
+      "supplier": "Seafood Distributor"
+    },
+    {
+      "id": "150006",
+      "name": "Soft-Shell Crab",
+      "category": "Fish & Seafood",
+      "unit": "3",
+      "unitName": "(lb)",
+      "costPerUnit": "30.0000",
+      "supplier": "Seafood Distributor"
+    },
+    {
+      "id": "180001",
+      "name": "Test Shrimp",
+      "category": "Fish & Seafood",
+      "unit": "2",
+      "unitName": "(oz)",
+      "costPerUnit": "0.7500",
+      "supplier": "Test Supplier"
+    },
+    {
+      "id": "3",
+      "name": "Tuna (Ahi)",
+      "category": "Fish & Seafood",
+      "unit": "3",
+      "unitName": "(lb)",
+      "costPerUnit": "18.0000",
+      "supplier": "NULL"
+    },
+    {
+      "id": "30002",
+      "name": "Tuna (sashimi grade)",
+      "category": "Fish & Seafood",
+      "unit": "1",
+      "unitName": "(pc)",
+      "costPerUnit": "0.9375",
+      "supplier": "NULL"
+    },
+    {
+      "id": "30003",
+      "name": "Yellowtail (sashimi grade)",
+      "category": "Fish & Seafood",
+      "unit": "1",
+      "unitName": "(pc)",
+      "costPerUnit": "0.9375",
+      "supplier": "NULL"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\tcategory\tunit\tunitName\tcostPerUnit\tsupplier\n30004\tAlbacore (sashimi grade)\tFish & Seafood\t1\t(pc)\t0.8625\tNULL\n150009\tCooked Salmon\tFish & Seafood\t3\t(lb)\t15.0000\tSeafood Distributor\n150004\tCooked Shrimp (Ebi)\tFish & Seafood\t3\t(lb)\t13.0000\tSeafood Distributor\n150007\tCrab Stick (Kani Kama)\tFish & Seafood\t3\t(lb)\t25.0000\tSeafood Distributor\n150003\tEel (Unagi)\tFish & Seafood\t3\t(lb)\t29.0000\tSeafood Distributor\n150023\tIkura (Salmon Eggs)\tRoe & Eggs\t2\t(oz)\t5.0000\tSeafood Distributor\n4\tSalmon\tFish & Seafood\t3\t(lb)\t15.0000\tNULL\n30001\tSalmon (sashimi grade)\tFish & Seafood\t1\t(pc)\t0.7500\tNULL\n150001\tSalmon Belly\tFish & Seafood\t3\t(lb)\t28.0000\tSeafood Distributor\n150002\tScallops (Hokkaido Hotate)\tFish & Seafood\t2\t(oz)\t1.2000\tSeafood Distributor\n30005\tShrimp (cooked)\tFish & Seafood\t3\t(lb)\t16.0000\tNULL\n150005\tShrimp Tempura\tFish & Seafood\t3\t(lb)\t20.0000\tSeafood Distributor\n150010\tSmoked Salmon\tFish & Seafood\t3\t(lb)\t20.0000\tSeafood Distributor\n150008\tSnow Crab\tFish & Seafood\t3\t(lb)\t21.0000\tSeafood Distributor\n150006\tSoft-Shell Crab\tFish & Seafood\t3\t(lb)\t30.0000\tSeafood Distributor\n180001\tTest Shrimp\tFish & Seafood\t2\t(oz)\t0.7500\tTest Supplier\n3\tTuna (Ahi)\tFish & Seafood\t3\t(lb)\t18.0000\tNULL\n30002\tTuna (sashimi grade)\tFish & Seafood\t1\t(pc)\t0.9375\tNULL\n30003\tYellowtail (sashimi grade)\tFish & Seafood\t1\t(pc)\t0.9375\tNULL\n",
+  "stderr": "",
+  "execution_time_ms": 59
+}

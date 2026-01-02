@@ -42,6 +42,9 @@ const ingredientPieceWeights: Record<string, number> = {
   'Crab Stick (Kani Kama)': 0.75,      // 1 crab stick = 0.75 oz
   'Snow Crab': 2.0,                    // 1 crab portion = 2.0 oz (leg meat)
   'Soft-Shell Crab': 3.0,              // 1 whole crab = 3.0 oz (small to medium)
+  
+  // Meat
+  'New York Steak (Sliced)': 2.5,      // 1 steak slice = 2.5 oz (thin-sliced for sushi rolls)
 };
 
 /**

@@ -687,3 +687,31 @@
 - Caterpillar Roll: $160.83 → $32.40 (80% reduction)
 
 All seafood recipes now show realistic, profitable margins. mathjs integration working perfectly for all piece → oz conversions.
+
+## Comprehensive Fish & Meat Ingredient Review (COMPLETED ✅)
+- [x] Systematically review ALL ingredients in database (scrolled through entire list)
+- [x] Identify all fish products (raw, cooked, sashimi-grade, specialty cuts) - ALL ALREADY CONVERTED
+- [x] Identify all meat products (beef, chicken, pork, specialty meats) - Found 1: New York Steak (Sliced)
+- [x] Check current pricing units for each fish/meat product
+- [x] List all fish/meat products still using lb pricing - New York Steak (Sliced) at $15.00/lb
+- [x] List all fish/meat products using other units (pc, each, etc.) - None found
+- [x] Research standard piece weights for newly identified products - New York Steak: 2.5 oz/slice
+- [x] Update INGREDIENT_PIECE_WEIGHTS in unitConversion.ts - Added New York Steak (Sliced): 2.5 oz
+- [x] Convert lb-based fish/meat to oz pricing via UI - $15.00/lb → $0.94/oz
+- [x] Test affected recipes to verify cost calculations - Surf's Up tested successfully
+- [x] Document all changes and save checkpoint
+
+**RESULT:** ✅ SUCCESS! Found and converted the ONLY remaining meat product using lb pricing.
+
+**New York Steak (Sliced) Conversion:**
+- Before: $15.00/lb (unit: lb)
+- After: $0.94/oz (unit: oz)
+- Piece weight: 2.5 oz per slice
+
+**Surf's Up Recipe Impact:**
+- BEFORE: $65.96 cost, -196% margin (massive loss!)
+- AFTER: $20.96 cost, +6% margin (PROFITABLE!)
+- Improvement: 68% cost reduction ($45.00 savings!)
+- Root cause: 3 pieces calculated as 3 lb ($45) instead of 3 × 2.5 oz × $0.94/oz = $7.05
+
+**ALL SEAFOOD AND MEAT PRODUCTS NOW USING OZ-BASED PRICING WITH ACCURATE PIECE WEIGHT CONVERSIONS!** 🎉

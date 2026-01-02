@@ -1,0 +1,73 @@
+{
+  "query": "SHOW TABLES;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 49cxSE1jUeHq7LY.root --database KMmUaMc2BgFeVkUfVYZGPD --execute SHOW TABLES;",
+  "rows": [
+    {
+      "Tables_in_KMmUaMc2BgFeVkUfVYZGPD": "__drizzle_migrations"
+    },
+    {
+      "Tables_in_KMmUaMc2BgFeVkUfVYZGPD": "events"
+    },
+    {
+      "Tables_in_KMmUaMc2BgFeVkUfVYZGPD": "forecasts"
+    },
+    {
+      "Tables_in_KMmUaMc2BgFeVkUfVYZGPD": "ingredientConversions"
+    },
+    {
+      "Tables_in_KMmUaMc2BgFeVkUfVYZGPD": "ingredientUnits"
+    },
+    {
+      "Tables_in_KMmUaMc2BgFeVkUfVYZGPD": "ingredients"
+    },
+    {
+      "Tables_in_KMmUaMc2BgFeVkUfVYZGPD": "item_sales"
+    },
+    {
+      "Tables_in_KMmUaMc2BgFeVkUfVYZGPD": "locations"
+    },
+    {
+      "Tables_in_KMmUaMc2BgFeVkUfVYZGPD": "pos_integrations"
+    },
+    {
+      "Tables_in_KMmUaMc2BgFeVkUfVYZGPD": "prep_plan_items"
+    },
+    {
+      "Tables_in_KMmUaMc2BgFeVkUfVYZGPD": "prep_plans"
+    },
+    {
+      "Tables_in_KMmUaMc2BgFeVkUfVYZGPD": "recipeCategories"
+    },
+    {
+      "Tables_in_KMmUaMc2BgFeVkUfVYZGPD": "recipe_ingredients"
+    },
+    {
+      "Tables_in_KMmUaMc2BgFeVkUfVYZGPD": "recipes"
+    },
+    {
+      "Tables_in_KMmUaMc2BgFeVkUfVYZGPD": "reports"
+    },
+    {
+      "Tables_in_KMmUaMc2BgFeVkUfVYZGPD": "restaurants"
+    },
+    {
+      "Tables_in_KMmUaMc2BgFeVkUfVYZGPD": "sales_data"
+    },
+    {
+      "Tables_in_KMmUaMc2BgFeVkUfVYZGPD": "unitCategories"
+    },
+    {
+      "Tables_in_KMmUaMc2BgFeVkUfVYZGPD": "unitConversions"
+    },
+    {
+      "Tables_in_KMmUaMc2BgFeVkUfVYZGPD": "users"
+    },
+    {
+      "Tables_in_KMmUaMc2BgFeVkUfVYZGPD": "weather_data"
+    }
+  ],
+  "messages": [],
+  "stdout": "Tables_in_KMmUaMc2BgFeVkUfVYZGPD\n__drizzle_migrations\nevents\nforecasts\ningredientConversions\ningredientUnits\ningredients\nitem_sales\nlocations\npos_integrations\nprep_plan_items\nprep_plans\nrecipeCategories\nrecipe_ingredients\nrecipes\nreports\nrestaurants\nsales_data\nunitCategories\nunitConversions\nusers\nweather_data\n",
+  "stderr": "",
+  "execution_time_ms": 48
+}

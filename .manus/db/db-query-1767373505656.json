@@ -1,0 +1,16 @@
+{
+  "query": "SELECT name, unit, costPerUnit, supplier FROM ingredients WHERE name LIKE '%New York%';",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 49cxSE1jUeHq7LY.root --database KMmUaMc2BgFeVkUfVYZGPD --execute SELECT name, unit, costPerUnit, supplier FROM ingredients WHERE name LIKE '%New York%';",
+  "rows": [
+    {
+      "name": "New York Steak (Sliced)",
+      "unit": "3",
+      "costPerUnit": "15.0000",
+      "supplier": "Meat Distributor"
+    }
+  ],
+  "messages": [],
+  "stdout": "name\tunit\tcostPerUnit\tsupplier\nNew York Steak (Sliced)\t3\t15.0000\tMeat Distributor\n",
+  "stderr": "",
+  "execution_time_ms": 56
+}

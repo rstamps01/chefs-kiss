@@ -747,3 +747,41 @@ All seafood recipes now show realistic, profitable margins. mathjs integration w
 - Blonde Bombshell: $35.14 → $28.58 (19% reduction)
 - Rainbow Roll: $12.69 → $9.20 (27% reduction)
 - Yellowfin Tuna Nigiri: $2.51 → $0.63 (75% reduction!)
+
+## Investigate RSM Full Recipe Cost Calculation (COMPLETED ✅)
+- [x] View RSM Full recipe details in Edit mode
+- [x] List all 12 ingredients with quantities, units, and individual costs
+- [x] Identify which ingredients have "Missing unit conversions" warnings - Found: Spicy Soy Sauce + Unagi Sauce
+- [x] Check for incorrect quantity values or unit mismatches - Found: Both sauces priced in (gal) but used in oz
+- [x] Verify piece weight definitions exist for all ingredients using pieces - Piece weights OK
+- [x] Calculate expected cost manually and compare with reported $63.45 - Sauce cost: $50 out of $63.45!
+- [x] Fix any identified issues - Converted both sauces from (gal) to (oz) pricing
+- [x] Test corrected recipe and verify accurate cost calculation - Cost reduced to $13.45!
+- [x] Update todo.md and save checkpoint
+
+**RESULT:** ✅ SUCCESS! Fixed catastrophic gallon-to-ounce conversion failure that was inflating sauce costs by 125x.
+
+**Root Cause:**
+- Spicy Soy Sauce: $25.00/gal (recipe uses 1 oz)
+- Unagi Sauce: $25.00/gal (recipe uses 1 oz)
+- mathjs library does NOT support gallon → oz conversions
+- System failed silently and treated $25/gal as $25/oz
+- Result: $50 sauce cost instead of $0.40!
+
+**Solution:**
+- Converted Spicy Soy Sauce: (gal) → (oz), $25.00 → $0.20
+- Converted Unagi Sauce: (gal) → (oz), $25.00 → $0.20
+- Calculation: $25/gal ÷ 128 oz/gal = $0.195/oz ≈ $0.20/oz
+
+**Impact on RSM Full:**
+- BEFORE: $63.45 cost, -84% margin (losing $28.95 per sale)
+- AFTER: $13.45 cost, +61% margin (earning $21.05 profit per sale)
+- **Savings: $50.00 per recipe (79% cost reduction)**
+- **Margin improvement: +145 percentage points**
+
+**Impact on RSM Half:**
+- AFTER: $6.74 cost, +72% margin
+
+**Transformed from worst-performing recipes to highly profitable!** 🎉
+
+**ISSUE:** RSM Full shows $63.45 cost with -84% margin (price: $34.50). Need to identify why cost is so high and if calculation is accurate.

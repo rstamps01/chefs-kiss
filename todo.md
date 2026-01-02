@@ -884,3 +884,14 @@ All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb
 - [x] Test count-based units (each, sheet, roll)
 - [x] Validate bidirectional conversion accuracy
 - [x] Create comprehensive CONVERSION_TEST_RESULTS.md documentation
+
+## Unit Conversion System Fixes (Current Sprint)
+- [x] Investigate why volume-to-volume conversions show "Missing" (e.g., Cup → Tablespoon)
+- [x] Add support for Pint, Quart, Fluid Ounce conversions (currently show "Needed")
+- [x] Fix mathjs unit aliases for all volume units
+- [x] Exclude count types (dozen, each, roll, sheet) from conversion dropdown
+- [x] Group Volume units together in dropdown menu
+- [x] Group Weight units together in dropdown menu
+- [x] Ensure piece-based conversions work for all weight units (oz, lb, kg, g)
+- [x] Test complete conversion matrix (all volume↔volume, all weight↔weight)
+- [x] Update CONVERSION_TEST_RESULTS.md with validation results

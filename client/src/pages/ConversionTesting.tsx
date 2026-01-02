@@ -19,6 +19,13 @@ export default function ConversionTesting() {
   const { data: units = [] } = trpc.conversionTesting.getSupportedUnits.useQuery();
   const { data: ingredients = [] } = trpc.conversionTesting.getIngredientsForTesting.useQuery();
 
+  // Categorize units for grouped display
+  const volumeUnits = units.filter(u => ['gal', 'l', 'ml', 'cup', 'tbsp', 'tsp', 'pt', 'qt', 'fl oz'].includes(u.name.toLowerCase()));
+  const weightUnits = units.filter(u => ['oz', 'lb', 'kg', 'g'].includes(u.name.toLowerCase()));
+  const pieceUnits = units.filter(u => ['pc', 'piece', 'pieces'].includes(u.name.toLowerCase()));
+  // Exclude count types from conversion options
+  const excludedUnits = ['doz', 'dozen', 'each', 'ea', 'sheet', 'roll'];
+
   const testConversion = trpc.conversionTesting.testConversion.useQuery(
     {
       value: parseFloat(value) || 1,
@@ -79,11 +86,36 @@ export default function ConversionTesting() {
                   <SelectValue placeholder="Select source unit" />
                 </SelectTrigger>
                 <SelectContent>
-                  {units.map((unit) => (
-                    <SelectItem key={unit.id} value={unit.name}>
-                      {unit.displayName} ({unit.name})
-                    </SelectItem>
-                  ))}
+                  {volumeUnits.length > 0 && (
+                    <>
+                      <div className="px-2 py-1.5 text-sm font-semibold text-muted-foreground">Volume</div>
+                      {volumeUnits.map((unit) => (
+                        <SelectItem key={unit.id} value={unit.name}>
+                          {unit.displayName} ({unit.name})
+                        </SelectItem>
+                      ))}
+                    </>
+                  )}
+                  {weightUnits.length > 0 && (
+                    <>
+                      <div className="px-2 py-1.5 text-sm font-semibold text-muted-foreground mt-2">Weight</div>
+                      {weightUnits.map((unit) => (
+                        <SelectItem key={unit.id} value={unit.name}>
+                          {unit.displayName} ({unit.name})
+                        </SelectItem>
+                      ))}
+                    </>
+                  )}
+                  {pieceUnits.length > 0 && (
+                    <>
+                      <div className="px-2 py-1.5 text-sm font-semibold text-muted-foreground mt-2">Piece-Based</div>
+                      {pieceUnits.map((unit) => (
+                        <SelectItem key={unit.id} value={unit.name}>
+                          {unit.displayName} ({unit.name})
+                        </SelectItem>
+                      ))}
+                    </>
+                  )}
                 </SelectContent>
               </Select>
             </div>
@@ -95,11 +127,36 @@ export default function ConversionTesting() {
                   <SelectValue placeholder="Select target unit" />
                 </SelectTrigger>
                 <SelectContent>
-                  {units.map((unit) => (
-                    <SelectItem key={unit.id} value={unit.name}>
-                      {unit.displayName} ({unit.name})
-                    </SelectItem>
-                  ))}
+                  {volumeUnits.length > 0 && (
+                    <>
+                      <div className="px-2 py-1.5 text-sm font-semibold text-muted-foreground">Volume</div>
+                      {volumeUnits.map((unit) => (
+                        <SelectItem key={unit.id} value={unit.name}>
+                          {unit.displayName} ({unit.name})
+                        </SelectItem>
+                      ))}
+                    </>
+                  )}
+                  {weightUnits.length > 0 && (
+                    <>
+                      <div className="px-2 py-1.5 text-sm font-semibold text-muted-foreground mt-2">Weight</div>
+                      {weightUnits.map((unit) => (
+                        <SelectItem key={unit.id} value={unit.name}>
+                          {unit.displayName} ({unit.name})
+                        </SelectItem>
+                      ))}
+                    </>
+                  )}
+                  {pieceUnits.length > 0 && (
+                    <>
+                      <div className="px-2 py-1.5 text-sm font-semibold text-muted-foreground mt-2">Piece-Based</div>
+                      {pieceUnits.map((unit) => (
+                        <SelectItem key={unit.id} value={unit.name}>
+                          {unit.displayName} ({unit.name})
+                        </SelectItem>
+                      ))}
+                    </>
+                  )}
                 </SelectContent>
               </Select>
             </div>

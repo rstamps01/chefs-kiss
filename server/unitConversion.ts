@@ -3,6 +3,48 @@ import { create, all, Unit, MathJsInstance } from 'mathjs';
 // Create mathjs instance with all functions
 const math: MathJsInstance = create(all);
 
+// Unit alias mapping: database abbreviations → mathjs full names
+// This allows our database to store user-friendly abbreviations while mathjs requires full names
+const UNIT_ALIASES: Record<string, string> = {
+  // Volume units
+  'gal': 'gallon',
+  'l': 'liter',
+  'ml': 'milliliter',
+  'cup': 'cup',
+  'tbsp': 'tablespoon',
+  'tsp': 'teaspoon',
+  'pt': 'pint',
+  'qt': 'quart',
+  'fl oz': 'fluidounce',
+  'floz': 'fluidounce',
+  
+  // Weight units
+  'oz': 'ounce',
+  'lb': 'pound',
+  'kg': 'kilogram',
+  'g': 'gram',
+  
+  // Count units (not convertible)
+  'each': 'each',
+  'ea': 'each',
+  'sheet': 'sheet',
+  'roll': 'roll',
+  'doz': 'dozen',
+  'dozen': 'dozen',
+};
+
+/**
+ * Normalize a unit string to mathjs-compatible format
+ * Converts database abbreviations to full unit names that mathjs recognizes
+ * 
+ * @param unit - Unit string from database (e.g., 'oz', 'tsp', 'gal')
+ * @returns Mathjs-compatible unit name (e.g., 'ounce', 'teaspoon', 'gallon')
+ */
+function normalizeUnit(unit: string): string {
+  const normalized = unit.toLowerCase().trim();
+  return UNIT_ALIASES[normalized] || normalized;
+}
+
 // Track initialized custom units to avoid duplicates
 const initializedUnits = new Set<string>();
 
@@ -79,16 +121,20 @@ export function convertUnit(
   ingredientName?: string
 ): number | null {
   try {
+    // Normalize units to mathjs-compatible format
+    const normalizedFrom = normalizeUnit(fromUnit);
+    const normalizedTo = normalizeUnit(toUnit);
+    
     // Handle same-unit case (no conversion needed)
-    if (fromUnit === toUnit) {
+    if (normalizedFrom === normalizedTo) {
       return value;
     }
 
     // Handle unsupported units that should be treated as "each" (no conversion)
-    const unsupportedUnits = ['each', 'ea'];
-    if (unsupportedUnits.includes(fromUnit.toLowerCase()) || unsupportedUnits.includes(toUnit.toLowerCase())) {
+    const unsupportedUnits = ['each', 'sheet', 'roll', 'dozen'];
+    if (unsupportedUnits.includes(normalizedFrom) || unsupportedUnits.includes(normalizedTo)) {
       // If both are unsupported or same conceptually, return as-is
-      if (unsupportedUnits.includes(fromUnit.toLowerCase()) && unsupportedUnits.includes(toUnit.toLowerCase())) {
+      if (unsupportedUnits.includes(normalizedFrom) && unsupportedUnits.includes(normalizedTo)) {
         return value;
       }
       // Cannot convert between "each" and weight/volume units without ingredient-specific data
@@ -106,10 +152,10 @@ export function convertUnit(
           const valueInOz = value * cupWeight;
           console.log(`[UnitConversion] DEBUG: ${value} cup × ${cupWeight} oz/cup = ${valueInOz} oz`);
           // Then convert ounces to target unit
-          const ozQuantity: Unit = math.unit(valueInOz, 'oz');
-          const converted: Unit = ozQuantity.to(toUnit);
-          const result = converted.toNumber(toUnit);
-          console.log(`[UnitConversion] DEBUG: ${valueInOz} oz → ${result} ${toUnit}`);
+          const ozQuantity: Unit = math.unit(valueInOz, 'ounce');
+          const converted: Unit = ozQuantity.to(normalizedTo);
+          const result = converted.toNumber(normalizedTo);
+          console.log(`[UnitConversion] DEBUG: ${valueInOz} oz → ${result} ${normalizedTo}`);
           return result;
         }
       }
@@ -130,10 +176,10 @@ export function convertUnit(
           const valueInOz = value * pieceWeight;
           console.log(`[UnitConversion] DEBUG: ${value} pc × ${pieceWeight} oz/pc = ${valueInOz} oz`);
           // Then convert ounces to target unit
-          const ozQuantity: Unit = math.unit(valueInOz, 'oz');
-          const converted: Unit = ozQuantity.to(toUnit);
-          const result = converted.toNumber(toUnit);
-          console.log(`[UnitConversion] DEBUG: ${valueInOz} oz → ${result} ${toUnit}`);
+          const ozQuantity: Unit = math.unit(valueInOz, 'ounce');
+          const converted: Unit = ozQuantity.to(normalizedTo);
+          const result = converted.toNumber(normalizedTo);
+          console.log(`[UnitConversion] DEBUG: ${valueInOz} oz → ${result} ${normalizedTo}`);
           return result;
         }
       }
@@ -143,9 +189,9 @@ export function convertUnit(
     }
 
     // Standard mathjs conversion
-    const quantity: Unit = math.unit(value, fromUnit);
-    const converted: Unit = quantity.to(toUnit);
-    return converted.toNumber(toUnit);
+    const quantity: Unit = math.unit(value, normalizedFrom);
+    const converted: Unit = quantity.to(normalizedTo);
+    return converted.toNumber(normalizedTo);
   } catch (error) {
     console.error(`[UnitConversion] Failed to convert ${value} ${fromUnit} to ${toUnit}:`, error);
     return null;

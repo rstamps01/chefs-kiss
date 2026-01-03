@@ -33,6 +33,22 @@ export default function Recipes() {
   // Fetch ingredients from database
   const { data: ingredients, isLoading: ingredientsLoading } = trpc.ingredients.list.useQuery();
   
+  // Fetch category lists to determine category types
+  const { data: recipeCategories = [] } = trpc.recipeCategories.listActive.useQuery();
+  const { data: ingredientCategoryNames = [] } = trpc.recipeCategories.listIngredientCategories.useQuery();
+  
+  // Helper function to determine category type
+  const getCategoryType = (categoryName: string): 'recipe' | 'ingredient' | 'unknown' => {
+    const recipeCategoryNames = recipeCategories.map(cat => cat.name);
+    const isRecipeCategory = recipeCategoryNames.includes(categoryName);
+    const isIngredientCategory = ingredientCategoryNames.includes(categoryName);
+    
+    // If it's in both lists, prioritize Recipe category
+    if (isRecipeCategory) return 'recipe';
+    if (isIngredientCategory) return 'ingredient';
+    return 'unknown';
+  };
+  
   // Delete recipe mutation
   const deleteRecipeMutation = trpc.recipes.delete.useMutation({
     onSuccess: () => {
@@ -334,11 +350,30 @@ export default function Recipes() {
                   <Card key={recipe.id} className="hover:shadow-md transition-shadow">
                     <CardHeader>
                       <div className="flex items-start justify-between">
-                        <div>
-                          <CardTitle className="text-lg">{recipe.name}</CardTitle>
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-1">
+                            <CardTitle className="text-lg">{recipe.name}</CardTitle>
+                            {recipe.category && (() => {
+                              const categoryType = getCategoryType(recipe.category);
+                              return (
+                                <Badge 
+                                  variant="outline"
+                                  className={
+                                    categoryType === 'recipe' 
+                                      ? 'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950 dark:text-blue-300 dark:border-blue-800'
+                                      : categoryType === 'ingredient'
+                                      ? 'bg-green-50 text-green-700 border-green-200 dark:bg-green-950 dark:text-green-300 dark:border-green-800'
+                                      : 'bg-gray-50 text-gray-700 border-gray-200 dark:bg-gray-950 dark:text-gray-300 dark:border-gray-800'
+                                  }
+                                >
+                                  {recipe.category}
+                                </Badge>
+                              );
+                            })()}
+                          </div>
                           <CardDescription>{recipe.description || "No description"}</CardDescription>
                         </div>
-                        <Badge variant="secondary">{metrics.margin}%</Badge>
+                        <Badge variant="secondary" className="ml-2">{metrics.margin}%</Badge>
                       </div>
                     </CardHeader>
                     <CardContent>

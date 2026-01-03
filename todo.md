@@ -1065,3 +1065,12 @@ All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb
 - [x] Update category dropdown with grouped sections
 - [x] Test category selection in create modal
 - [x] Verify consistency with edit modal
+
+## Category Badge Visual Enhancement
+- [x] Create helper function to determine if category is Recipe or Ingredient type
+- [x] Design badge color scheme (Recipe Categories vs Ingredient Categories)
+- [x] Add Badge component to recipe cards with category type indicator
+- [x] Implement color coding (blue for Recipe, green for Ingredient, gray for unknown)
+- [x] Test badge display across all recipe cards
+- [x] Verify visual clarity and accessibility
+- [x] Write comprehensive tests (6 passing tests)

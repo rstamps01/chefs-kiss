@@ -1058,3 +1058,10 @@ All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb
 - [x] Update category dropdown to use visual grouping with section headers
 - [x] Write comprehensive tests for category grouping functionality
 - [x] Verify all 5 tests passing (fetch, sort, group, overlap detection)
+
+## Recipe Creation Modal Category Grouping
+- [x] Update RecipeCreateModal to fetch ingredient categories
+- [x] Implement same grouping logic as RecipeEditModal
+- [x] Update category dropdown with grouped sections
+- [x] Test category selection in create modal
+- [x] Verify consistency with edit modal

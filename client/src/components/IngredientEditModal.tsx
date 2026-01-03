@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useToast } from "@/hooks/use-toast";
 import { QuickAddUnitDialog } from "@/components/QuickAddUnitDialog";
 import { QuickAddCategoryDialog } from "@/components/QuickAddCategoryDialog";
+import { UnitAccordionPicker } from "@/components/UnitAccordionPicker";
 
 interface Ingredient {
   id: number;
@@ -147,22 +148,16 @@ export function IngredientEditModal({ open, onOpenChange, ingredient }: Ingredie
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="edit-unit">Unit Type *</Label>
-            <div className="flex gap-2">
-              <Select value={unit} onValueChange={setUnit} required>
-                <SelectTrigger id="edit-unit">
-                  <SelectValue placeholder="Select unit type" />
-                </SelectTrigger>
-                <SelectContent>
-                  {activeUnits.map((u) => (
-                    <SelectItem key={u.id} value={u.name}>
-                      {u.displayName}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+            <div className="flex items-center justify-between">
+              <Label>Unit Type *</Label>
               <QuickAddUnitDialog onUnitAdded={(name) => setUnit(name)} />
             </div>
+            <UnitAccordionPicker
+              units={activeUnits.map(u => ({ unit: u.name, unitDisplayName: u.displayName }))}
+              selectedUnit={unit}
+              onSelectUnit={setUnit}
+              label="unit type"
+            />
           </div>
 
           <div className="space-y-2">

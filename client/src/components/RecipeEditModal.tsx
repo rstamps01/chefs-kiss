@@ -9,6 +9,7 @@ import { useState, useEffect } from "react";
 import { Loader2, Plus, Trash2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { QuickAddCategoryButton } from "@/components/QuickAddCategoryButton";
+import { UnitAccordionPicker } from "@/components/UnitAccordionPicker";
 
 interface RecipeEditModalProps {
   recipe: any;
@@ -297,77 +298,97 @@ export function RecipeEditModal({ recipe, open, onOpenChange }: RecipeEditModalP
                   ingredientCost = ingredient.quantity * parseFloat(ingredientData.costPerUnit);
                 }
 
+                // Get the selected ingredient's unit for smart disabling
+                const selectedIngredientUnit = ingredientData?.unit;
+                
+                // Determine which units to disable based on ingredient's unit category
+                const disabledUnits = new Set<string>();
+                let disabledReason = "";
+                if (selectedIngredientUnit) {
+                  const ingredientUnitData = activeUnits.find(u => u.name === selectedIngredientUnit);
+                  const ingredientCategoryId = ingredientUnitData?.categoryId;
+                  
+                  // Disable all units from different categories
+                  if (ingredientCategoryId) {
+                    activeUnits.forEach(unit => {
+                      if (unit.categoryId !== ingredientCategoryId) {
+                        disabledUnits.add(unit.name);
+                      }
+                    });
+                    
+                    // Determine category name for tooltip
+                    const categoryName = ingredientUnitData?.categoryId === 1 ? "Weight" : 
+                                        ingredientUnitData?.categoryId === 2 ? "Volume" : 
+                                        ingredientUnitData?.categoryId === 3 ? "Piece-Based" : "this category";
+                    disabledReason = `This unit is incompatible with the ingredient's ${categoryName} unit type`;
+                  }
+                }
+
                 return (
-                  <div key={index} className="grid grid-cols-[1fr_0.8fr_1fr_0.8fr_auto] gap-2 items-end">
-                    <div className="grid gap-2 min-w-0 overflow-hidden">
-                      <Label className="text-xs">Ingredient</Label>
-                      <Select
-                        value={ingredient.ingredientId.toString()}
-                        onValueChange={(value) => updateIngredient(index, "ingredientId", parseInt(value))}
+                  <div key={index} className="border rounded-lg p-4 space-y-3">
+                    <div className="grid grid-cols-[1fr_0.8fr_0.8fr_auto] gap-2 items-end">
+                      <div className="grid gap-2 min-w-0 overflow-hidden">
+                        <Label className="text-xs">Ingredient</Label>
+                        <Select
+                          value={ingredient.ingredientId.toString()}
+                          onValueChange={(value) => updateIngredient(index, "ingredientId", parseInt(value))}
+                        >
+                          <SelectTrigger className="truncate max-w-full">
+                            <SelectValue className="truncate" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {availableIngredients?.map((ing) => (
+                              <SelectItem key={ing.id} value={ing.id.toString()}>
+                                {ing.name}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      <div className="grid gap-2">
+                        <Label className="text-xs">Quantity</Label>
+                        <Input
+                          type="number"
+                          min="0"
+                          step="0.1"
+                          value={ingredient.quantity}
+                          onChange={(e) => updateIngredient(index, "quantity", parseFloat(e.target.value))}
+                        />
+                      </div>
+
+                      <div className="grid gap-2">
+                        <Label className="text-xs">Cost</Label>
+                        <div className="h-10 px-3 flex items-center text-sm text-muted-foreground bg-muted rounded-md">
+                          {ingredient.isCalculating ? (
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                          ) : (
+                            `$${ingredientCost.toFixed(2)}`
+                          )}
+                        </div>
+                      </div>
+
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="icon"
+                        onClick={() => removeIngredient(index)}
+                        className="mt-6"
                       >
-                        <SelectTrigger className="truncate max-w-full">
-                          <SelectValue className="truncate" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {availableIngredients?.map((ing) => (
-                            <SelectItem key={ing.id} value={ing.id.toString()}>
-                              {ing.name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
                     </div>
 
-                    <div className="grid gap-2">
-                      <Label className="text-xs">Quantity</Label>
-                      <Input
-                        type="number"
-                        min="0"
-                        step="0.1"
-                        value={ingredient.quantity}
-                        onChange={(e) => updateIngredient(index, "quantity", parseFloat(e.target.value))}
+                    <div>
+                      <UnitAccordionPicker
+                        units={activeUnits.map(u => ({ unit: u.name, unitDisplayName: u.displayName }))}
+                        selectedUnit={ingredient.unit}
+                        onSelectUnit={(value) => updateIngredient(index, "unit", value)}
+                        label="Unit"
+                        disabledUnits={disabledUnits}
+                        disabledReason={disabledReason}
                       />
                     </div>
-
-                    <div className="grid gap-2">
-                      <Label className="text-xs">Unit</Label>
-                      <Select
-                        value={ingredient.unit}
-                        onValueChange={(value) => updateIngredient(index, "unit", value)}
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select unit" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {activeUnits.map((unit) => (
-                            <SelectItem key={unit.id} value={unit.name}>
-                              {unit.displayName}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-
-                    <div className="grid gap-2">
-                      <Label className="text-xs">Cost</Label>
-                      <div className="h-10 px-3 flex items-center text-sm text-muted-foreground bg-muted rounded-md">
-                        {ingredient.isCalculating ? (
-                          <Loader2 className="h-4 w-4 animate-spin" />
-                        ) : (
-                          `$${ingredientCost.toFixed(2)}`
-                        )}
-                      </div>
-                    </div>
-
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="icon"
-                      onClick={() => removeIngredient(index)}
-                      className="mt-6"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
                   </div>
                 );
               })}

@@ -983,3 +983,11 @@ All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb
 - [x] Implement smart disabling logic based on ingredient's unit category
 - [x] Adjust layout to accommodate accordion picker in recipe ingredient rows
 - [x] Test TypeScript compilation and resolve type errors
+
+## Accordion Picker Enhancements (Current Sprint)
+- [x] Add tooltip/helper text for disabled units explaining why they're unavailable
+- [x] Implement search input at top of accordion for real-time unit filtering
+- [ ] Add conversion preview when switching unit categories in Edit Recipe (deferred - requires backend integration)
+- [x] Test tooltip display on disabled units
+- [x] Test search filtering across all unit categories
+- [x] Verify enhancements work in both Edit Ingredient and Edit Recipe modals

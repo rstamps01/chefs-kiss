@@ -31,7 +31,7 @@ export default function Home() {
       </header>
 
       {/* Hero Section */}
-      <section className="py-20 bg-gradient-to-b from-blue-50 to-background">
+      <section className="py-20">
         <div className="container">
           <div className="max-w-3xl mx-auto text-center space-y-6">
             <h1 className="text-5xl font-bold tracking-tight">
@@ -65,7 +65,7 @@ export default function Home() {
       </section>
 
       {/* Features */}
-      <section className="py-20">
+      <section className="py-20 bg-transparent">
         <div className="container">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4">Everything You Need to Optimize Operations</h2>

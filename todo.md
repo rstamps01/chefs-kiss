@@ -1084,3 +1084,13 @@ All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb
 - [x] Add "All Categories" option to clear filter
 - [x] Test filter functionality with badge colors
 - [x] Write comprehensive tests (7 passing tests)
+
+## Apply Gradient Background to All Pages
+- [x] Identify all page components (Home, Recipes, Sales, Forecasting, Prep Planning, etc.)
+- [x] Update App.tsx or global layout with gradient background
+- [x] Apply gradient to DashboardLayout component
+- [x] Ensure gradient works with existing card components
+- [x] Test visual consistency across all pages
+- [x] Applied bluish-grey gradient (#C5CDD8 → #D8DFE6 → #EEF1F3) to body in index.css
+- [x] Updated Home.tsx and NotFound.tsx to remove conflicting backgrounds
+- [x] Set DashboardLayout main to transparent background

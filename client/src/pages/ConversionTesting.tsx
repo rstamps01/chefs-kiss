@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight, CheckCircle2, XCircle, AlertTriangle } from "lucide-react";
@@ -25,6 +25,33 @@ export default function ConversionTesting() {
   const pieceUnits = units.filter(u => ['pc', 'piece', 'pieces'].includes(u.name.toLowerCase()));
   // Exclude count types from conversion options
   const excludedUnits = ['doz', 'dozen', 'each', 'ea', 'sheet', 'roll'];
+
+  // Determine category of selected From Unit
+  const getUnitCategory = (unitName: string): 'volume' | 'weight' | 'piece' | null => {
+    if (volumeUnits.some(u => u.name === unitName)) return 'volume';
+    if (weightUnits.some(u => u.name === unitName)) return 'weight';
+    if (pieceUnits.some(u => u.name === unitName)) return 'piece';
+    return null;
+  };
+
+  const fromUnitCategory = fromUnit ? getUnitCategory(fromUnit) : null;
+
+  // Check if a unit is compatible with the selected From Unit
+  const isCompatible = (unitName: string): boolean => {
+    if (!fromUnit) return true; // All enabled if no From Unit selected
+    const toCategory = getUnitCategory(unitName);
+    
+    // Volume ↔ Volume: compatible
+    if (fromUnitCategory === 'volume' && toCategory === 'volume') return true;
+    // Weight ↔ Weight: compatible
+    if (fromUnitCategory === 'weight' && toCategory === 'weight') return true;
+    // Piece → Weight: compatible (requires ingredient data)
+    if (fromUnitCategory === 'piece' && toCategory === 'weight') return true;
+    // Weight → Piece: compatible (requires ingredient data)
+    if (fromUnitCategory === 'weight' && toCategory === 'piece') return true;
+    // All other combinations: incompatible
+    return false;
+  };
 
   const testConversion = trpc.conversionTesting.testConversion.useQuery(
     {
@@ -87,34 +114,34 @@ export default function ConversionTesting() {
                 </SelectTrigger>
                 <SelectContent>
                   {volumeUnits.length > 0 && (
-                    <>
-                      <div className="px-2 py-1.5 text-sm font-semibold text-muted-foreground">Volume</div>
+                    <SelectGroup>
+                      <SelectLabel>Volume</SelectLabel>
                       {volumeUnits.map((unit) => (
                         <SelectItem key={unit.id} value={unit.name}>
                           {unit.displayName} ({unit.name})
                         </SelectItem>
                       ))}
-                    </>
+                    </SelectGroup>
                   )}
                   {weightUnits.length > 0 && (
-                    <>
-                      <div className="px-2 py-1.5 text-sm font-semibold text-muted-foreground mt-2">Weight</div>
+                    <SelectGroup>
+                      <SelectLabel>Weight</SelectLabel>
                       {weightUnits.map((unit) => (
                         <SelectItem key={unit.id} value={unit.name}>
                           {unit.displayName} ({unit.name})
                         </SelectItem>
                       ))}
-                    </>
+                    </SelectGroup>
                   )}
                   {pieceUnits.length > 0 && (
-                    <>
-                      <div className="px-2 py-1.5 text-sm font-semibold text-muted-foreground mt-2">Piece-Based</div>
+                    <SelectGroup>
+                      <SelectLabel>Piece-Based</SelectLabel>
                       {pieceUnits.map((unit) => (
                         <SelectItem key={unit.id} value={unit.name}>
                           {unit.displayName} ({unit.name})
                         </SelectItem>
                       ))}
-                    </>
+                    </SelectGroup>
                   )}
                 </SelectContent>
               </Select>
@@ -128,34 +155,46 @@ export default function ConversionTesting() {
                 </SelectTrigger>
                 <SelectContent>
                   {volumeUnits.length > 0 && (
-                    <>
-                      <div className="px-2 py-1.5 text-sm font-semibold text-muted-foreground">Volume</div>
+                    <SelectGroup>
+                      <SelectLabel>Volume</SelectLabel>
                       {volumeUnits.map((unit) => (
-                        <SelectItem key={unit.id} value={unit.name}>
+                        <SelectItem 
+                          key={unit.id} 
+                          value={unit.name}
+                          disabled={!isCompatible(unit.name)}
+                        >
                           {unit.displayName} ({unit.name})
                         </SelectItem>
                       ))}
-                    </>
+                    </SelectGroup>
                   )}
                   {weightUnits.length > 0 && (
-                    <>
-                      <div className="px-2 py-1.5 text-sm font-semibold text-muted-foreground mt-2">Weight</div>
+                    <SelectGroup>
+                      <SelectLabel>Weight</SelectLabel>
                       {weightUnits.map((unit) => (
-                        <SelectItem key={unit.id} value={unit.name}>
+                        <SelectItem 
+                          key={unit.id} 
+                          value={unit.name}
+                          disabled={!isCompatible(unit.name)}
+                        >
                           {unit.displayName} ({unit.name})
                         </SelectItem>
                       ))}
-                    </>
+                    </SelectGroup>
                   )}
                   {pieceUnits.length > 0 && (
-                    <>
-                      <div className="px-2 py-1.5 text-sm font-semibold text-muted-foreground mt-2">Piece-Based</div>
+                    <SelectGroup>
+                      <SelectLabel>Piece-Based</SelectLabel>
                       {pieceUnits.map((unit) => (
-                        <SelectItem key={unit.id} value={unit.name}>
+                        <SelectItem 
+                          key={unit.id} 
+                          value={unit.name}
+                          disabled={!isCompatible(unit.name)}
+                        >
                           {unit.displayName} ({unit.name})
                         </SelectItem>
                       ))}
-                    </>
+                    </SelectGroup>
                   )}
                 </SelectContent>
               </Select>

@@ -918,3 +918,21 @@ All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb
 - [x] Test with ingredients requiring unit conversions (Tuna pc, Sushi Rice cup)
 - [x] Verify total recipe cost updates in real-time
 - [x] Save checkpoint with real-time cost update feature
+
+## Hierarchical Unit Dropdown Menus (Completed)
+- [x] Design unit categorization structure (Volume, Weight, Piece-Based)
+- [x] Create compatibility matrix for unit conversions
+- [x] Implement SelectGroup component with category headers
+- [x] Add sub-menu items under each category in From Unit dropdown
+- [x] Add sub-menu items under each category in To Unit dropdown
+- [x] Implement logic to determine selected unit's category
+- [x] Add smart disabling for incompatible To Unit options based on From Unit selection
+- [x] Grey out non-compatible options (disabled but visible)
+- [x] Test Volume → Volume conversions (cup selected: all Volume enabled)
+- [x] Test Volume → Weight conversions (cup selected: all Weight disabled)
+- [x] Test Weight → Weight conversions (oz selected: all Weight + Piece enabled)
+- [x] Test Weight → Volume conversions (oz selected: all Volume disabled)
+- [x] Test Piece → Weight conversions (enabled with ingredient data)
+- [x] Test Piece → Volume conversions (all disabled)
+- [x] Verify visual hierarchy and usability
+- [ ] Save checkpoint with hierarchical dropdown enhancement

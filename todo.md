@@ -1074,3 +1074,13 @@ All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb
 - [x] Test badge display across all recipe cards
 - [x] Verify visual clarity and accessibility
 - [x] Write comprehensive tests (6 passing tests)
+
+## Category Filter with Badge Preview
+- [x] Locate existing category filter dropdown in Recipes page
+- [x] Add category filter state management
+- [x] Create filter dropdown with colored badge previews
+- [x] Apply getCategoryType() helper to filter options
+- [x] Implement filter logic to show only selected category recipes
+- [x] Add "All Categories" option to clear filter
+- [x] Test filter functionality with badge colors
+- [x] Write comprehensive tests (7 passing tests)

@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Plus, Search, Edit, Trash2, Loader2, ArrowUpDown } from "lucide-react";
+import { Plus, Search, Edit, Trash2, Loader2, ArrowUpDown, Filter } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { trpc } from "@/lib/trpc";
 import { useState, useMemo } from "react";
@@ -20,6 +20,7 @@ export default function Recipes() {
   const [searchQuery, setSearchQuery] = useState("");
   const [recipeSortBy, setRecipeSortBy] = useState<RecipeSortOption>("name-asc");
   const [ingredientSortBy, setIngredientSortBy] = useState<IngredientSortOption>("name-asc");
+  const [categoryFilter, setCategoryFilter] = useState<string>("all");
   const [editingRecipe, setEditingRecipe] = useState<any>(null);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isIngredientCreateModalOpen, setIsIngredientCreateModalOpen] = useState(false);
@@ -109,6 +110,11 @@ export default function Recipes() {
         recipe.name.toLowerCase().includes(query) ||
         (recipe.description && recipe.description.toLowerCase().includes(query))
       );
+    }
+    
+    // Then filter by category
+    if (categoryFilter !== "all") {
+      filtered = filtered.filter(recipe => recipe.category === categoryFilter);
     }
     
     // Then sort
@@ -296,6 +302,39 @@ export default function Recipes() {
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </div>
+              <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+                <SelectTrigger className="w-[200px]">
+                  <Filter className="mr-2 h-4 w-4" />
+                  <SelectValue placeholder="Filter by category" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">
+                    <span className="font-medium">All Categories</span>
+                  </SelectItem>
+                  <div className="my-1 h-px bg-border" />
+                  {Array.from(new Set(recipes?.map(r => r.category).filter((cat): cat is string => Boolean(cat)))).sort((a, b) => a.localeCompare(b)).map((category) => {
+                    const categoryType = getCategoryType(category);
+                    return (
+                      <SelectItem key={category} value={category}>
+                        <div className="flex items-center gap-2">
+                          <Badge 
+                            variant="outline"
+                            className={
+                              categoryType === 'recipe' 
+                                ? 'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950 dark:text-blue-300 dark:border-blue-800 text-xs'
+                                : categoryType === 'ingredient'
+                                ? 'bg-green-50 text-green-700 border-green-200 dark:bg-green-950 dark:text-green-300 dark:border-green-800 text-xs'
+                                : 'bg-gray-50 text-gray-700 border-gray-200 dark:bg-gray-950 dark:text-gray-300 dark:border-gray-800 text-xs'
+                            }
+                          >
+                            {category}
+                          </Badge>
+                        </div>
+                      </SelectItem>
+                    );
+                  })}
+                </SelectContent>
+              </Select>
               <Select value={recipeSortBy} onValueChange={(value) => setRecipeSortBy(value as RecipeSortOption)}>
                 <SelectTrigger className="w-[180px]">
                   <ArrowUpDown className="mr-2 h-4 w-4" />

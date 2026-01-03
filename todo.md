@@ -969,3 +969,9 @@ All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb
 - [x] Update Piece-Based unit display name to match screenshot format (Piece (def: 1 oz))
 - [x] Update UnitAccordionPicker component to display only displayName without redundant abbreviation
 - [x] Update seed script with correct display names for future consistency
+
+## Accordion UI Improvements
+- [x] Nest all three accordion categories under collapsible "Select from unit" heading
+- [x] Implement auto-collapse behavior so only one category can be open at a time
+- [x] Test nested accordion collapse/expand functionality
+- [x] Verify auto-collapse works correctly across both From Unit and To Unit pickers

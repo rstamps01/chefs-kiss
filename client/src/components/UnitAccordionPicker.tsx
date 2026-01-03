@@ -28,7 +28,11 @@ export function UnitAccordionPicker({
   disabledUnits = new Set(),
   label,
 }: UnitAccordionPickerProps) {
-  const [openSections, setOpenSections] = useState<string[]>(["volume", "weight", "piece"]);
+  // Parent accordion state (controls visibility of all categories)
+  const [isOpen, setIsOpen] = useState<string[]>([]);
+  
+  // Child accordion state (controls which category is expanded - only one at a time)
+  const [openCategory, setOpenCategory] = useState<string[]>([]);
 
   // Categorize units
   const volumeUnits = ["gal", "l", "ml", "cup", "tbsp", "tsp", "pt", "qt", "fl oz"];
@@ -61,6 +65,11 @@ export function UnitAccordionPicker({
     return unit ? getDisplayText(unit) : selectedUnit;
   };
 
+  // Auto-collapse: when a category is opened, close others
+  const handleCategoryChange = (value: string[]) => {
+    setOpenCategory(value);
+  };
+
   return (
     <div className="space-y-2">
       <label className="text-sm font-medium">{label}</label>
@@ -68,102 +77,122 @@ export function UnitAccordionPicker({
         <div className="p-3 bg-muted/50 border-b">
           <div className="text-sm font-medium">{getSelectedDisplayText()}</div>
         </div>
+        
+        {/* Parent Accordion - wraps all categories */}
         <Accordion
           type="multiple"
-          value={openSections}
-          onValueChange={setOpenSections}
+          value={isOpen}
+          onValueChange={setIsOpen}
           className="w-full"
         >
-          {/* Volume Section */}
-          <AccordionItem value="volume" className="border-b-0">
+          <AccordionItem value="main" className="border-b-0">
             <AccordionTrigger className="px-3 py-2 hover:bg-muted/50">
-              <span className="text-sm font-semibold text-muted-foreground">
-                Volume
+              <span className="text-sm font-medium">
+                Select {label.toLowerCase()}
               </span>
             </AccordionTrigger>
             <AccordionContent className="pb-0">
-              <div className="space-y-1 px-2 pb-2">
-                {categorizedUnits.volume.map((unit) => {
-                  const isDisabled = disabledUnits.has(unit.unit);
-                  const isSelected = selectedUnit === unit.unit;
-                  return (
-                    <Button
-                      key={unit.unit}
-                      variant={isSelected ? "secondary" : "ghost"}
-                      className={`w-full justify-between text-left h-auto py-2 ${
-                        isDisabled ? "opacity-40 cursor-not-allowed" : ""
-                      }`}
-                      onClick={() => !isDisabled && onSelectUnit(unit.unit)}
-                      disabled={isDisabled}
-                    >
-                      <span className="text-sm">{getDisplayText(unit)}</span>
-                      {isSelected && <Check className="h-4 w-4" />}
-                    </Button>
-                  );
-                })}
-              </div>
-            </AccordionContent>
-          </AccordionItem>
+              {/* Child Accordion - contains categories with auto-collapse */}
+              <Accordion
+                type="single"
+                collapsible
+                value={openCategory[0]}
+                onValueChange={(value) => handleCategoryChange(value ? [value] : [])}
+                className="w-full"
+              >
+                {/* Volume Section */}
+                <AccordionItem value="volume" className="border-b-0">
+                  <AccordionTrigger className="px-3 py-2 hover:bg-muted/50">
+                    <span className="text-sm font-semibold text-muted-foreground">
+                      Volume
+                    </span>
+                  </AccordionTrigger>
+                  <AccordionContent className="pb-0">
+                    <div className="space-y-1 px-2 pb-2">
+                      {categorizedUnits.volume.map((unit) => {
+                        const isDisabled = disabledUnits.has(unit.unit);
+                        const isSelected = selectedUnit === unit.unit;
+                        return (
+                          <Button
+                            key={unit.unit}
+                            variant={isSelected ? "secondary" : "ghost"}
+                            className={`w-full justify-between text-left h-auto py-2 ${
+                              isDisabled ? "opacity-40 cursor-not-allowed" : ""
+                            }`}
+                            onClick={() => !isDisabled && onSelectUnit(unit.unit)}
+                            disabled={isDisabled}
+                          >
+                            <span className="text-sm">{getDisplayText(unit)}</span>
+                            {isSelected && <Check className="h-4 w-4" />}
+                          </Button>
+                        );
+                      })}
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
 
-          {/* Weight Section */}
-          <AccordionItem value="weight" className="border-b-0">
-            <AccordionTrigger className="px-3 py-2 hover:bg-muted/50">
-              <span className="text-sm font-semibold text-muted-foreground">
-                Weight
-              </span>
-            </AccordionTrigger>
-            <AccordionContent className="pb-0">
-              <div className="space-y-1 px-2 pb-2">
-                {categorizedUnits.weight.map((unit) => {
-                  const isDisabled = disabledUnits.has(unit.unit);
-                  const isSelected = selectedUnit === unit.unit;
-                  return (
-                    <Button
-                      key={unit.unit}
-                      variant={isSelected ? "secondary" : "ghost"}
-                      className={`w-full justify-between text-left h-auto py-2 ${
-                        isDisabled ? "opacity-40 cursor-not-allowed" : ""
-                      }`}
-                      onClick={() => !isDisabled && onSelectUnit(unit.unit)}
-                      disabled={isDisabled}
-                    >
-                      <span className="text-sm">{getDisplayText(unit)}</span>
-                      {isSelected && <Check className="h-4 w-4" />}
-                    </Button>
-                  );
-                })}
-              </div>
-            </AccordionContent>
-          </AccordionItem>
+                {/* Weight Section */}
+                <AccordionItem value="weight" className="border-b-0">
+                  <AccordionTrigger className="px-3 py-2 hover:bg-muted/50">
+                    <span className="text-sm font-semibold text-muted-foreground">
+                      Weight
+                    </span>
+                  </AccordionTrigger>
+                  <AccordionContent className="pb-0">
+                    <div className="space-y-1 px-2 pb-2">
+                      {categorizedUnits.weight.map((unit) => {
+                        const isDisabled = disabledUnits.has(unit.unit);
+                        const isSelected = selectedUnit === unit.unit;
+                        return (
+                          <Button
+                            key={unit.unit}
+                            variant={isSelected ? "secondary" : "ghost"}
+                            className={`w-full justify-between text-left h-auto py-2 ${
+                              isDisabled ? "opacity-40 cursor-not-allowed" : ""
+                            }`}
+                            onClick={() => !isDisabled && onSelectUnit(unit.unit)}
+                            disabled={isDisabled}
+                          >
+                            <span className="text-sm">{getDisplayText(unit)}</span>
+                            {isSelected && <Check className="h-4 w-4" />}
+                          </Button>
+                        );
+                      })}
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
 
-          {/* Piece-Based Section */}
-          <AccordionItem value="piece" className="border-b-0">
-            <AccordionTrigger className="px-3 py-2 hover:bg-muted/50">
-              <span className="text-sm font-semibold text-muted-foreground">
-                Piece-Based
-              </span>
-            </AccordionTrigger>
-            <AccordionContent className="pb-0">
-              <div className="space-y-1 px-2 pb-2">
-                {categorizedUnits.piece.map((unit) => {
-                  const isDisabled = disabledUnits.has(unit.unit);
-                  const isSelected = selectedUnit === unit.unit;
-                  return (
-                    <Button
-                      key={unit.unit}
-                      variant={isSelected ? "secondary" : "ghost"}
-                      className={`w-full justify-between text-left h-auto py-2 ${
-                        isDisabled ? "opacity-40 cursor-not-allowed" : ""
-                      }`}
-                      onClick={() => !isDisabled && onSelectUnit(unit.unit)}
-                      disabled={isDisabled}
-                    >
-                      <span className="text-sm">{getDisplayText(unit)}</span>
-                      {isSelected && <Check className="h-4 w-4" />}
-                    </Button>
-                  );
-                })}
-              </div>
+                {/* Piece-Based Section */}
+                <AccordionItem value="piece" className="border-b-0">
+                  <AccordionTrigger className="px-3 py-2 hover:bg-muted/50">
+                    <span className="text-sm font-semibold text-muted-foreground">
+                      Piece-Based
+                    </span>
+                  </AccordionTrigger>
+                  <AccordionContent className="pb-0">
+                    <div className="space-y-1 px-2 pb-2">
+                      {categorizedUnits.piece.map((unit) => {
+                        const isDisabled = disabledUnits.has(unit.unit);
+                        const isSelected = selectedUnit === unit.unit;
+                        return (
+                          <Button
+                            key={unit.unit}
+                            variant={isSelected ? "secondary" : "ghost"}
+                            className={`w-full justify-between text-left h-auto py-2 ${
+                              isDisabled ? "opacity-40 cursor-not-allowed" : ""
+                            }`}
+                            onClick={() => !isDisabled && onSelectUnit(unit.unit)}
+                            disabled={isDisabled}
+                          >
+                            <span className="text-sm">{getDisplayText(unit)}</span>
+                            {isSelected && <Check className="h-4 w-4" />}
+                          </Button>
+                        );
+                      })}
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
             </AccordionContent>
           </AccordionItem>
         </Accordion>

@@ -975,3 +975,11 @@ All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb
 - [x] Implement auto-collapse behavior so only one category can be open at a time
 - [x] Test nested accordion collapse/expand functionality
 - [x] Verify auto-collapse works correctly across both From Unit and To Unit pickers
+
+## Replace Dropdowns with Accordion Pickers in Modals (Current Sprint)
+- [x] Analyze current IngredientEditModal and RecipeEditModal implementations
+- [x] Replace Unit Type dropdown in Edit Ingredient modal with UnitAccordionPicker
+- [x] Replace ingredient Unit dropdown in Edit Recipe modal with UnitAccordionPicker
+- [x] Implement smart disabling logic based on ingredient's unit category
+- [x] Adjust layout to accommodate accordion picker in recipe ingredient rows
+- [x] Test TypeScript compilation and resolve type errors

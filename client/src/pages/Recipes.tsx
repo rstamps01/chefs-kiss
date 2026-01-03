@@ -3,7 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Plus, Search, Edit, Trash2, Loader2 } from "lucide-react";
+import { Plus, Search, Edit, Trash2, Loader2, ArrowUpDown } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { trpc } from "@/lib/trpc";
 import { useState, useMemo } from "react";
 import { RecipeEditModal } from "@/components/RecipeEditModal";
@@ -12,8 +13,13 @@ import { IngredientCreateModal } from "@/components/IngredientCreateModal";
 import { IngredientEditModal } from "@/components/IngredientEditModal";
 import { useToast } from "@/hooks/use-toast";
 
+type RecipeSortOption = "name-asc" | "name-desc" | "price-high" | "price-low" | "category";
+type IngredientSortOption = "name-asc" | "name-desc" | "cost-high" | "cost-low" | "category";
+
 export default function Recipes() {
   const [searchQuery, setSearchQuery] = useState("");
+  const [recipeSortBy, setRecipeSortBy] = useState<RecipeSortOption>("name-asc");
+  const [ingredientSortBy, setIngredientSortBy] = useState<IngredientSortOption>("name-asc");
   const [editingRecipe, setEditingRecipe] = useState<any>(null);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isIngredientCreateModalOpen, setIsIngredientCreateModalOpen] = useState(false);
@@ -75,29 +81,103 @@ export default function Recipes() {
     }
   };
 
-  // Filter recipes based on search
+  // Filter and sort recipes
   const filteredRecipes = useMemo(() => {
     if (!recipes) return [];
-    if (!searchQuery) return recipes;
     
-    const query = searchQuery.toLowerCase();
-    return recipes.filter(recipe => 
-      recipe.name.toLowerCase().includes(query) ||
-      (recipe.description && recipe.description.toLowerCase().includes(query))
-    );
-  }, [recipes, searchQuery]);
+    // First filter by search query
+    let filtered = recipes;
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      filtered = recipes.filter(recipe => 
+        recipe.name.toLowerCase().includes(query) ||
+        (recipe.description && recipe.description.toLowerCase().includes(query))
+      );
+    }
+    
+    // Then sort
+    const sorted = [...filtered];
+    switch (recipeSortBy) {
+      case "name-asc":
+        sorted.sort((a, b) => a.name.localeCompare(b.name));
+        break;
+      case "name-desc":
+        sorted.sort((a, b) => b.name.localeCompare(a.name));
+        break;
+      case "price-high":
+        sorted.sort((a, b) => {
+          const priceA = parseFloat(a.sellingPrice || "0");
+          const priceB = parseFloat(b.sellingPrice || "0");
+          return priceB - priceA;
+        });
+        break;
+      case "price-low":
+        sorted.sort((a, b) => {
+          const priceA = parseFloat(a.sellingPrice || "0");
+          const priceB = parseFloat(b.sellingPrice || "0");
+          return priceA - priceB;
+        });
+        break;
+      case "category":
+        sorted.sort((a, b) => {
+          const catA = a.category || "";
+          const catB = b.category || "";
+          return catA.localeCompare(catB);
+        });
+        break;
+    }
+    
+    return sorted;
+  }, [recipes, searchQuery, recipeSortBy]);
 
-  // Filter ingredients based on search
+  // Filter and sort ingredients
   const filteredIngredients = useMemo(() => {
     if (!ingredients) return [];
-    if (!searchQuery) return ingredients;
     
-    const query = searchQuery.toLowerCase();
-    return ingredients.filter(ingredient => 
-      ingredient.name.toLowerCase().includes(query) ||
-      (ingredient.category && ingredient.category.toLowerCase().includes(query))
-    );
-  }, [ingredients, searchQuery]);
+    // First filter by search query
+    let filtered = ingredients;
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      filtered = ingredients.filter(ingredient => 
+        ingredient.name.toLowerCase().includes(query) ||
+        (ingredient.category && ingredient.category.toLowerCase().includes(query))
+      );
+    }
+    
+    // Then sort
+    const sorted = [...filtered];
+    switch (ingredientSortBy) {
+      case "name-asc":
+        sorted.sort((a, b) => a.name.localeCompare(b.name));
+        break;
+      case "name-desc":
+        sorted.sort((a, b) => b.name.localeCompare(a.name));
+        break;
+      case "cost-high":
+        sorted.sort((a, b) => {
+          const costA = parseFloat(a.costPerUnit || "0");
+          const costB = parseFloat(b.costPerUnit || "0");
+          return costB - costA;
+        });
+        break;
+      case "cost-low":
+        sorted.sort((a, b) => {
+          const costA = parseFloat(a.costPerUnit || "0");
+          const costB = parseFloat(b.costPerUnit || "0");
+          return costA - costB;
+        });
+        break;
+      case "category":
+        sorted.sort((a, b) => {
+          const catA = a.category || "";
+          const catB = b.category || "";
+          return catA.localeCompare(catB);
+        });
+        break;
+    }
+    
+    return sorted;
+  }, [ingredients, searchQuery, ingredientSortBy]);
 
   // Calculate recipe statistics
   const recipeStats = useMemo(() => {
@@ -189,7 +269,7 @@ export default function Recipes() {
 
         {/* RECIPES TAB */}
         <TabsContent value="recipes" className="space-y-6">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between gap-4">
             <div className="flex gap-4 flex-1">
               <div className="relative flex-1 max-w-md">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -200,6 +280,19 @@ export default function Recipes() {
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </div>
+              <Select value={recipeSortBy} onValueChange={(value) => setRecipeSortBy(value as RecipeSortOption)}>
+                <SelectTrigger className="w-[180px]">
+                  <ArrowUpDown className="mr-2 h-4 w-4" />
+                  <SelectValue placeholder="Sort by" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="name-asc">Name (A-Z)</SelectItem>
+                  <SelectItem value="name-desc">Name (Z-A)</SelectItem>
+                  <SelectItem value="price-high">Price (High-Low)</SelectItem>
+                  <SelectItem value="price-low">Price (Low-High)</SelectItem>
+                  <SelectItem value="category">Category</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
             <Button onClick={() => setIsCreateModalOpen(true)}>
               <Plus className="mr-2 h-4 w-4" />
@@ -351,7 +444,7 @@ export default function Recipes() {
 
         {/* INGREDIENTS TAB */}
         <TabsContent value="ingredients" className="space-y-6">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between gap-4">
             <div className="flex gap-4 flex-1">
               <div className="relative flex-1 max-w-md">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -362,6 +455,19 @@ export default function Recipes() {
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </div>
+              <Select value={ingredientSortBy} onValueChange={(value) => setIngredientSortBy(value as IngredientSortOption)}>
+                <SelectTrigger className="w-[180px]">
+                  <ArrowUpDown className="mr-2 h-4 w-4" />
+                  <SelectValue placeholder="Sort by" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="name-asc">Name (A-Z)</SelectItem>
+                  <SelectItem value="name-desc">Name (Z-A)</SelectItem>
+                  <SelectItem value="cost-high">Cost (High-Low)</SelectItem>
+                  <SelectItem value="cost-low">Cost (Low-High)</SelectItem>
+                  <SelectItem value="category">Category</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
             <Button onClick={() => setIsIngredientCreateModalOpen(true)}>
               <Plus className="mr-2 h-4 w-4" />

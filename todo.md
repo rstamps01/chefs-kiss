@@ -991,3 +991,14 @@ All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb
 - [x] Test tooltip display on disabled units
 - [x] Test search filtering across all unit categories
 - [x] Verify enhancements work in both Edit Ingredient and Edit Recipe modals
+
+## Recipe Management Sorting Feature (Current Sprint)
+- [x] Analyze Recipe Management page structure and current data display
+- [x] Design sorting UI component (dropdown or button group)
+- [x] Implement sorting state management for Recipes section
+- [x] Add sorting options: A-Z, Z-A, Price High-Low, Price Low-High, Category
+- [x] Implement sorting state management for Ingredients section
+- [x] Add sorting options: A-Z, Z-A, Cost High-Low, Cost Low-High, Category
+- [x] Test all sorting options in Recipes section
+- [x] Test all sorting options in Ingredients section
+- [x] Verify sorting persists during page interactions

@@ -906,3 +906,15 @@ All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb
 - [x] Fixed lb unit alias mapping (changed from 'pound' to 'lb' for mathjs compatibility)
 - [x] Added missing volume units to ingredientUnits table (gal, pt, qt, fl oz)
 - [x] Fixed cup conversion logic to only apply special handling for cup→weight, not cup→volume
+
+## Real-Time Ingredient Cost Updates in Edit Recipe Modal (Completed)
+- [x] Analyze current Edit Recipe modal cost calculation implementation
+- [x] Add tRPC endpoint for real-time cost calculation (calculateIngredientCost)
+- [x] Implement useEffect hooks to trigger cost recalculation on quantity/unit changes
+- [x] Add debouncing to prevent excessive API calls during typing
+- [x] Update cost display to show loading state during calculation
+- [x] Test real-time updates with various quantity changes (Avocado 0.5 → 1.0: $1.00 → $2.00)
+- [x] Test real-time updates with unit type changes (Tuna pc → oz: $5.63 → $3.75)
+- [x] Test with ingredients requiring unit conversions (Tuna pc, Sushi Rice cup)
+- [x] Verify total recipe cost updates in real-time
+- [x] Save checkpoint with real-time cost update feature

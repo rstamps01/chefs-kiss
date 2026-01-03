@@ -115,6 +115,57 @@ export const appRouter = router({
         await deleteRecipe(input.recipeId);
         return { success: true };
       }),
+    calculateIngredientCost: protectedProcedure
+      .input(z.object({
+        ingredientId: z.number().int().positive(),
+        quantity: z.number().positive(),
+        unit: z.string().min(1),
+      }))
+      .query(async ({ ctx, input }) => {
+        const restaurant = await getUserRestaurant(ctx.user.id);
+        if (!restaurant) {
+          throw new Error("Restaurant not found");
+        }
+        
+        // Get ingredient details
+        const ingredients = await getIngredients(restaurant.id);
+        const ingredient = ingredients.find(ing => ing.id === input.ingredientId);
+        
+        if (!ingredient) {
+          throw new Error("Ingredient not found");
+        }
+        
+        // Calculate cost with unit conversion
+        const { convertUnit } = await import("./unitConversion");
+        
+        if (!ingredient.costPerUnit) {
+          return { cost: null, error: "Ingredient has no cost defined" };
+        }
+        
+        if (!ingredient.unit) {
+          return { cost: null, error: "Ingredient has no unit defined" };
+        }
+        
+        const costPerUnit = parseFloat(ingredient.costPerUnit);
+        const pieceWeightOz = ingredient.pieceWeightOz ? parseFloat(ingredient.pieceWeightOz) : undefined;
+        
+        // Convert recipe unit to ingredient storage unit
+        const convertedQuantity = convertUnit(
+          input.quantity,
+          input.unit,
+          ingredient.unit,
+          pieceWeightOz,
+          ingredient.name as string | undefined
+        );
+        
+        if (convertedQuantity === null) {
+          // If conversion fails, return null cost
+          return { cost: null, error: "Unit conversion failed" };
+        }
+        
+        const cost = convertedQuantity * costPerUnit;
+        return { cost: cost.toFixed(2), error: null };
+      }),
   }),
   
   ingredients: router({

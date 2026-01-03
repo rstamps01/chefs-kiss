@@ -37,6 +37,7 @@ export function RecipeEditModal({ recipe, open, onOpenChange }: RecipeEditModalP
     quantity: number;
     unit: string;
     convertedCost?: string; // Backend-calculated cost with conversions
+    isCalculating?: boolean; // Loading state for cost calculation
   }>>(recipe.ingredients.map((ing: any) => ({
     ingredientId: ing.ingredientId,
     ingredientName: ing.ingredientName,
@@ -123,13 +124,62 @@ export function RecipeEditModal({ recipe, open, onOpenChange }: RecipeEditModalP
           ...updated[index],
           ingredientId: value,
           ingredientName: ingredient.name,
+          isCalculating: true, // Mark as calculating
         };
       }
     } else {
-      updated[index] = { ...updated[index], [field]: value };
+      updated[index] = { ...updated[index], [field]: value, isCalculating: true };
     }
     setIngredients(updated);
   };
+
+  // Real-time cost calculation with debouncing
+  useEffect(() => {
+    const timers: NodeJS.Timeout[] = [];
+    
+    ingredients.forEach((ingredient, index) => {
+      if (ingredient.isCalculating && ingredient.ingredientId && ingredient.quantity > 0 && ingredient.unit) {
+        // Debounce cost calculation (500ms after last change)
+        const timer = setTimeout(async () => {
+          try {
+            const result = await utils.client.recipes.calculateIngredientCost.query({
+              ingredientId: ingredient.ingredientId,
+              quantity: ingredient.quantity,
+              unit: ingredient.unit,
+            });
+            
+            // Update cost in state
+            setIngredients(prev => {
+              const updated = [...prev];
+              updated[index] = {
+                ...updated[index],
+                convertedCost: result.cost || undefined,
+                isCalculating: false,
+              };
+              return updated;
+            });
+          } catch (error) {
+            console.error("Failed to calculate ingredient cost:", error);
+            setIngredients(prev => {
+              const updated = [...prev];
+              updated[index] = {
+                ...updated[index],
+                isCalculating: false,
+              };
+              return updated;
+            });
+          }
+        }, 500);
+        
+        timers.push(timer);
+      }
+    });
+    
+    // Cleanup timers on unmount or when dependencies change
+    return () => {
+      timers.forEach(timer => clearTimeout(timer));
+    };
+  }, [ingredients, utils]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -301,7 +351,11 @@ export function RecipeEditModal({ recipe, open, onOpenChange }: RecipeEditModalP
                     <div className="grid gap-2">
                       <Label className="text-xs">Cost</Label>
                       <div className="h-10 px-3 flex items-center text-sm text-muted-foreground bg-muted rounded-md">
-                        ${ingredientCost.toFixed(2)}
+                        {ingredient.isCalculating ? (
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                        ) : (
+                          `$${ingredientCost.toFixed(2)}`
+                        )}
                       </div>
                     </div>
 

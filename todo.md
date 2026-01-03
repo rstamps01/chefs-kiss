@@ -1020,3 +1020,11 @@ All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb
 - [x] Test warning indicators appear correctly for problematic ingredients
 - [x] Test modal stays open during unit selection workflow
 - [x] Verify user can complete full recipe editing without modal closing unexpectedly
+
+## Debug Warning Icons Not Appearing (Current Issue)
+- [x] Check if conversion errors are actually being caught and flagged
+- [x] Verify hasConversionError flag is being set correctly in state
+- [x] Check if warning icon JSX is rendering properly
+- [x] Add console logging to track conversion error flow
+- [x] Test with a recipe that has known conversion issues
+- [x] Verify tooltip component is working correctly

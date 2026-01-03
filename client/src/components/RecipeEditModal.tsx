@@ -47,6 +47,7 @@ export function RecipeEditModal({ recipe, open, onOpenChange }: RecipeEditModalP
     quantity: parseFloat(ing.quantity),
     unit: ing.unit,
     convertedCost: ing.convertedCost, // Preserve backend-calculated cost
+    hasConversionError: !!ing.conversionWarning, // Set error flag if backend returned warning
   })));
 
   // Reset form when recipe changes
@@ -62,6 +63,7 @@ export function RecipeEditModal({ recipe, open, onOpenChange }: RecipeEditModalP
       quantity: parseFloat(ing.quantity),
       unit: ing.unit,
       convertedCost: ing.convertedCost, // Preserve backend-calculated cost
+      hasConversionError: !!ing.conversionWarning, // Set error flag if backend returned warning
     })));
   }, [recipe]);
 

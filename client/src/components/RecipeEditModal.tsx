@@ -6,7 +6,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { trpc } from "@/lib/trpc";
 import { useState, useEffect } from "react";
-import { Loader2, Plus, Trash2 } from "lucide-react";
+import { Loader2, Plus, Trash2, AlertTriangle } from "lucide-react";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useToast } from "@/hooks/use-toast";
 import { QuickAddCategoryButton } from "@/components/QuickAddCategoryButton";
 import { UnitAccordionPicker } from "@/components/UnitAccordionPicker";
@@ -39,6 +40,7 @@ export function RecipeEditModal({ recipe, open, onOpenChange }: RecipeEditModalP
     unit: string;
     convertedCost?: string; // Backend-calculated cost with conversions
     isCalculating?: boolean; // Loading state for cost calculation
+    hasConversionError?: boolean; // Flag for conversion errors
   }>>(recipe.ingredients.map((ing: any) => ({
     ingredientId: ing.ingredientId,
     ingredientName: ing.ingredientName,
@@ -166,6 +168,7 @@ export function RecipeEditModal({ recipe, open, onOpenChange }: RecipeEditModalP
               updated[index] = {
                 ...updated[index],
                 isCalculating: false,
+                hasConversionError: true, // Mark as having conversion error
               };
               return updated;
             });
@@ -359,11 +362,25 @@ export function RecipeEditModal({ recipe, open, onOpenChange }: RecipeEditModalP
 
                       <div className="grid gap-2">
                         <Label className="text-xs">Cost</Label>
-                        <div className="h-10 px-3 flex items-center text-sm text-muted-foreground bg-muted rounded-md">
-                          {ingredient.isCalculating ? (
-                            <Loader2 className="h-4 w-4 animate-spin" />
-                          ) : (
-                            `$${ingredientCost.toFixed(2)}`
+                        <div className="h-10 px-3 flex items-center justify-between text-sm text-muted-foreground bg-muted rounded-md">
+                          <span>
+                            {ingredient.isCalculating ? (
+                              <Loader2 className="h-4 w-4 animate-spin" />
+                            ) : (
+                              `$${ingredientCost.toFixed(2)}`
+                            )}
+                          </span>
+                          {ingredient.hasConversionError && (
+                            <TooltipProvider>
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <AlertTriangle className="h-4 w-4 text-amber-500" />
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                  <p className="text-xs">Missing unit conversion - cost may be inaccurate</p>
+                                </TooltipContent>
+                              </Tooltip>
+                            </TooltipProvider>
                           )}
                         </div>
                       </div>

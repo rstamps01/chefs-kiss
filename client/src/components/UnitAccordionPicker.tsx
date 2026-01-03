@@ -153,7 +153,10 @@ export function UnitAccordionPicker({
                             className={`w-full justify-between text-left h-auto py-2 ${
                               isDisabled ? "opacity-40 cursor-not-allowed" : ""
                             }`}
-                            onClick={() => !isDisabled && onSelectUnit(unit.unit)}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              if (!isDisabled) onSelectUnit(unit.unit);
+                            }}
                             disabled={isDisabled}
                           >
                             <span className="text-sm flex items-center gap-2">
@@ -200,7 +203,10 @@ export function UnitAccordionPicker({
                             className={`w-full justify-between text-left h-auto py-2 ${
                               isDisabled ? "opacity-40 cursor-not-allowed" : ""
                             }`}
-                            onClick={() => !isDisabled && onSelectUnit(unit.unit)}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              if (!isDisabled) onSelectUnit(unit.unit);
+                            }}
                             disabled={isDisabled}
                           >
                             <span className="text-sm flex items-center gap-2">
@@ -247,7 +253,10 @@ export function UnitAccordionPicker({
                             className={`w-full justify-between text-left h-auto py-2 ${
                               isDisabled ? "opacity-40 cursor-not-allowed" : ""
                             }`}
-                            onClick={() => !isDisabled && onSelectUnit(unit.unit)}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              if (!isDisabled) onSelectUnit(unit.unit);
+                            }}
                             disabled={isDisabled}
                           >
                             <span className="text-sm flex items-center gap-2">

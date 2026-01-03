@@ -1012,3 +1012,11 @@ All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb
 - [x] Verify new units appear in Conversion Testing page
 - [x] Verify new units appear in Edit Ingredient modal
 - [x] Verify new units appear in Edit Recipe modal
+
+## Recipe Conversion Warnings & Modal UX (Current Sprint)
+- [x] Add warning icon/indicator for ingredients with missing unit conversions in Edit Recipe modal
+- [x] Display tooltip explaining the conversion issue when hovering over warning icon
+- [x] Fix Edit Recipe modal to remain open after selecting ingredient unit type
+- [x] Test warning indicators appear correctly for problematic ingredients
+- [x] Test modal stays open during unit selection workflow
+- [x] Verify user can complete full recipe editing without modal closing unexpectedly

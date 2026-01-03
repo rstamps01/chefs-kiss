@@ -1,0 +1,9 @@
+{
+  "query": "SELECT u.id, u.name, u.displayName, c.name as categoryName FROM ingredientUnits u JOIN unitCategories c ON u.categoryId = c.id WHERE LOWER(c.name) LIKE '%piece%' ORDER BY u.name;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 49cxSE1jUeHq7LY.root --database KMmUaMc2BgFeVkUfVYZGPD --execute SELECT u.id, u.name, u.displayName, c.name as categoryName FROM ingredientUnits u JOIN unitCategories c ON u.categoryId = c.id WHERE LOWER(c.name) LIKE '%piece%' ORDER BY u.name;",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 62
+}

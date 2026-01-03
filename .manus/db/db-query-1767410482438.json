@@ -1,0 +1,106 @@
+{
+  "query": "SELECT u.id, u.name, u.displayName, c.name as categoryName FROM ingredientUnits u JOIN unitCategories c ON u.categoryId = c.id ORDER BY c.name, u.name LIMIT 30;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 49cxSE1jUeHq7LY.root --database KMmUaMc2BgFeVkUfVYZGPD --execute SELECT u.id, u.name, u.displayName, c.name as categoryName FROM ingredientUnits u JOIN unitCategories c ON u.categoryId = c.id ORDER BY c.name, u.name LIMIT 30;",
+  "rows": [
+    {
+      "id": "30001",
+      "name": "dozen",
+      "displayName": "(doz)",
+      "categoryName": "Count"
+    },
+    {
+      "id": "12",
+      "name": "each",
+      "displayName": "(ea)",
+      "categoryName": "Count"
+    },
+    {
+      "id": "13",
+      "name": "gallon",
+      "displayName": "(gal)",
+      "categoryName": "Custom"
+    },
+    {
+      "id": "1",
+      "name": "pieces",
+      "displayName": "Piece (def: 1 oz)",
+      "categoryName": "Custom"
+    },
+    {
+      "id": "6",
+      "name": "roll",
+      "displayName": "Roll",
+      "categoryName": "Custom"
+    },
+    {
+      "id": "14",
+      "name": "sheet",
+      "displayName": "Sheet",
+      "categoryName": "Custom"
+    },
+    {
+      "id": "7",
+      "name": "cup",
+      "displayName": "Cup (c)",
+      "categoryName": "Volume"
+    },
+    {
+      "id": "60002",
+      "name": "gal",
+      "displayName": "Gallon (gal)",
+      "categoryName": "Volume"
+    },
+    {
+      "id": "11",
+      "name": "l",
+      "displayName": "Liter (L)",
+      "categoryName": "Volume"
+    },
+    {
+      "id": "10",
+      "name": "ml",
+      "displayName": "Milliliter (mL)",
+      "categoryName": "Volume"
+    },
+    {
+      "id": "8",
+      "name": "tbsp",
+      "displayName": "Tablespoon (tbsp)",
+      "categoryName": "Volume"
+    },
+    {
+      "id": "9",
+      "name": "tsp",
+      "displayName": "Teaspoon (tsp)",
+      "categoryName": "Volume"
+    },
+    {
+      "id": "5",
+      "name": "g",
+      "displayName": "Gram (g)",
+      "categoryName": "Weight"
+    },
+    {
+      "id": "4",
+      "name": "kg",
+      "displayName": "Kilogram (kg)",
+      "categoryName": "Weight"
+    },
+    {
+      "id": "3",
+      "name": "lb",
+      "displayName": "Pound (lb)",
+      "categoryName": "Weight"
+    },
+    {
+      "id": "2",
+      "name": "oz",
+      "displayName": "Ounce (oz)",
+      "categoryName": "Weight"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\tdisplayName\tcategoryName\n30001\tdozen\t(doz)\tCount\n12\teach\t(ea)\tCount\n13\tgallon\t(gal)\tCustom\n1\tpieces\tPiece (def: 1 oz)\tCustom\n6\troll\tRoll\tCustom\n14\tsheet\tSheet\tCustom\n7\tcup\tCup (c)\tVolume\n60002\tgal\tGallon (gal)\tVolume\n11\tl\tLiter (L)\tVolume\n10\tml\tMilliliter (mL)\tVolume\n8\ttbsp\tTablespoon (tbsp)\tVolume\n9\ttsp\tTeaspoon (tsp)\tVolume\n5\tg\tGram (g)\tWeight\n4\tkg\tKilogram (kg)\tWeight\n3\tlb\tPound (lb)\tWeight\n2\toz\tOunce (oz)\tWeight\n",
+  "stderr": "",
+  "execution_time_ms": 57
+}

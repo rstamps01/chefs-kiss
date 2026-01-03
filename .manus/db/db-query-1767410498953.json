@@ -1,0 +1,24 @@
+{
+  "query": "SELECT u.*, c.name as categoryName FROM ingredientUnits u JOIN unitCategories c ON u.categoryId = c.id WHERE u.name IN ('pieces', 'pc', 'piece');",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 49cxSE1jUeHq7LY.root --database KMmUaMc2BgFeVkUfVYZGPD --execute SELECT u.*, c.name as categoryName FROM ingredientUnits u JOIN unitCategories c ON u.categoryId = c.id WHERE u.name IN ('pieces', 'pc', 'piece');",
+  "rows": [
+    {
+      "id": "1",
+      "restaurantId": "1",
+      "name": "pieces",
+      "displayName": "Piece (def: 1 oz)",
+      "isActive": "1",
+      "displayOrder": "1",
+      "createdAt": "2025-12-28 09:54:16",
+      "updatedAt": "2026-01-03 01:01:10",
+      "categoryId": "4",
+      "conversionFactor": "NULL",
+      "isStandard": "0",
+      "categoryName": "Custom"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\trestaurantId\tname\tdisplayName\tisActive\tdisplayOrder\tcreatedAt\tupdatedAt\tcategoryId\tconversionFactor\tisStandard\tcategoryName\n1\t1\tpieces\tPiece (def: 1 oz)\t1\t1\t2025-12-28 09:54:16\t2026-01-03 01:01:10\t4\tNULL\t0\tCustom\n",
+  "stderr": "",
+  "execution_time_ms": 63
+}

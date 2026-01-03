@@ -1,0 +1,14 @@
+{
+  "query": "SELECT id, name FROM unitCategories WHERE name IN ('Piece-Based', 'Piece', 'Count', 'Each');",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 49cxSE1jUeHq7LY.root --database KMmUaMc2BgFeVkUfVYZGPD --execute SELECT id, name FROM unitCategories WHERE name IN ('Piece-Based', 'Piece', 'Count', 'Each');",
+  "rows": [
+    {
+      "id": "3",
+      "name": "Count"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\n3\tCount\n",
+  "stderr": "",
+  "execution_time_ms": 61
+}

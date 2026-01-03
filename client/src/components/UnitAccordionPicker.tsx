@@ -49,7 +49,7 @@ export function UnitAccordionPicker({
   // Categorize units
   const volumeUnits = ["gal", "l", "ml", "cup", "tbsp", "tsp", "pt", "qt", "fl oz"];
   const weightUnits = ["oz", "lb", "kg", "g"];
-  const pieceUnits = ["pc", "pieces"];
+  const pieceUnits = ["pc", "pieces", "ea", "each", "roll", "sheet"];
 
   const getUnitCategory = (unit: string): "volume" | "weight" | "piece" | "other" => {
     const normalized = unit.toLowerCase();

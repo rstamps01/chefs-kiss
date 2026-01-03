@@ -1,0 +1,9 @@
+{
+  "query": "INSERT INTO ingredientUnits (name, displayName, categoryId, isActive) SELECT 'sheet', 'Sheet', id, 1 FROM unitCategories WHERE name = 'Piece-Based';",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 49cxSE1jUeHq7LY.root --database KMmUaMc2BgFeVkUfVYZGPD --execute INSERT INTO ingredientUnits (name, displayName, categoryId, isActive) SELECT 'sheet', 'Sheet', id, 1 FROM unitCategories WHERE name = 'Piece-Based';",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 56
+}

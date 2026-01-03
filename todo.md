@@ -1002,3 +1002,13 @@ All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb
 - [x] Test all sorting options in Recipes section
 - [x] Test all sorting options in Ingredients section
 - [x] Verify sorting persists during page interactions
+
+## Expand Piece-Based Units (Current Sprint)
+- [x] Add Each (ea) unit to database with proper display name
+- [x] Add Roll (roll) unit to database with proper display name
+- [x] Add Sheet unit to database with proper display name
+- [x] Update UnitAccordionPicker categorization to recognize new piece units
+- [x] Update seed script with new piece-based units
+- [x] Verify new units appear in Conversion Testing page
+- [x] Verify new units appear in Edit Ingredient modal
+- [x] Verify new units appear in Edit Recipe modal

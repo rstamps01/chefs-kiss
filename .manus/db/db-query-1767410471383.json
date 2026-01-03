@@ -1,0 +1,42 @@
+{
+  "query": "SELECT * FROM unitCategories;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 49cxSE1jUeHq7LY.root --database KMmUaMc2BgFeVkUfVYZGPD --execute SELECT * FROM unitCategories;",
+  "rows": [
+    {
+      "id": "1",
+      "name": "Weight",
+      "baseUnit": "g",
+      "description": "Mass/weight measurements (grams base)",
+      "canAutoConvert": "1",
+      "createdAt": "2025-12-28 12:32:18"
+    },
+    {
+      "id": "2",
+      "name": "Volume",
+      "baseUnit": "ml",
+      "description": "Liquid/volume measurements (milliliters base)",
+      "canAutoConvert": "1",
+      "createdAt": "2025-12-28 12:32:18"
+    },
+    {
+      "id": "3",
+      "name": "Count",
+      "baseUnit": "each",
+      "description": "Countable items (each base)",
+      "canAutoConvert": "1",
+      "createdAt": "2025-12-28 12:32:18"
+    },
+    {
+      "id": "4",
+      "name": "Custom",
+      "baseUnit": "NULL",
+      "description": "Custom non-standard measurements requiring manual conversion",
+      "canAutoConvert": "0",
+      "createdAt": "2025-12-28 12:32:18"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\tbaseUnit\tdescription\tcanAutoConvert\tcreatedAt\n1\tWeight\tg\tMass/weight measurements (grams base)\t1\t2025-12-28 12:32:18\n2\tVolume\tml\tLiquid/volume measurements (milliliters base)\t1\t2025-12-28 12:32:18\n3\tCount\teach\tCountable items (each base)\t1\t2025-12-28 12:32:18\n4\tCustom\tNULL\tCustom non-standard measurements requiring manual conversion\t0\t2025-12-28 12:32:18\n",
+  "stderr": "",
+  "execution_time_ms": 61
+}

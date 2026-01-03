@@ -106,10 +106,10 @@ export default function ConversionTesting() {
               <Input
                 id="value"
                 type="number"
-                step="0.01"
+                step="0.001"
                 value={value}
                 onChange={(e) => setValue(e.target.value)}
-                placeholder="1.0"
+                placeholder="1.000"
               />
             </div>
 

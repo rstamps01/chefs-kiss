@@ -1028,3 +1028,11 @@ All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb
 - [x] Add console logging to track conversion error flow
 - [x] Test with a recipe that has known conversion issues
 - [x] Verify tooltip component is working correctly
+
+## Quantity Precision Update (Current Sprint)
+- [x] Update Conversion Testing quantity input to support 3 decimal places
+- [x] Update Recipe Management ingredient quantity inputs to support 3 decimal places
+- [x] Update quantity display formatting to show up to 3 decimals
+- [x] Update backend to handle 3 decimal precision in calculations (already supports 4 decimals)
+- [x] Test quantity inputs accept and display 3 decimal values correctly
+- [x] Verify calculations maintain precision throughout the system

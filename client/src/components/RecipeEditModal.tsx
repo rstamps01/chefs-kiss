@@ -356,7 +356,7 @@ export function RecipeEditModal({ recipe, open, onOpenChange }: RecipeEditModalP
                         <Input
                           type="number"
                           min="0"
-                          step="0.1"
+                          step="0.001"
                           value={ingredient.quantity}
                           onChange={(e) => updateIngredient(index, "quantity", parseFloat(e.target.value))}
                         />

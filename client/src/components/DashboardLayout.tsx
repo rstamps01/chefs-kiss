@@ -29,7 +29,7 @@ import { Button } from "./ui/button";
 
 const menuItems = [
   { icon: Home, label: "Overview", path: "/dashboard" },
-  { icon: BarChart3, label: "Analytics", path: "/dashboard" },
+  { icon: BarChart3, label: "Analytics", path: "/analytics" },
   { icon: Upload, label: "Data Import", path: "/data-import" },
   { icon: TrendingUp, label: "Forecasting", path: "/forecasting" },
   { icon: ChefHat, label: "Prep Planning", path: "/prep-planning" },

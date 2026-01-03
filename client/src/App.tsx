@@ -28,6 +28,11 @@ function Router() {
           <Analytics />
         </DashboardLayout>
       </Route>
+      <Route path="/analytics">
+        <DashboardLayout>
+          <Analytics />
+        </DashboardLayout>
+      </Route>
       <Route path="/forecasting">
         <DashboardLayout>
           <Forecasting />

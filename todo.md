@@ -1036,3 +1036,9 @@ All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb
 - [x] Update backend to handle 3 decimal precision in calculations (already supports 4 decimals)
 - [x] Test quantity inputs accept and display 3 decimal values correctly
 - [x] Verify calculations maintain precision throughout the system
+
+## Dynamic Warning Icon Removal (Current Sprint)
+- [x] Update updateIngredient function to clear hasConversionError when conversion succeeds
+- [x] Ensure warning icon disappears immediately after selecting compatible unit
+- [x] Test warning icon removal with various unit combinations
+- [x] Verify warning reappears if user selects incompatible unit again

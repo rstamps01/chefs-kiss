@@ -160,6 +160,7 @@ export function RecipeEditModal({ recipe, open, onOpenChange }: RecipeEditModalP
                 ...updated[index],
                 convertedCost: result.cost || undefined,
                 isCalculating: false,
+                hasConversionError: false, // Clear error flag on successful conversion
               };
               return updated;
             });

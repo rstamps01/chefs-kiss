@@ -1,0 +1,64 @@
+{
+  "query": "SELECT name FROM recipeCategories WHERE isActive = 1 ORDER BY name;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 49cxSE1jUeHq7LY.root --database KMmUaMc2BgFeVkUfVYZGPD --execute SELECT name FROM recipeCategories WHERE isActive = 1 ORDER BY name;",
+  "rows": [
+    {
+      "name": "Appetizers"
+    },
+    {
+      "name": "Dairy & Other"
+    },
+    {
+      "name": "Desserts"
+    },
+    {
+      "name": "Entrees"
+    },
+    {
+      "name": "Fish"
+    },
+    {
+      "name": "Fish & Seafood"
+    },
+    {
+      "name": "Ingredient"
+    },
+    {
+      "name": "Nigiri"
+    },
+    {
+      "name": "Oils & Dressings"
+    },
+    {
+      "name": "Produce"
+    },
+    {
+      "name": "Roe & Eggs"
+    },
+    {
+      "name": "Sashimi"
+    },
+    {
+      "name": "Sauces & Condiments"
+    },
+    {
+      "name": "Soups & Salads"
+    },
+    {
+      "name": "Specialty Items"
+    },
+    {
+      "name": "Specialty Rolls"
+    },
+    {
+      "name": "Sushi Rolls"
+    },
+    {
+      "name": "Toppings & Garnishes"
+    }
+  ],
+  "messages": [],
+  "stdout": "name\nAppetizers\nDairy & Other\nDesserts\nEntrees\nFish\nFish & Seafood\nIngredient\nNigiri\nOils & Dressings\nProduce\nRoe & Eggs\nSashimi\nSauces & Condiments\nSoups & Salads\nSpecialty Items\nSpecialty Rolls\nSushi Rolls\nToppings & Garnishes\n",
+  "stderr": "",
+  "execution_time_ms": 55
+}

@@ -1042,3 +1042,19 @@ All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb
 - [x] Ensure warning icon disappears immediately after selecting compatible unit
 - [x] Test warning icon removal with various unit combinations
 - [x] Verify warning reappears if user selects incompatible unit again
+
+## Category Grouping in Edit Recipe (Current Sprint)
+- [ ] Check database schema for category type field
+- [ ] Update backend to return category type with categories
+- [ ] Group categories by type (Ingredient vs Recipe) in Edit Recipe modal
+- [ ] Alphabetize categories within each group
+- [ ] Test category dropdown displays grouped and sorted correctly
+
+## Recipe Category Grouping Enhancement
+- [x] Create backend endpoint to fetch distinct ingredient categories
+- [x] Update RecipeEditModal to fetch both recipe and ingredient categories
+- [x] Implement category grouping logic (Recipe Categories vs Ingredient Categories)
+- [x] Add alphabetical sorting within each category group
+- [x] Update category dropdown to use visual grouping with section headers
+- [x] Write comprehensive tests for category grouping functionality
+- [x] Verify all 5 tests passing (fetch, sort, group, overlap detection)

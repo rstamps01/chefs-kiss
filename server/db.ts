@@ -1,4 +1,4 @@
-import { eq, and, sql, desc } from "drizzle-orm";
+import { eq, and, sql, desc, isNotNull } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
 import { InsertUser, users, recipes, ingredients, recipeIngredients, restaurants, locations, recipeCategories, ingredientUnits, unitCategories, ingredientConversions, unitConversions } from "../drizzle/schema";
 import { ENV } from './_core/env';
@@ -833,6 +833,29 @@ export async function getActiveRecipeCategories(restaurantId: number) {
     .orderBy(recipeCategories.displayOrder, recipeCategories.name);
 
   return categories;
+}
+
+/**
+ * Get distinct ingredient categories for a restaurant
+ */
+export async function getIngredientCategories(restaurantId: number) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  const result = await db
+    .selectDistinct({ category: ingredients.category })
+    .from(ingredients)
+    .where(
+      and(
+        eq(ingredients.restaurantId, restaurantId),
+        isNotNull(ingredients.category)
+      )
+    )
+    .orderBy(ingredients.category);
+
+  return result.map(r => r.category).filter(Boolean);
 }
 
 /**

@@ -2,7 +2,7 @@ import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
-import { getUserRestaurant, getRecipesWithIngredients, getIngredients, getRestaurantLocations, createRecipe, addRecipeIngredients, updateRecipe, updateRecipeIngredients, deleteRecipe, createIngredient, updateIngredient, deleteIngredient, importSalesData, checkExistingSalesData, getSalesAnalytics, getDailySalesData, getSalesByDayOfWeek, getSalesDateRange, getRecipeCategories, getActiveRecipeCategories, createRecipeCategory, updateRecipeCategory, deleteRecipeCategory, getIngredientUnits, getActiveIngredientUnits, createIngredientUnit, updateIngredientUnit, deleteIngredientUnit, getUnitCategories, getIngredientConversions, getIngredientConversionsByIngredient, createIngredientConversion, updateIngredientConversion, deleteIngredientConversion, getConversionFactor } from "./db";
+import { getUserRestaurant, getRecipesWithIngredients, getIngredients, getRestaurantLocations, createRecipe, addRecipeIngredients, updateRecipe, updateRecipeIngredients, deleteRecipe, createIngredient, updateIngredient, deleteIngredient, importSalesData, checkExistingSalesData, getSalesAnalytics, getDailySalesData, getSalesByDayOfWeek, getSalesDateRange, getRecipeCategories, getActiveRecipeCategories, getIngredientCategories, createRecipeCategory, updateRecipeCategory, deleteRecipeCategory, getIngredientUnits, getActiveIngredientUnits, createIngredientUnit, updateIngredientUnit, deleteIngredientUnit, getUnitCategories, getIngredientConversions, getIngredientConversionsByIngredient, createIngredientConversion, updateIngredientConversion, deleteIngredientConversion, getConversionFactor } from "./db";
 import { generateForecast } from "./forecasting";
 import { generatePrepPlan, generateMultiDayPrepPlan } from "./prep-planning";
 import { z } from "zod";
@@ -471,6 +471,13 @@ export const appRouter = router({
         return [];
       }
       return await getActiveRecipeCategories(restaurant.id);
+    }),
+    listIngredientCategories: protectedProcedure.query(async ({ ctx }) => {
+      const restaurant = await getUserRestaurant(ctx.user.id);
+      if (!restaurant) {
+        return [];
+      }
+      return await getIngredientCategories(restaurant.id);
     }),
     create: protectedProcedure
       .input(z.object({

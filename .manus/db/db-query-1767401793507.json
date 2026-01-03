@@ -1,0 +1,124 @@
+{
+  "query": "SELECT id, name, displayName, isActive FROM ingredientUnits ORDER BY name",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 49cxSE1jUeHq7LY.root --database KMmUaMc2BgFeVkUfVYZGPD --execute SELECT id, name, displayName, isActive FROM ingredientUnits ORDER BY name",
+  "rows": [
+    {
+      "id": "7",
+      "name": "cup",
+      "displayName": "Cup (c)",
+      "isActive": "1"
+    },
+    {
+      "id": "30001",
+      "name": "dozen",
+      "displayName": "(doz)",
+      "isActive": "1"
+    },
+    {
+      "id": "12",
+      "name": "each",
+      "displayName": "(ea)",
+      "isActive": "1"
+    },
+    {
+      "id": "90007",
+      "name": "fl oz",
+      "displayName": "Fluid Ounce (fl oz)",
+      "isActive": "1"
+    },
+    {
+      "id": "5",
+      "name": "g",
+      "displayName": "Gram (g)",
+      "isActive": "1"
+    },
+    {
+      "id": "60002",
+      "name": "gal",
+      "displayName": "Gallon (gal)",
+      "isActive": "1"
+    },
+    {
+      "id": "13",
+      "name": "gallon",
+      "displayName": "(gal)",
+      "isActive": "1"
+    },
+    {
+      "id": "4",
+      "name": "kg",
+      "displayName": "Kilogram (kg)",
+      "isActive": "1"
+    },
+    {
+      "id": "11",
+      "name": "l",
+      "displayName": "Liter (L)",
+      "isActive": "1"
+    },
+    {
+      "id": "3",
+      "name": "lb",
+      "displayName": "Pound (lb)",
+      "isActive": "1"
+    },
+    {
+      "id": "10",
+      "name": "ml",
+      "displayName": "Milliliter (mL)",
+      "isActive": "1"
+    },
+    {
+      "id": "2",
+      "name": "oz",
+      "displayName": "Ounce (oz)",
+      "isActive": "1"
+    },
+    {
+      "id": "1",
+      "name": "pieces",
+      "displayName": "(pc)",
+      "isActive": "1"
+    },
+    {
+      "id": "90005",
+      "name": "pt",
+      "displayName": "Pint (pt)",
+      "isActive": "1"
+    },
+    {
+      "id": "90006",
+      "name": "qt",
+      "displayName": "Quart (qt)",
+      "isActive": "1"
+    },
+    {
+      "id": "6",
+      "name": "roll",
+      "displayName": "Roll",
+      "isActive": "1"
+    },
+    {
+      "id": "14",
+      "name": "sheet",
+      "displayName": "Sheet",
+      "isActive": "1"
+    },
+    {
+      "id": "8",
+      "name": "tbsp",
+      "displayName": "Tablespoon (tbsp)",
+      "isActive": "1"
+    },
+    {
+      "id": "9",
+      "name": "tsp",
+      "displayName": "Teaspoon (tsp)",
+      "isActive": "1"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\tdisplayName\tisActive\n7\tcup\tCup (c)\t1\n30001\tdozen\t(doz)\t1\n12\teach\t(ea)\t1\n90007\tfl oz\tFluid Ounce (fl oz)\t1\n5\tg\tGram (g)\t1\n60002\tgal\tGallon (gal)\t1\n13\tgallon\t(gal)\t1\n4\tkg\tKilogram (kg)\t1\n11\tl\tLiter (L)\t1\n3\tlb\tPound (lb)\t1\n10\tml\tMilliliter (mL)\t1\n2\toz\tOunce (oz)\t1\n1\tpieces\t(pc)\t1\n90005\tpt\tPint (pt)\t1\n90006\tqt\tQuart (qt)\t1\n6\troll\tRoll\t1\n14\tsheet\tSheet\t1\n8\ttbsp\tTablespoon (tbsp)\t1\n9\ttsp\tTeaspoon (tsp)\t1\n",
+  "stderr": "",
+  "execution_time_ms": 108
+}

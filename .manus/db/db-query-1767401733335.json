@@ -1,0 +1,15 @@
+{
+  "query": "SELECT id, name, displayName FROM ingredientUnits WHERE name = 'pc' OR name = 'pieces'",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 49cxSE1jUeHq7LY.root --database KMmUaMc2BgFeVkUfVYZGPD --execute SELECT id, name, displayName FROM ingredientUnits WHERE name = 'pc' OR name = 'pieces'",
+  "rows": [
+    {
+      "id": "1",
+      "name": "pieces",
+      "displayName": "(pc)"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\tdisplayName\n1\tpieces\t(pc)\n",
+  "stderr": "",
+  "execution_time_ms": 52
+}

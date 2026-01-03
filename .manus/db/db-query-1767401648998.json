@@ -1,0 +1,9 @@
+{
+  "query": "UPDATE ingredientUnits SET displayName = 'Cup (c)' WHERE name = 'cup';\nUPDATE ingredientUnits SET displayName = 'Fluid Ounce (fl oz)' WHERE name = 'fl oz';\nUPDATE ingredientUnits SET displayName = 'Gallon (gal)' WHERE name = 'gal';\nUPDATE ingredientUnits SET displayName = 'Liter (L)' WHERE name = 'l';\nUPDATE ingredientUnits SET displayName = 'Milliliter (mL)' WHERE name = 'ml';\nUPDATE ingredientUnits SET displayName = 'Pint (pt)' WHERE name = 'pt';\nUPDATE ingredientUnits SET displayName = 'Quart (qt)' WHERE name = 'qt';\nUPDATE ingredientUnits SET displayName = 'Tablespoon (tbsp)' WHERE name = 'tbsp';\nUPDATE ingredientUnits SET displayName = 'Teaspoon (tsp)' WHERE name = 'tsp';",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 49cxSE1jUeHq7LY.root --database KMmUaMc2BgFeVkUfVYZGPD --execute UPDATE ingredientUnits SET displayName = 'Cup (c)' WHERE name = 'cup';\nUPDATE ingredientUnits SET displayName = 'Fluid Ounce (fl oz)' WHERE name = 'fl oz';\nUPDATE ingredientUnits SET displayName = 'Gallon (gal)' WHERE name = 'gal';\nUPDATE ingredientUnits SET displayName = 'Liter (L)' WHERE name = 'l';\nUPDATE ingredientUnits SET displayName = 'Milliliter (mL)' WHERE name = 'ml';\nUPDATE ingredientUnits SET displayName = 'Pint (pt)' WHERE name = 'pt';\nUPDATE ingredientUnits SET displayName = 'Quart (qt)' WHERE name = 'qt';\nUPDATE ingredientUnits SET displayName = 'Tablespoon (tbsp)' WHERE name = 'tbsp';\nUPDATE ingredientUnits SET displayName = 'Teaspoon (tsp)' WHERE name = 'tsp';",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 122
+}

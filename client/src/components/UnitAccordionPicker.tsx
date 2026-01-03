@@ -50,9 +50,9 @@ export function UnitAccordionPicker({
   };
 
   const getDisplayText = (unit: Unit) => {
-    return unit.unitDisplayName
-      ? `${unit.unitDisplayName} (${unit.unit})`
-      : unit.unit;
+    // Display only the displayName since it already includes the abbreviation
+    // e.g., "Cup (c)" instead of "Cup (c) (cup)"
+    return unit.unitDisplayName || unit.unit;
   };
 
   const getSelectedDisplayText = () => {

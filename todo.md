@@ -950,3 +950,22 @@ All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb
 - [x] Test unit selection (oz selected, checkmark displayed)
 - [x] Verify smart disabling still works (Volume units greyed out when Weight selected)
 - [x] Save checkpoint with collapsible sub-menu feature
+
+## Update Unit Display Names to Match Screenshot Convention (Current Task)
+- [ ] Analyze current unit display format in UnitAccordionPicker component
+- [ ] Review ingredientUnits table displayName values
+- [ ] Update Volume units: Cup (c), Fluid Ounce (fl oz), Gallon (gal), Liter (L), Milliliter (mL), Pint (pt), Quart (qt), Tablespoon (tbsp), Teaspoon (tsp)
+- [ ] Update Weight units: Ounce (oz), Gram (g), Kilogram (kg), Pound (lb)
+- [ ] Update Piece-Based units: Piece (def: 1 oz)
+- [ ] Update UnitAccordionPicker to display full names with abbreviations
+- [ ] Test unit display in From Unit accordion
+- [ ] Test unit display in To Unit accordion
+- [ ] Verify all unit names match screenshot format
+- [ ] Save checkpoint with updated unit naming convention
+
+## Update Unit Display Names (Completed)
+- [x] Update Volume unit display names to match screenshot format (Cup (c), Gallon (gal), etc.)
+- [x] Update Weight unit display names to match screenshot format (Ounce (oz), Pound (lb), etc.)
+- [x] Update Piece-Based unit display name to match screenshot format (Piece (def: 1 oz))
+- [x] Update UnitAccordionPicker component to display only displayName without redundant abbreviation
+- [x] Update seed script with correct display names for future consistency

@@ -1,0 +1,105 @@
+{
+  "query": "SELECT name, displayName, categoryId FROM ingredientUnits WHERE isActive = 1 ORDER BY categoryId, name",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 49cxSE1jUeHq7LY.root --database KMmUaMc2BgFeVkUfVYZGPD --execute SELECT name, displayName, categoryId FROM ingredientUnits WHERE isActive = 1 ORDER BY categoryId, name",
+  "rows": [
+    {
+      "name": "fl oz",
+      "displayName": "Fluid Ounce (fl oz)",
+      "categoryId": "NULL"
+    },
+    {
+      "name": "pt",
+      "displayName": "Pint (pt)",
+      "categoryId": "NULL"
+    },
+    {
+      "name": "qt",
+      "displayName": "Quart (qt)",
+      "categoryId": "NULL"
+    },
+    {
+      "name": "g",
+      "displayName": "Gram (g)",
+      "categoryId": "1"
+    },
+    {
+      "name": "kg",
+      "displayName": "Kilogram (kg)",
+      "categoryId": "1"
+    },
+    {
+      "name": "lb",
+      "displayName": "Pound (lb)",
+      "categoryId": "1"
+    },
+    {
+      "name": "oz",
+      "displayName": "Ounce (oz)",
+      "categoryId": "1"
+    },
+    {
+      "name": "cup",
+      "displayName": "Cup (c)",
+      "categoryId": "2"
+    },
+    {
+      "name": "gal",
+      "displayName": "Gallon (gal)",
+      "categoryId": "2"
+    },
+    {
+      "name": "l",
+      "displayName": "Liter (L)",
+      "categoryId": "2"
+    },
+    {
+      "name": "ml",
+      "displayName": "Milliliter (mL)",
+      "categoryId": "2"
+    },
+    {
+      "name": "tbsp",
+      "displayName": "Tablespoon (tbsp)",
+      "categoryId": "2"
+    },
+    {
+      "name": "tsp",
+      "displayName": "Teaspoon (tsp)",
+      "categoryId": "2"
+    },
+    {
+      "name": "dozen",
+      "displayName": "(doz)",
+      "categoryId": "3"
+    },
+    {
+      "name": "each",
+      "displayName": "(ea)",
+      "categoryId": "3"
+    },
+    {
+      "name": "gallon",
+      "displayName": "(gal)",
+      "categoryId": "4"
+    },
+    {
+      "name": "pieces",
+      "displayName": "(pc)",
+      "categoryId": "4"
+    },
+    {
+      "name": "roll",
+      "displayName": "Roll",
+      "categoryId": "4"
+    },
+    {
+      "name": "sheet",
+      "displayName": "Sheet",
+      "categoryId": "4"
+    }
+  ],
+  "messages": [],
+  "stdout": "name\tdisplayName\tcategoryId\nfl oz\tFluid Ounce (fl oz)\tNULL\npt\tPint (pt)\tNULL\nqt\tQuart (qt)\tNULL\ng\tGram (g)\t1\nkg\tKilogram (kg)\t1\nlb\tPound (lb)\t1\noz\tOunce (oz)\t1\ncup\tCup (c)\t2\ngal\tGallon (gal)\t2\nl\tLiter (L)\t2\nml\tMilliliter (mL)\t2\ntbsp\tTablespoon (tbsp)\t2\ntsp\tTeaspoon (tsp)\t2\ndozen\t(doz)\t3\neach\t(ea)\t3\ngallon\t(gal)\t4\npieces\t(pc)\t4\nroll\tRoll\t4\nsheet\tSheet\t4\n",
+  "stderr": "",
+  "execution_time_ms": 53
+}

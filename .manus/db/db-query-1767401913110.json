@@ -1,0 +1,124 @@
+{
+  "query": "SELECT id, restaurantId, name, displayName FROM ingredientUnits ORDER BY id",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 49cxSE1jUeHq7LY.root --database KMmUaMc2BgFeVkUfVYZGPD --execute SELECT id, restaurantId, name, displayName FROM ingredientUnits ORDER BY id",
+  "rows": [
+    {
+      "id": "1",
+      "restaurantId": "1",
+      "name": "pieces",
+      "displayName": "Piece (def: 1 oz)"
+    },
+    {
+      "id": "2",
+      "restaurantId": "1",
+      "name": "oz",
+      "displayName": "Ounce (oz)"
+    },
+    {
+      "id": "3",
+      "restaurantId": "1",
+      "name": "lb",
+      "displayName": "Pound (lb)"
+    },
+    {
+      "id": "4",
+      "restaurantId": "1",
+      "name": "kg",
+      "displayName": "Kilogram (kg)"
+    },
+    {
+      "id": "5",
+      "restaurantId": "1",
+      "name": "g",
+      "displayName": "Gram (g)"
+    },
+    {
+      "id": "6",
+      "restaurantId": "1",
+      "name": "roll",
+      "displayName": "Roll"
+    },
+    {
+      "id": "7",
+      "restaurantId": "1",
+      "name": "cup",
+      "displayName": "Cup (c)"
+    },
+    {
+      "id": "8",
+      "restaurantId": "1",
+      "name": "tbsp",
+      "displayName": "Tablespoon (tbsp)"
+    },
+    {
+      "id": "9",
+      "restaurantId": "1",
+      "name": "tsp",
+      "displayName": "Teaspoon (tsp)"
+    },
+    {
+      "id": "10",
+      "restaurantId": "1",
+      "name": "ml",
+      "displayName": "Milliliter (mL)"
+    },
+    {
+      "id": "11",
+      "restaurantId": "1",
+      "name": "l",
+      "displayName": "Liter (L)"
+    },
+    {
+      "id": "12",
+      "restaurantId": "1",
+      "name": "each",
+      "displayName": "(ea)"
+    },
+    {
+      "id": "13",
+      "restaurantId": "1",
+      "name": "gallon",
+      "displayName": "(gal)"
+    },
+    {
+      "id": "14",
+      "restaurantId": "1",
+      "name": "sheet",
+      "displayName": "Sheet"
+    },
+    {
+      "id": "30001",
+      "restaurantId": "1",
+      "name": "dozen",
+      "displayName": "(doz)"
+    },
+    {
+      "id": "60002",
+      "restaurantId": "1",
+      "name": "gal",
+      "displayName": "Gallon (gal)"
+    },
+    {
+      "id": "90005",
+      "restaurantId": "1",
+      "name": "pt",
+      "displayName": "Pint (pt)"
+    },
+    {
+      "id": "90006",
+      "restaurantId": "1",
+      "name": "qt",
+      "displayName": "Quart (qt)"
+    },
+    {
+      "id": "90007",
+      "restaurantId": "1",
+      "name": "fl oz",
+      "displayName": "Fluid Ounce (fl oz)"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\trestaurantId\tname\tdisplayName\n1\t1\tpieces\tPiece (def: 1 oz)\n2\t1\toz\tOunce (oz)\n3\t1\tlb\tPound (lb)\n4\t1\tkg\tKilogram (kg)\n5\t1\tg\tGram (g)\n6\t1\troll\tRoll\n7\t1\tcup\tCup (c)\n8\t1\ttbsp\tTablespoon (tbsp)\n9\t1\ttsp\tTeaspoon (tsp)\n10\t1\tml\tMilliliter (mL)\n11\t1\tl\tLiter (L)\n12\t1\teach\t(ea)\n13\t1\tgallon\t(gal)\n14\t1\tsheet\tSheet\n30001\t1\tdozen\t(doz)\n60002\t1\tgal\tGallon (gal)\n90005\t1\tpt\tPint (pt)\n90006\t1\tqt\tQuart (qt)\n90007\t1\tfl oz\tFluid Ounce (fl oz)\n",
+  "stderr": "",
+  "execution_time_ms": 65
+}

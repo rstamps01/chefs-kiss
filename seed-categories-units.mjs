@@ -64,17 +64,17 @@ async function main() {
 
   // Seed ingredient units
   const units = [
-    { name: "pieces", displayName: "Pieces", displayOrder: 1 },
-    { name: "oz", displayName: "Ounces (oz)", displayOrder: 2 },
-    { name: "lb", displayName: "Pounds (lb)", displayOrder: 3 },
-    { name: "kg", displayName: "Kilograms (kg)", displayOrder: 4 },
-    { name: "g", displayName: "Grams (g)", displayOrder: 5 },
+    { name: "pieces", displayName: "Piece (def: 1 oz)", displayOrder: 1 },
+    { name: "oz", displayName: "Ounce (oz)", displayOrder: 2 },
+    { name: "lb", displayName: "Pound (lb)", displayOrder: 3 },
+    { name: "kg", displayName: "Kilogram (kg)", displayOrder: 4 },
+    { name: "g", displayName: "Gram (g)", displayOrder: 5 },
     { name: "roll", displayName: "Roll", displayOrder: 6 },
-    { name: "cup", displayName: "Cup", displayOrder: 7 },
+    { name: "cup", displayName: "Cup (c)", displayOrder: 7 },
     { name: "tbsp", displayName: "Tablespoon (tbsp)", displayOrder: 8 },
     { name: "tsp", displayName: "Teaspoon (tsp)", displayOrder: 9 },
-    { name: "ml", displayName: "Milliliters (ml)", displayOrder: 10 },
-    { name: "l", displayName: "Liters (l)", displayOrder: 11 },
+    { name: "ml", displayName: "Milliliter (mL)", displayOrder: 10 },
+    { name: "l", displayName: "Liter (L)", displayOrder: 11 },
     { name: "each", displayName: "Each", displayOrder: 12 },
   ];
 

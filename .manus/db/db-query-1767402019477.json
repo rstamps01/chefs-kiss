@@ -1,0 +1,9 @@
+{
+  "query": "UPDATE ingredientUnits SET displayName = CASE name\n  WHEN 'pieces' THEN 'Piece (def: 1 oz)'\n  WHEN 'oz' THEN 'Ounce (oz)'\n  WHEN 'lb' THEN 'Pound (lb)'\n  WHEN 'kg' THEN 'Kilogram (kg)'\n  WHEN 'g' THEN 'Gram (g)'\n  WHEN 'cup' THEN 'Cup (c)'\n  WHEN 'tbsp' THEN 'Tablespoon (tbsp)'\n  WHEN 'tsp' THEN 'Teaspoon (tsp)'\n  WHEN 'ml' THEN 'Milliliter (mL)'\n  WHEN 'l' THEN 'Liter (L)'\n  WHEN 'gal' THEN 'Gallon (gal)'\n  WHEN 'pt' THEN 'Pint (pt)'\n  WHEN 'qt' THEN 'Quart (qt)'\n  WHEN 'fl oz' THEN 'Fluid Ounce (fl oz)'\n  ELSE displayName\nEND",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 49cxSE1jUeHq7LY.root --database KMmUaMc2BgFeVkUfVYZGPD --execute UPDATE ingredientUnits SET displayName = CASE name\n  WHEN 'pieces' THEN 'Piece (def: 1 oz)'\n  WHEN 'oz' THEN 'Ounce (oz)'\n  WHEN 'lb' THEN 'Pound (lb)'\n  WHEN 'kg' THEN 'Kilogram (kg)'\n  WHEN 'g' THEN 'Gram (g)'\n  WHEN 'cup' THEN 'Cup (c)'\n  WHEN 'tbsp' THEN 'Tablespoon (tbsp)'\n  WHEN 'tsp' THEN 'Teaspoon (tsp)'\n  WHEN 'ml' THEN 'Milliliter (mL)'\n  WHEN 'l' THEN 'Liter (L)'\n  WHEN 'gal' THEN 'Gallon (gal)'\n  WHEN 'pt' THEN 'Pint (pt)'\n  WHEN 'qt' THEN 'Quart (qt)'\n  WHEN 'fl oz' THEN 'Fluid Ounce (fl oz)'\n  ELSE displayName\nEND",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 53
+}

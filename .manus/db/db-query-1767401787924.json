@@ -1,0 +1,35 @@
+{
+  "query": "SELECT id, name, displayName FROM ingredientUnits WHERE name LIKE '%p%' OR displayName LIKE '%piece%' OR displayName LIKE '%Piece%'",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 49cxSE1jUeHq7LY.root --database KMmUaMc2BgFeVkUfVYZGPD --execute SELECT id, name, displayName FROM ingredientUnits WHERE name LIKE '%p%' OR displayName LIKE '%piece%' OR displayName LIKE '%Piece%'",
+  "rows": [
+    {
+      "id": "1",
+      "name": "pieces",
+      "displayName": "(pc)"
+    },
+    {
+      "id": "7",
+      "name": "cup",
+      "displayName": "Cup (c)"
+    },
+    {
+      "id": "8",
+      "name": "tbsp",
+      "displayName": "Tablespoon (tbsp)"
+    },
+    {
+      "id": "9",
+      "name": "tsp",
+      "displayName": "Teaspoon (tsp)"
+    },
+    {
+      "id": "90005",
+      "name": "pt",
+      "displayName": "Pint (pt)"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\tdisplayName\n1\tpieces\t(pc)\n7\tcup\tCup (c)\n8\ttbsp\tTablespoon (tbsp)\n9\ttsp\tTeaspoon (tsp)\n90005\tpt\tPint (pt)\n",
+  "stderr": "",
+  "execution_time_ms": 61
+}

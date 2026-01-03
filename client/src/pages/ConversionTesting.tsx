@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { UnitAccordionPicker } from "@/components/UnitAccordionPicker";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight, CheckCircle2, XCircle, AlertTriangle } from "lucide-react";
@@ -16,21 +17,27 @@ export default function ConversionTesting() {
   const [selectedIngredientId, setSelectedIngredientId] = useState<number | undefined>(undefined);
   const [testResult, setTestResult] = useState<any>(null);
 
-  const { data: units = [] } = trpc.conversionTesting.getSupportedUnits.useQuery();
+  const { data: unitsData = [] } = trpc.conversionTesting.getSupportedUnits.useQuery();
+  
+  // Transform units data for UnitAccordionPicker
+  const units = unitsData.map(u => ({
+    unit: u.name,
+    unitDisplayName: u.displayName || null
+  }));
   const { data: ingredients = [] } = trpc.conversionTesting.getIngredientsForTesting.useQuery();
 
   // Categorize units for grouped display
-  const volumeUnits = units.filter(u => ['gal', 'l', 'ml', 'cup', 'tbsp', 'tsp', 'pt', 'qt', 'fl oz'].includes(u.name.toLowerCase()));
-  const weightUnits = units.filter(u => ['oz', 'lb', 'kg', 'g'].includes(u.name.toLowerCase()));
-  const pieceUnits = units.filter(u => ['pc', 'piece', 'pieces'].includes(u.name.toLowerCase()));
+  const volumeUnits = units.filter(u => ['gal', 'l', 'ml', 'cup', 'tbsp', 'tsp', 'pt', 'qt', 'fl oz'].includes(u.unit.toLowerCase()));
+  const weightUnits = units.filter(u => ['oz', 'lb', 'kg', 'g'].includes(u.unit.toLowerCase()));
+  const pieceUnits = units.filter(u => ['pc', 'piece', 'pieces'].includes(u.unit.toLowerCase()));
   // Exclude count types from conversion options
   const excludedUnits = ['doz', 'dozen', 'each', 'ea', 'sheet', 'roll'];
 
   // Determine category of selected From Unit
   const getUnitCategory = (unitName: string): 'volume' | 'weight' | 'piece' | null => {
-    if (volumeUnits.some(u => u.name === unitName)) return 'volume';
-    if (weightUnits.some(u => u.name === unitName)) return 'weight';
-    if (pieceUnits.some(u => u.name === unitName)) return 'piece';
+    if (volumeUnits.some(u => u.unit === unitName)) return 'volume';
+    if (weightUnits.some(u => u.unit === unitName)) return 'weight';
+    if (pieceUnits.some(u => u.unit === unitName)) return 'piece';
     return null;
   };
 
@@ -106,99 +113,20 @@ export default function ConversionTesting() {
               />
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="fromUnit">From Unit</Label>
-              <Select value={fromUnit} onValueChange={setFromUnit}>
-                <SelectTrigger id="fromUnit">
-                  <SelectValue placeholder="Select source unit" />
-                </SelectTrigger>
-                <SelectContent>
-                  {volumeUnits.length > 0 && (
-                    <SelectGroup>
-                      <SelectLabel>Volume</SelectLabel>
-                      {volumeUnits.map((unit) => (
-                        <SelectItem key={unit.id} value={unit.name}>
-                          {unit.displayName} ({unit.name})
-                        </SelectItem>
-                      ))}
-                    </SelectGroup>
-                  )}
-                  {weightUnits.length > 0 && (
-                    <SelectGroup>
-                      <SelectLabel>Weight</SelectLabel>
-                      {weightUnits.map((unit) => (
-                        <SelectItem key={unit.id} value={unit.name}>
-                          {unit.displayName} ({unit.name})
-                        </SelectItem>
-                      ))}
-                    </SelectGroup>
-                  )}
-                  {pieceUnits.length > 0 && (
-                    <SelectGroup>
-                      <SelectLabel>Piece-Based</SelectLabel>
-                      {pieceUnits.map((unit) => (
-                        <SelectItem key={unit.id} value={unit.name}>
-                          {unit.displayName} ({unit.name})
-                        </SelectItem>
-                      ))}
-                    </SelectGroup>
-                  )}
-                </SelectContent>
-              </Select>
-            </div>
+            <UnitAccordionPicker
+              units={units}
+              selectedUnit={fromUnit}
+              onSelectUnit={setFromUnit}
+              label="From Unit"
+            />
 
-            <div className="space-y-2">
-              <Label htmlFor="toUnit">To Unit</Label>
-              <Select value={toUnit} onValueChange={setToUnit}>
-                <SelectTrigger id="toUnit">
-                  <SelectValue placeholder="Select target unit" />
-                </SelectTrigger>
-                <SelectContent>
-                  {volumeUnits.length > 0 && (
-                    <SelectGroup>
-                      <SelectLabel>Volume</SelectLabel>
-                      {volumeUnits.map((unit) => (
-                        <SelectItem 
-                          key={unit.id} 
-                          value={unit.name}
-                          disabled={!isCompatible(unit.name)}
-                        >
-                          {unit.displayName} ({unit.name})
-                        </SelectItem>
-                      ))}
-                    </SelectGroup>
-                  )}
-                  {weightUnits.length > 0 && (
-                    <SelectGroup>
-                      <SelectLabel>Weight</SelectLabel>
-                      {weightUnits.map((unit) => (
-                        <SelectItem 
-                          key={unit.id} 
-                          value={unit.name}
-                          disabled={!isCompatible(unit.name)}
-                        >
-                          {unit.displayName} ({unit.name})
-                        </SelectItem>
-                      ))}
-                    </SelectGroup>
-                  )}
-                  {pieceUnits.length > 0 && (
-                    <SelectGroup>
-                      <SelectLabel>Piece-Based</SelectLabel>
-                      {pieceUnits.map((unit) => (
-                        <SelectItem 
-                          key={unit.id} 
-                          value={unit.name}
-                          disabled={!isCompatible(unit.name)}
-                        >
-                          {unit.displayName} ({unit.name})
-                        </SelectItem>
-                      ))}
-                    </SelectGroup>
-                  )}
-                </SelectContent>
-              </Select>
-            </div>
+            <UnitAccordionPicker
+              units={units}
+              selectedUnit={toUnit}
+              onSelectUnit={setToUnit}
+              disabledUnits={new Set(units.filter(u => !isCompatible(u.unit)).map(u => u.unit))}
+              label="To Unit"
+            />
 
             <div className="space-y-2">
               <Label htmlFor="ingredient">Ingredient (Optional)</Label>

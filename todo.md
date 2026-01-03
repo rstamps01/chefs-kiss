@@ -936,3 +936,17 @@ All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb
 - [x] Test Piece → Volume conversions (all disabled)
 - [x] Verify visual hierarchy and usability
 - [ ] Save checkpoint with hierarchical dropdown enhancement
+
+## Collapsible Sub-Menus for Unit Dropdowns (Completed)
+- [x] Design collapsible menu structure with expand/collapse icons
+- [x] Implement state management for expanded/collapsed sections
+- [x] Create UnitAccordionPicker component with Accordion/AccordionItem/AccordionTrigger
+- [x] Add chevron icons (built-in to AccordionTrigger) to indicate expand/collapse state
+- [x] Implement click handlers to toggle section visibility
+- [x] Update From Unit dropdown with collapsible accordion sections
+- [x] Update To Unit dropdown with collapsible accordion sections
+- [x] Add smooth transitions for expand/collapse animations (built-in to Accordion)
+- [x] Test collapsible functionality in From Unit dropdown (Volume section collapsed successfully)
+- [x] Test unit selection (oz selected, checkmark displayed)
+- [x] Verify smart disabling still works (Volume units greyed out when Weight selected)
+- [x] Save checkpoint with collapsible sub-menu feature

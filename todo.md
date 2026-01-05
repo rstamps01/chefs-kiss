@@ -1147,3 +1147,14 @@ All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb
 - [x] Update CSV export to include category and pieces
 - [x] Test category grouping and piece calculations
 - [x] Write comprehensive tests for enhanced features (5 passing tests)
+
+## Prep Planning Display Enhancements
+- [x] Update prep list to prominently show piece weight and total weight
+- [x] Make ingredient cards expandable to show recipe breakdown
+- [x] Add click handler to expand/collapse ingredient details
+- [x] Display recipe list within each ingredient showing usage
+- [x] Create predicted dishes list section for the day
+- [x] Show all predicted dishes with estimated servings
+- [x] Test expandable ingredient cards
+- [x] Test predicted dishes list display
+- [x] Write comprehensive tests (5 passing tests)

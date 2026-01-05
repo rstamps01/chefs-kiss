@@ -20,6 +20,8 @@ export default function PrepPlanning() {
   const [safetyBuffer, setSafetyBuffer] = useState<number>(10);
   const [completedItems, setCompletedItems] = useState<Set<number>>(new Set());
   const [expandedItems, setExpandedItems] = useState<Set<number>>(new Set());
+  const [multiDayMode, setMultiDayMode] = useState<boolean>(false);
+  const [daysCount, setDaysCount] = useState<number>(3);
 
   // Fetch user restaurant and locations
   const { data: restaurant } = trpc.restaurant.get.useQuery();
@@ -30,17 +32,35 @@ export default function PrepPlanning() {
     setSelectedLocation(locations[0].id);
   }
 
-  // Fetch prep plan
-  const { data: prepPlan, isLoading, refetch, isRefetching } = trpc.prepPlanning.generate.useQuery(
+  // Fetch single-day prep plan
+  const { data: prepPlan, isLoading: isSingleDayLoading, refetch: refetchSingleDay, isRefetching: isRefetchingSingleDay } = trpc.prepPlanning.generate.useQuery(
     {
       locationId: selectedLocation ?? 0,
       targetDate,
       safetyBufferPercent: safetyBuffer,
     },
     {
-      enabled: !!selectedLocation,
+      enabled: !!selectedLocation && !multiDayMode,
     }
   );
+
+  // Fetch multi-day prep plan
+  const { data: multiDayPlan, isLoading: isMultiDayLoading, refetch: refetchMultiDay, isRefetching: isRefetchingMultiDay } = trpc.prepPlanning.multiDay.useQuery(
+    {
+      locationId: selectedLocation ?? 0,
+      startDate: targetDate,
+      days: daysCount,
+      safetyBufferPercent: safetyBuffer,
+    },
+    {
+      enabled: !!selectedLocation && multiDayMode,
+    }
+  );
+
+  // Unified loading and refetch states
+  const isLoading = multiDayMode ? isMultiDayLoading : isSingleDayLoading;
+  const isRefetching = multiDayMode ? isRefetchingMultiDay : isRefetchingSingleDay;
+  const refetch = multiDayMode ? refetchMultiDay : refetchSingleDay;
 
   // Format date for display
   const formattedDate = useMemo(() => {
@@ -167,7 +187,7 @@ export default function PrepPlanning() {
       </div>
 
       {/* Filters */}
-      <div className="grid gap-4 md:grid-cols-3 print:hidden">
+      <div className="grid gap-4 md:grid-cols-4 print:hidden">
         <div className="space-y-2">
           <Label htmlFor="location-select">Location</Label>
           <Select
@@ -188,7 +208,7 @@ export default function PrepPlanning() {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="date-select">Prep Date</Label>
+          <Label htmlFor="date-select">{multiDayMode ? "Start Date" : "Prep Date"}</Label>
           <Input
             id="date-select"
             type="date"
@@ -196,6 +216,31 @@ export default function PrepPlanning() {
             onChange={(e) => setTargetDate(e.target.value)}
             min={new Date().toISOString().split("T")[0]}
           />
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="mode-select">Planning Mode</Label>
+          <Select
+            value={multiDayMode ? `multi-${daysCount}` : "single"}
+            onValueChange={(value) => {
+              if (value === "single") {
+                setMultiDayMode(false);
+              } else {
+                setMultiDayMode(true);
+                setDaysCount(parseInt(value.replace("multi-", "")));
+              }
+            }}
+          >
+            <SelectTrigger id="mode-select">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="single">Single Day</SelectItem>
+              <SelectItem value="multi-3">Next 3 Days</SelectItem>
+              <SelectItem value="multi-7">This Week (7 days)</SelectItem>
+              <SelectItem value="multi-14">Next 2 Weeks</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
 
         <div className="space-y-2">
@@ -221,13 +266,22 @@ export default function PrepPlanning() {
         <div className="flex items-center justify-center h-64">
           <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
         </div>
-      ) : !prepPlan ? (
+      ) : (!prepPlan && !multiDayPlan) ? (
         <Card>
           <CardContent className="flex items-center justify-center h-64">
             <p className="text-muted-foreground">Select a location and date to generate prep plan</p>
           </CardContent>
         </Card>
-      ) : (
+      ) : multiDayMode && multiDayPlan ? (
+        <MultiDayPrepView 
+          multiDayPlan={multiDayPlan} 
+          safetyBuffer={safetyBuffer}
+          completedItems={completedItems}
+          setCompletedItems={setCompletedItems}
+          expandedItems={expandedItems}
+          setExpandedItems={setExpandedItems}
+        />
+      ) : prepPlan ? (
         <>
           {/* Metrics */}
           <div className="grid gap-4 md:grid-cols-3 print:hidden">
@@ -439,7 +493,175 @@ export default function PrepPlanning() {
             </Card>
           )}
         </>
-      )}
+      ) : null}
     </div>
+  );
+}
+
+// Multi-Day Prep View Component
+function MultiDayPrepView({ 
+  multiDayPlan, 
+  safetyBuffer,
+  completedItems,
+  setCompletedItems,
+  expandedItems,
+  setExpandedItems 
+}: {
+  multiDayPlan: any;
+  safetyBuffer: number;
+  completedItems: Set<number>;
+  setCompletedItems: (items: Set<number>) => void;
+  expandedItems: Set<number>;
+  setExpandedItems: (items: Set<number>) => void;
+}) {
+  const [expandedDays, setExpandedDays] = useState<Set<number>>(new Set());
+
+  const toggleDayExpansion = (ingredientId: number) => {
+    const newExpanded = new Set(expandedDays);
+    if (newExpanded.has(ingredientId)) {
+      newExpanded.delete(ingredientId);
+    } else {
+      newExpanded.add(ingredientId);
+    }
+    setExpandedDays(newExpanded);
+  };
+
+  // Group ingredients by category
+  const groupedByCategory = useMemo(() => {
+    const groups = new Map<string, typeof multiDayPlan.ingredients>();
+    multiDayPlan.ingredients.forEach((ing: any) => {
+      const category = ing.category || "Uncategorized";
+      if (!groups.has(category)) {
+        groups.set(category, []);
+      }
+      groups.get(category)!.push(ing);
+    });
+    return new Map(Array.from(groups.entries()).sort(([a], [b]) => a.localeCompare(b)));
+  }, [multiDayPlan]);
+
+  return (
+    <>
+      {/* Multi-Day Metrics */}
+      <div className="grid gap-4 md:grid-cols-3 print:hidden">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Total Forecast Revenue</CardTitle>
+            <TrendingUp className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">${multiDayPlan.metrics.totalForecastRevenue.toFixed(0)}</div>
+            <p className="text-xs text-muted-foreground">
+              Avg: ${multiDayPlan.metrics.averageDailyRevenue.toFixed(0)}/day
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Total Ingredients</CardTitle>
+            <Package className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{multiDayPlan.metrics.totalIngredients}</div>
+            <p className="text-xs text-muted-foreground">Across {multiDayPlan.totalDays} days</p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Date Range</CardTitle>
+            <ChefHat className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-lg font-bold">{multiDayPlan.totalDays} Days</div>
+            <p className="text-xs text-muted-foreground">
+              {new Date(multiDayPlan.startDate).toLocaleDateString()} - {new Date(multiDayPlan.endDate).toLocaleDateString()}
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Consolidated Prep List */}
+      <div className="space-y-6">
+        {Array.from(groupedByCategory.entries()).map(([category, items]) => (
+          <Card key={category}>
+            <CardHeader>
+              <CardTitle className="flex items-center justify-between">
+                <span>{category}</span>
+                <Badge variant="outline">{items.length} items</Badge>
+              </CardTitle>
+              <CardDescription>
+                Consolidated prep for {category.toLowerCase()} across {multiDayPlan.totalDays} days
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {items.map((ingredient: any) => (
+                  <div
+                    key={ingredient.ingredientId}
+                    className="border rounded-lg p-4 hover:bg-accent/50 transition-colors cursor-pointer"
+                    onClick={() => toggleDayExpansion(ingredient.ingredientId)}
+                  >
+                    <div className="flex items-start justify-between">
+                      <div className="flex items-start gap-3 flex-1">
+                        <Checkbox
+                          checked={completedItems.has(ingredient.ingredientId)}
+                          onCheckedChange={(checked) => {
+                            const newCompleted = new Set(completedItems);
+                            if (checked) {
+                              newCompleted.add(ingredient.ingredientId);
+                            } else {
+                              newCompleted.delete(ingredient.ingredientId);
+                            }
+                            setCompletedItems(newCompleted);
+                          }}
+                          onClick={(e) => e.stopPropagation()}
+                        />
+                        <div className="flex-1">
+                          <h4 className="font-semibold text-base">{ingredient.ingredientName}</h4>
+                          <div className="mt-2 space-y-1">
+                            <p className="text-sm text-muted-foreground">
+                              <strong>Total Needed:</strong> {ingredient.totalWithBuffer} {ingredient.unit}
+                              {ingredient.pieces && (
+                                <> ({ingredient.pieces} pieces × ~{ingredient.pieceWeightOz}oz each)</>
+                              )}
+                            </p>
+                            <p className="text-sm text-muted-foreground">
+                              <strong>Base Quantity:</strong> {ingredient.totalQuantityAllDays} {ingredient.unit} + {safetyBuffer}% buffer
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Day-by-Day Breakdown */}
+                    {expandedDays.has(ingredient.ingredientId) && (
+                      <div className="mt-4 pl-9 space-y-2 border-l-2 border-blue-200">
+                        <p className="text-sm font-semibold text-muted-foreground mb-2">Day-by-Day Breakdown:</p>
+                        {ingredient.dayBreakdowns.map((day: any) => (
+                          <div key={day.date} className="pl-4 py-2 bg-accent/30 rounded">
+                            <p className="text-sm font-medium">
+                              {new Date(day.date).toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })}:
+                              <span className="ml-2 text-foreground">{day.quantity} {ingredient.unit}</span>
+                            </p>
+                            <ul className="mt-1 ml-4 text-xs text-muted-foreground space-y-1">
+                              {day.recipes.map((recipe: any) => (
+                                <li key={recipe.recipeId}>
+                                  • {recipe.recipeName} ({recipe.estimatedServings} servings) - {recipe.ingredientQuantity} {ingredient.unit}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    </>
   );
 }

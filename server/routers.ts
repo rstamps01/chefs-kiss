@@ -4,7 +4,8 @@ import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
 import { getUserRestaurant, getRecipesWithIngredients, getIngredients, getRestaurantLocations, createRecipe, addRecipeIngredients, updateRecipe, updateRecipeIngredients, deleteRecipe, createIngredient, updateIngredient, deleteIngredient, importSalesData, checkExistingSalesData, getSalesAnalytics, getDailySalesData, getSalesByDayOfWeek, getSalesDateRange, getRecipeCategories, getActiveRecipeCategories, getIngredientCategories, createRecipeCategory, updateRecipeCategory, deleteRecipeCategory, getIngredientUnits, getActiveIngredientUnits, createIngredientUnit, updateIngredientUnit, deleteIngredientUnit, getUnitCategories, getIngredientConversions, getIngredientConversionsByIngredient, createIngredientConversion, updateIngredientConversion, deleteIngredientConversion, getConversionFactor } from "./db";
 import { generateForecast } from "./forecasting";
-import { generatePrepPlan, generateMultiDayPrepPlan } from "./prep-planning";
+import { generatePrepPlan } from "./prep-planning";
+import { generateMultiDayPrepPlan } from "./multi-day-prep-planning";
 import { z } from "zod";
 
 export const appRouter = router({
@@ -599,7 +600,7 @@ export const appRouter = router({
       .input(z.object({
         locationId: z.number(),
         startDate: z.string(),
-        days: z.number().int().min(1).max(7),
+        days: z.number().int().min(1).max(30),
         safetyBufferPercent: z.number().min(0).max(50).default(10),
       }))
       .query(async ({ ctx, input }) => {

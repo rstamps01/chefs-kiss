@@ -1168,3 +1168,17 @@ All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb
 - [x] Verify ingredient quantities match only predicted recipes
 - [x] Write tests for day-specific filtering (5 passing tests)
 - [x] Reduced ingredient count from all to only 57 needed for predicted recipes
+
+## Multi-Day Prep Planning
+- [x] Design multi-day prep plan data structure with day-by-day breakdowns
+- [x] Create backend function to generate prep plans for date ranges
+- [x] Add date range presets (next 3 days, this week, next 2 weeks)
+- [x] Consolidate ingredients across multiple days
+- [x] Show per-day breakdown for each ingredient
+- [x] Create backend router endpoint for multi-day prep planning
+- [x] Update frontend with date range selector UI (Planning Mode dropdown)
+- [x] Display consolidated ingredient list with day breakdowns
+- [x] Add expandable day-by-day view for each ingredient
+- [x] Create MultiDayPrepView component with category grouping
+- [x] Test multi-day prep planning with various date ranges
+- [x] Write comprehensive tests for multi-day functionality (5 passing tests)

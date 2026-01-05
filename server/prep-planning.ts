@@ -100,6 +100,10 @@ export async function generatePrepPlan(
     const recipeSalesPercent = recipeMix.get(recipe.id) || 0.1; // Default 10% if no history
     const estimatedRevenue = forecast.predictedRevenue * recipeSalesPercent;
     const estimatedServings = Math.ceil(estimatedRevenue / parseFloat(recipe.sellingPrice));
+    
+    // CRITICAL: Only include recipes that are actually predicted to be sold that day
+    // Skip recipes with zero or negligible predicted servings
+    if (estimatedServings < 1) continue;
 
     // Calculate ingredient quantities for this recipe
     for (const recipeIngredient of recipe.ingredients) {

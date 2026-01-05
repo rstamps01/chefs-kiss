@@ -1158,3 +1158,13 @@ All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb
 - [x] Test expandable ingredient cards
 - [x] Test predicted dishes list display
 - [x] Write comprehensive tests (5 passing tests)
+
+## Prep Planning Filtering - Day-Specific Recipes Only
+- [x] Review current prep planning logic to understand ingredient collection
+- [x] Update backend to only include ingredients for forecasted recipes
+- [x] Filter recipe breakdown to only show recipes predicted for that day
+- [x] Remove ingredients not used in any predicted recipe (skip recipes with servings < 1)
+- [x] Test filtered prep list with forecasted recipes
+- [x] Verify ingredient quantities match only predicted recipes
+- [x] Write tests for day-specific filtering (5 passing tests)
+- [x] Reduced ingredient count from all to only 57 needed for predicted recipes

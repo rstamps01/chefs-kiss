@@ -1094,3 +1094,12 @@ All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb
 - [x] Applied bluish-grey gradient (#C5CDD8 → #D8DFE6 → #EEF1F3) to body in index.css
 - [x] Updated Home.tsx and NotFound.tsx to remove conflicting backgrounds
 - [x] Set DashboardLayout main to transparent background
+
+## Semi-Transparent Card Backgrounds for Visual Depth
+- [x] Update card background color in CSS variables to semi-transparent
+- [x] Set card opacity to 90% (0.9) in both light and dark modes
+- [x] Set popover opacity to 95% (0.95) for better readability
+- [x] Test card readability with gradient showing through
+- [x] Verify text contrast meets accessibility standards
+- [x] Check all pages for visual consistency
+- [x] Ensure card borders remain visible

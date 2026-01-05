@@ -1103,3 +1103,11 @@ All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb
 - [x] Verify text contrast meets accessibility standards
 - [x] Check all pages for visual consistency
 - [x] Ensure card borders remain visible
+
+## Card Hover Opacity Transitions
+- [x] Add CSS transition for smooth opacity changes on hover
+- [x] Increase card opacity on hover (90% → 95%)
+- [x] Set transition duration to 300ms for smooth animation
+- [x] Add shadow enhancement on hover (shadow-sm → shadow-md)
+- [x] Test hover effects on all interactive cards
+- [x] Verify smooth animation performance across all pages

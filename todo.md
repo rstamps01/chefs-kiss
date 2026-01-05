@@ -1120,3 +1120,30 @@ All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb
 - [x] Test animation performance across pages
 - [x] Verify animation doesn't distract from content
 - [x] Infinite loop for continuous breathing effect
+
+## Enhanced Prep Planning with Categories and Portions
+- [ ] Review current Prep Planning page and data structure
+- [ ] Analyze recipe ingredients and portion types (pieces, weight, volume)
+- [ ] Design category-based prep list organization
+- [ ] Implement recipe-based portion display (pieces for fish/seafood)
+- [ ] Create interactive dashboard with checkboxes for completed tasks
+- [ ] Add checkbox state persistence (mark as complete/incomplete)
+- [ ] Design printable prep report layout
+- [ ] Implement print-friendly CSS styles
+- [ ] Add category grouping in prep lists
+- [ ] Test checkbox functionality and state management
+- [ ] Verify print layout across browsers
+
+## Enhanced Prep Planning with Category Organization
+- [x] Review current Prep Planning implementation
+- [x] Update backend to include category and piece weight information
+- [x] Modify PrepRecommendation interface to include category and pieces
+- [x] Calculate pieces for fish/seafood based on piece weight
+- [x] Create category-based grouping in frontend
+- [x] Add checkboxes for completed prep tasks
+- [x] Implement checkbox state management
+- [x] Add print-friendly layout and CSS
+- [x] Create Print Report button
+- [x] Update CSV export to include category and pieces
+- [x] Test category grouping and piece calculations
+- [x] Write comprehensive tests for enhanced features (5 passing tests)

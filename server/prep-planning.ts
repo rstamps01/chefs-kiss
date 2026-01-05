@@ -16,8 +16,11 @@ import { generateForecast } from "./forecasting";
 export interface PrepRecommendation {
   ingredientId: number;
   ingredientName: string;
+  category: string | null;
   recommendedQuantity: number;
   unit: string;
+  pieces: number | null; // Number of pieces (for fish/seafood)
+  pieceWeightOz: number | null; // Weight per piece in oz
   safetyBuffer: number;
   totalWithBuffer: number;
   recipes: {
@@ -64,10 +67,22 @@ export async function generatePrepPlan(
   // Get all recipes with their ingredients
   const recipesWithIngredients = await getRecipesWithIngredients();
 
+  // Fetch all ingredients with their details (category, piece weight)
+  const allIngredients = await db.select().from(ingredients);
+  const ingredientDetailsMap = new Map(allIngredients.map(ing => [
+    ing.id,
+    {
+      category: ing.category,
+      pieceWeightOz: ing.pieceWeightOz ? parseFloat(ing.pieceWeightOz) : null,
+    }
+  ]));
+
   // Calculate ingredient requirements
   const ingredientRequirements = new Map<number, {
     name: string;
     unit: string;
+    category: string | null;
+    pieceWeightOz: number | null;
     totalQuantity: number;
     recipes: Array<{
       recipeId: number;
@@ -95,9 +110,12 @@ export async function generatePrepPlan(
       const totalQuantity = quantityPerServing * estimatedServings;
 
       if (!ingredientRequirements.has(ingredientId)) {
+        const details = ingredientDetailsMap.get(ingredientId);
         ingredientRequirements.set(ingredientId, {
           name: ingredientName,
           unit: unit,
+          category: details?.category || null,
+          pieceWeightOz: details?.pieceWeightOz || null,
           totalQuantity: 0,
           recipes: [],
         });
@@ -118,13 +136,25 @@ export async function generatePrepPlan(
   const recommendations: PrepRecommendation[] = [];
   for (const [ingredientId, data] of Array.from(ingredientRequirements.entries())) {
     const safetyBuffer = data.totalQuantity * (safetyBufferPercent / 100);
+    const totalWithBuffer = data.totalQuantity + safetyBuffer;
+    
+    // Calculate pieces if piece weight is available and unit is weight-based
+    let pieces: number | null = null;
+    if (data.pieceWeightOz && (data.unit === 'oz' || data.unit === 'lb')) {
+      const totalOz = data.unit === 'lb' ? totalWithBuffer * 16 : totalWithBuffer;
+      pieces = Math.ceil(totalOz / data.pieceWeightOz);
+    }
+    
     recommendations.push({
       ingredientId,
       ingredientName: data.name,
-      recommendedQuantity: Math.round(data.totalQuantity), // Round to whole number
+      category: data.category,
+      recommendedQuantity: Math.round(data.totalQuantity),
       unit: data.unit,
-      safetyBuffer: Math.round(safetyBuffer), // Round to whole number
-      totalWithBuffer: Math.round(data.totalQuantity + safetyBuffer), // Round to whole number
+      pieces,
+      pieceWeightOz: data.pieceWeightOz,
+      safetyBuffer: Math.round(safetyBuffer),
+      totalWithBuffer: Math.round(totalWithBuffer),
       recipes: data.recipes,
     });
   }

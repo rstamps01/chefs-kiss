@@ -1,0 +1,65 @@
+/* Print-specific styles for Prep Planning */
+@media print {
+  @page {
+    size: letter;
+    margin: 0.5in;
+  }
+
+  body {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  /* Hide checkboxes in print */
+  input[type="checkbox"] {
+    display: none;
+  }
+
+  /* Add checkbox placeholder for manual checking */
+  input[type="checkbox"] + * {
+    position: relative;
+    padding-left: 30px;
+  }
+
+  input[type="checkbox"] + *::before {
+    content: "☐";
+    position: absolute;
+    left: 0;
+    font-size: 20px;
+    font-weight: bold;
+  }
+
+  /* Page breaks */
+  .print-page-break {
+    page-break-after: always;
+  }
+
+  /* Ensure cards don't break across pages */
+  .card {
+    page-break-inside: avoid;
+  }
+
+  /* Compact spacing for print */
+  .space-y-6 > * + * {
+    margin-top: 1rem !important;
+  }
+
+  .space-y-3 > * + * {
+    margin-top: 0.5rem !important;
+  }
+
+  /* Print title */
+  .print-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+
+  /* Print date */
+  .print-date {
+    font-size: 14px;
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+}

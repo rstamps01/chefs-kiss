@@ -4,9 +4,11 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { ChefHat, Download, AlertCircle, Loader2, TrendingUp, Package } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
+import { ChefHat, Download, AlertCircle, Loader2, TrendingUp, Package, Printer } from "lucide-react";
 import { trpc } from "@/lib/trpc";
 import { useState, useMemo } from "react";
+import "./PrepPlanning.print.css";
 
 export default function PrepPlanning() {
   const [selectedLocation, setSelectedLocation] = useState<number | null>(null);
@@ -16,6 +18,7 @@ export default function PrepPlanning() {
     return tomorrow.toISOString().split("T")[0];
   });
   const [safetyBuffer, setSafetyBuffer] = useState<number>(10);
+  const [completedItems, setCompletedItems] = useState<Set<number>>(new Set());
 
   // Fetch user restaurant and locations
   const { data: restaurant } = trpc.restaurant.get.useQuery();
@@ -48,6 +51,23 @@ export default function PrepPlanning() {
       day: "numeric",
     });
   }, [targetDate]);
+
+  // Group recommendations by category
+  const groupedByCategory = useMemo(() => {
+    if (!prepPlan) return new Map();
+
+    const groups = new Map<string, typeof prepPlan.recommendations>();
+    prepPlan.recommendations.forEach((rec) => {
+      const category = rec.category || "Uncategorized";
+      if (!groups.has(category)) {
+        groups.set(category, []);
+      }
+      groups.get(category)!.push(rec);
+    });
+
+    // Sort categories alphabetically
+    return new Map(Array.from(groups.entries()).sort(([a], [b]) => a.localeCompare(b)));
+  }, [prepPlan]);
 
   // Group recommendations by recipe
   const topRecipes = useMemo(() => {
@@ -83,9 +103,11 @@ export default function PrepPlanning() {
 
     // Create CSV content
     const csvRows = [
-      ["Ingredient", "Recommended Qty", "Safety Buffer", "Total with Buffer", "Unit"],
-      ...prepPlan.recommendations.map((rec) => [
+      ["Category", "Ingredient", "Pieces", "Recommended Qty", "Safety Buffer", "Total with Buffer", "Unit"],
+      ...prepPlan.recommendations.map((rec: any) => [
+        rec.category || "Uncategorized",
         rec.ingredientName,
+        rec.pieces?.toString() || "",
         rec.recommendedQuantity.toString(),
         rec.safetyBuffer.toString(),
         rec.totalWithBuffer.toString(),
@@ -103,8 +125,19 @@ export default function PrepPlanning() {
     URL.revokeObjectURL(url);
   };
 
+  const handlePrint = () => {
+    window.print();
+  };
+
   return (
     <div className="space-y-6">
+      {/* Print-only header */}
+      <div className="hidden print:block">
+        <h1 className="print-title">Chef's Kiss - Prep Plan</h1>
+        <p className="print-date">
+          {formattedDate} | Location: {locations.find(l => l.id === selectedLocation)?.name || "N/A"}
+        </p>
+      </div>
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Prep Planning</h1>
@@ -112,7 +145,11 @@ export default function PrepPlanning() {
             Daily ingredient prep recommendations based on sales forecasts
           </p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 print:hidden">
+          <Button variant="outline" onClick={handlePrint} disabled={!prepPlan}>
+            <Printer className="mr-2 h-4 w-4" />
+            Print Report
+          </Button>
           <Button variant="outline" onClick={handleExport} disabled={!prepPlan}>
             <Download className="mr-2 h-4 w-4" />
             Export CSV
@@ -129,7 +166,7 @@ export default function PrepPlanning() {
       </div>
 
       {/* Filters */}
-      <div className="grid gap-4 md:grid-cols-3">
+      <div className="grid gap-4 md:grid-cols-3 print:hidden">
         <div className="space-y-2">
           <Label htmlFor="location-select">Location</Label>
           <Select
@@ -192,7 +229,7 @@ export default function PrepPlanning() {
       ) : (
         <>
           {/* Metrics */}
-          <div className="grid gap-4 md:grid-cols-3">
+          <div className="grid gap-4 md:grid-cols-3 print:hidden">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Forecast Revenue</CardTitle>
@@ -232,7 +269,7 @@ export default function PrepPlanning() {
           </div>
 
           {/* AI Recommendation */}
-          <Card className="border-blue-200 bg-blue-50/50">
+          <Card className="border-blue-200 bg-blue-50/50 print:hidden">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <AlertCircle className="h-5 w-5 text-blue-600" />
@@ -251,51 +288,92 @@ export default function PrepPlanning() {
             </CardContent>
           </Card>
 
-          {/* Prep List */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Prep List for {formattedDate}</CardTitle>
-              <CardDescription>
-                Quantities calculated from forecast with {safetyBuffer}% safety buffer
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                {prepPlan.recommendations.map((rec) => (
-                  <div
-                    key={rec.ingredientId}
-                    className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent/50 transition-colors"
-                  >
-                    <div className="flex items-center gap-4">
-                      <div className="flex items-center justify-center w-10 h-10 rounded-full bg-primary/10">
-                        <Package className="h-5 w-5 text-primary" />
-                      </div>
-                      <div>
-                        <div className="font-semibold">{rec.ingredientName}</div>
-                        <div className="text-sm text-muted-foreground">
-                          Base: {rec.recommendedQuantity} {rec.unit} + Buffer: {rec.safetyBuffer} {rec.unit}
+          {/* Prep List by Category */}
+          <div className="space-y-6">
+            {Array.from(groupedByCategory.entries()).map(([category, items]) => (
+              <Card key={category}>
+                <CardHeader>
+                  <CardTitle className="flex items-center justify-between">
+                    <span>{category}</span>
+                    <Badge variant="outline">{items.length} items</Badge>
+                  </CardTitle>
+                  <CardDescription>
+                    Prep tasks for {category.toLowerCase()}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    {items.map((rec: any) => {
+                      const isCompleted = completedItems.has(rec.ingredientId);
+                      return (
+                        <div
+                          key={rec.ingredientId}
+                          className={`flex items-center gap-4 p-4 border rounded-lg hover:bg-accent/50 transition-colors ${
+                            isCompleted ? "opacity-60 bg-green-50/50" : ""
+                          }`}
+                        >
+                          <Checkbox
+                            checked={isCompleted}
+                            onCheckedChange={(checked) => {
+                              setCompletedItems((prev) => {
+                                const newSet = new Set(prev);
+                                if (checked) {
+                                  newSet.add(rec.ingredientId);
+                                } else {
+                                  newSet.delete(rec.ingredientId);
+                                }
+                                return newSet;
+                              });
+                            }}
+                          />
+                          <div className="flex-1 flex items-center justify-between">
+                            <div className="flex items-center gap-4">
+                              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-primary/10">
+                                <Package className="h-5 w-5 text-primary" />
+                              </div>
+                              <div>
+                                <div className={`font-semibold ${
+                                  isCompleted ? "line-through" : ""
+                                }`}>
+                                  {rec.ingredientName}
+                                </div>
+                                <div className="text-sm text-muted-foreground">
+                                  {rec.pieces ? (
+                                    <>
+                                      <strong>{rec.pieces} pieces</strong> ({rec.totalWithBuffer} {rec.unit})
+                                      {rec.pieceWeightOz && (
+                                        <span className="ml-2 text-xs">~{rec.pieceWeightOz}oz each</span>
+                                      )}
+                                    </>
+                                  ) : (
+                                    <>
+                                      Base: {rec.recommendedQuantity} {rec.unit} + Buffer: {rec.safetyBuffer} {rec.unit}
+                                    </>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                            <div className="text-right">
+                              <div className="font-bold text-lg">
+                                {rec.totalWithBuffer} {rec.unit}
+                              </div>
+                              <div className="text-xs text-muted-foreground">
+                                {rec.recipes.length} recipe{rec.recipes.length !== 1 ? "s" : ""}
+                              </div>
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <div className="text-right">
-                        <div className="font-bold text-lg">
-                          {rec.totalWithBuffer} {rec.unit}
-                        </div>
-                        <div className="text-xs text-muted-foreground">
-                          {rec.recipes.length} recipe{rec.recipes.length !== 1 ? "s" : ""}
-                        </div>
-                      </div>
-                    </div>
+                      );
+                    })}
                   </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
 
           {/* Recipe Breakdown */}
           {topRecipes.length > 0 && (
-            <Card>
+            <Card className="print:hidden">
               <CardHeader>
                 <CardTitle>Top Predicted Dishes</CardTitle>
                 <CardDescription>Recipes driving ingredient requirements</CardDescription>

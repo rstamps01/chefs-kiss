@@ -92,9 +92,34 @@ export default function Recipes() {
     }
   };
   
-  const handleDeleteIngredient = (ingredientId: number, ingredientName: string) => {
-    if (confirm(`Are you sure you want to delete "${ingredientName}"? This will fail if the ingredient is used in any recipes.`)) {
-      deleteIngredientMutation.mutate({ ingredientId });
+  const handleDeleteIngredient = async (ingredientId: number, ingredientName: string) => {
+    try {
+      // First check if ingredient is used in recipes
+      const recipeUsage = await utils.client.ingredients.getRecipeUsage.query({ ingredientId });
+      
+      if (recipeUsage.length > 0) {
+        // Show which recipes use this ingredient
+        const recipeList = recipeUsage.map(r => `• ${r.recipeName} (${r.quantity} ${r.unit})`).join('\n');
+        const message = `Cannot delete "${ingredientName}" because it is used in ${recipeUsage.length} recipe(s):\n\n${recipeList}\n\nPlease remove this ingredient from these recipes first.`;
+        
+        toast({
+          title: "Cannot Delete Ingredient",
+          description: message,
+          variant: "destructive",
+        });
+        return;
+      }
+      
+      // If not used, proceed with deletion
+      if (confirm(`Are you sure you want to delete "${ingredientName}"?`)) {
+        deleteIngredientMutation.mutate({ ingredientId });
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to check ingredient usage. Please try again.",
+        variant: "destructive",
+      });
     }
   };
 

@@ -2,7 +2,7 @@ import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
-import { getUserRestaurant, getRecipesWithIngredients, getIngredients, getRestaurantLocations, createRecipe, addRecipeIngredients, updateRecipe, updateRecipeIngredients, deleteRecipe, createIngredient, updateIngredient, deleteIngredient, importSalesData, checkExistingSalesData, getSalesAnalytics, getDailySalesData, getSalesByDayOfWeek, getSalesDateRange, getRecipeCategories, getActiveRecipeCategories, getIngredientCategories, createRecipeCategory, updateRecipeCategory, deleteRecipeCategory, getIngredientUnits, getActiveIngredientUnits, createIngredientUnit, updateIngredientUnit, deleteIngredientUnit, getUnitCategories, getIngredientConversions, getIngredientConversionsByIngredient, createIngredientConversion, updateIngredientConversion, deleteIngredientConversion, getConversionFactor } from "./db";
+import { getUserRestaurant, getRecipesWithIngredients, getIngredients, getRestaurantLocations, createRecipe, addRecipeIngredients, updateRecipe, updateRecipeIngredients, deleteRecipe, createIngredient, updateIngredient, deleteIngredient, getRecipesUsingIngredient, importSalesData, checkExistingSalesData, getSalesAnalytics, getDailySalesData, getSalesByDayOfWeek, getSalesDateRange, getRecipeCategories, getActiveRecipeCategories, getIngredientCategories, createRecipeCategory, updateRecipeCategory, deleteRecipeCategory, getIngredientUnits, getActiveIngredientUnits, createIngredientUnit, updateIngredientUnit, deleteIngredientUnit, getUnitCategories, getIngredientConversions, getIngredientConversionsByIngredient, createIngredientConversion, updateIngredientConversion, deleteIngredientConversion, getConversionFactor } from "./db";
 import { generateForecast } from "./forecasting";
 import { generatePrepPlan } from "./prep-planning";
 import { generateMultiDayPrepPlan } from "./multi-day-prep-planning";
@@ -216,6 +216,13 @@ export const appRouter = router({
         const { ingredientId, ...updates } = input;
         await updateIngredient(ingredientId, updates);
         return { success: true };
+      }),
+    getRecipeUsage: protectedProcedure
+      .input(z.object({
+        ingredientId: z.number().int().positive(),
+      }))
+      .query(async ({ input }) => {
+        return await getRecipesUsingIngredient(input.ingredientId);
       }),
     delete: protectedProcedure
       .input(z.object({

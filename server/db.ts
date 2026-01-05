@@ -763,6 +763,29 @@ export async function updateIngredient(ingredientId: number, data: {
 }
 
 /**
+ * Get all recipes that use a specific ingredient
+ */
+export async function getRecipesUsingIngredient(ingredientId: number) {
+  const db = await getDb();
+  if (!db) {
+    throw new Error("Database not available");
+  }
+
+  const recipesWithIngredient = await db
+    .select({
+      recipeId: recipes.id,
+      recipeName: recipes.name,
+      quantity: recipeIngredients.quantity,
+      unit: recipeIngredients.unit,
+    })
+    .from(recipeIngredients)
+    .innerJoin(recipes, eq(recipes.id, recipeIngredients.recipeId))
+    .where(eq(recipeIngredients.ingredientId, ingredientId));
+
+  return recipesWithIngredient;
+}
+
+/**
  * Delete an ingredient
  */
 export async function deleteIngredient(ingredientId: number) {

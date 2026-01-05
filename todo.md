@@ -1182,3 +1182,14 @@ All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb
 - [x] Create MultiDayPrepView component with category grouping
 - [x] Test multi-day prep planning with various date ranges
 - [x] Write comprehensive tests for multi-day functionality (5 passing tests)
+
+## Fix Ingredient Deletion Error
+- [x] Investigate current ingredient deletion logic and error handling
+- [x] Add recipe usage check before deletion attempt
+- [x] Show which recipes use the ingredient in error dialog
+- [x] Created getRecipesUsingIngredient backend function
+- [x] Added ingredients.getRecipeUsage tRPC endpoint
+- [x] Updated frontend to check usage before deletion
+- [x] Improve error toast messaging with actionable information
+- [x] Display recipe list with quantities in error message
+- [x] Test ingredient deletion flow (5 passing tests)

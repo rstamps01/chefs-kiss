@@ -2,7 +2,7 @@ import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
-import { getUserRestaurant, getRecipesWithIngredients, getIngredients, getRestaurantLocations, createRecipe, addRecipeIngredients, updateRecipe, updateRecipeIngredients, deleteRecipe, createIngredient, updateIngredient, deleteIngredient, getRecipesUsingIngredient, importSalesData, checkExistingSalesData, getSalesAnalytics, getDailySalesData, getSalesByDayOfWeek, getSalesDateRange, getRecipeCategories, getActiveRecipeCategories, getIngredientCategories, createRecipeCategory, updateRecipeCategory, deleteRecipeCategory, getIngredientUnits, getActiveIngredientUnits, createIngredientUnit, updateIngredientUnit, deleteIngredientUnit, getUnitCategories, getIngredientConversions, getIngredientConversionsByIngredient, createIngredientConversion, updateIngredientConversion, deleteIngredientConversion, getConversionFactor } from "./db";
+import { getUserRestaurant, getRecipesWithIngredients, getIngredients, getRestaurantLocations, createRecipe, addRecipeIngredients, updateRecipe, updateRecipeIngredients, deleteRecipe, createIngredient, updateIngredient, deleteIngredient, getRecipesUsingIngredient, importSalesData, checkExistingSalesData, getSalesAnalytics, getDailySalesData, getSalesByDayOfWeek, getSalesDateRange, getRecipeCategories, getActiveRecipeCategories, getIngredientCategories, createRecipeCategory, updateRecipeCategory, deleteRecipeCategory, getIngredientUnits, getActiveIngredientUnits, createIngredientUnit, updateIngredientUnit, deleteIngredientUnit, getUnitCategories } from "./db";
 import { generateForecast } from "./forecasting";
 import { generatePrepPlan } from "./prep-planning";
 import { generateMultiDayPrepPlan } from "./multi-day-prep-planning";
@@ -634,65 +634,6 @@ export const appRouter = router({
     }),
   }),
 
-  // Ingredient Conversions endpoints
-  ingredientConversions: router({
-    list: protectedProcedure.query(async ({ ctx }) => {
-      const restaurant = await getUserRestaurant(ctx.user.id);
-      if (!restaurant) {
-        return [];
-      }
-      return await getIngredientConversions(restaurant.id);
-    }),
-    listByIngredient: protectedProcedure
-      .input(z.object({ ingredientId: z.number().int().positive() }))
-      .query(async ({ input }) => {
-        return await getIngredientConversionsByIngredient(input.ingredientId);
-      }),
-    create: protectedProcedure
-      .input(z.object({
-        ingredientId: z.number().int().positive(),
-        fromUnit: z.string().min(1),
-        toUnit: z.string().min(1),
-        conversionFactor: z.string().min(1),
-        notes: z.string().optional(),
-      }))
-      .mutation(async ({ ctx, input }) => {
-        const restaurant = await getUserRestaurant(ctx.user.id);
-        if (!restaurant) {
-          throw new Error("Restaurant not found");
-        }
-        return await createIngredientConversion({
-          restaurantId: restaurant.id,
-          ...input,
-        });
-      }),
-    update: protectedProcedure
-      .input(z.object({
-        id: z.number().int().positive(),
-        fromUnit: z.string().min(1).optional(),
-        toUnit: z.string().min(1).optional(),
-        conversionFactor: z.string().min(1).optional(),
-        notes: z.string().optional(),
-      }))
-      .mutation(async ({ input }) => {
-        const { id, ...data } = input;
-        return await updateIngredientConversion(id, data);
-      }),
-    delete: protectedProcedure
-      .input(z.object({ id: z.number().int().positive() }))
-      .mutation(async ({ input }) => {
-        return await deleteIngredientConversion(input.id);
-      }),
-    getConversionFactor: protectedProcedure
-      .input(z.object({
-        ingredientId: z.number().int().positive(),
-        fromUnit: z.string().min(1),
-        toUnit: z.string().min(1),
-      }))
-      .query(async ({ input }) => {
-        return await getConversionFactor(input.ingredientId, input.fromUnit, input.toUnit);
-      }),
-  }),
 
   // Unit Conversion Testing endpoints
   conversionTesting: router({

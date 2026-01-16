@@ -1223,3 +1223,19 @@ All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb
 - [x] Also fixed: sheet, roll had categoryId 4 instead of 3 (Piece-Based)
 - [x] Solution: Updated database to set correct categoryId for all units
 - [x] All unit conversion tests passing (2/2 tests)
+
+
+## Analyze Unit Conversions Redundancy
+- [x] Compare Settings → Unit Conversions with Ingredient Piece Weight field
+- [x] Identify all conversion types currently in Unit Conversions section
+- [x] Verify Piece Weight field can handle all conversion scenarios
+- [x] Check if there are any gaps or limitations in Piece Weight approach
+- [x] Confirmed: All conversions are piece-to-weight, Piece Weight field is sufficient
+- [x] Verify no code dependencies on ingredientConversions table
+- [x] Remove Unit Conversions UI from Settings page
+- [x] Remove backend endpoints for unit conversions CRUD
+- [x] Delete UnitConversionsManager component
+- [x] Remove ingredientConversions router from server/routers.ts
+- [ ] Remove ingredientConversions table from schema (optional cleanup)
+- [x] Test all piece-to-weight conversions after removal (8/8 tests passing)
+- [x] Confirmed: Piece Weight field is the single source for conversions

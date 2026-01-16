@@ -1,0 +1,118 @@
+{
+  "query": "SELECT ic.*, i.name as ingredientName FROM ingredientConversions ic JOIN ingredients i ON ic.ingredientId = i.id WHERE ic.restaurantId = 1 ORDER BY i.name;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 49cxSE1jUeHq7LY.root --database KMmUaMc2BgFeVkUfVYZGPD --execute SELECT ic.*, i.name as ingredientName FROM ingredientConversions ic JOIN ingredients i ON ic.ingredientId = i.id WHERE ic.restaurantId = 1 ORDER BY i.name;",
+  "rows": [
+    {
+      "id": "60853",
+      "restaurantId": "1",
+      "ingredientId": "150019",
+      "fromUnit": "oz",
+      "toUnit": "each",
+      "conversionFactor": "0.500000",
+      "notes": "Average cilantro bunch weighs ~2 oz",
+      "createdAt": "2025-12-28 19:46:55",
+      "updatedAt": "2025-12-28 19:46:55",
+      "ingredientName": "Fresh Cilantro"
+    },
+    {
+      "id": "60852",
+      "restaurantId": "1",
+      "ingredientId": "150016",
+      "fromUnit": "oz",
+      "toUnit": "each",
+      "conversionFactor": "1.000000",
+      "notes": "Average 1 oz per green onion",
+      "createdAt": "2025-12-28 19:45:54",
+      "updatedAt": "2025-12-28 19:45:54",
+      "ingredientName": "Green Onion (Scallion)"
+    },
+    {
+      "id": "60854",
+      "restaurantId": "1",
+      "ingredientId": "150022",
+      "fromUnit": "oz",
+      "toUnit": "each",
+      "conversionFactor": "1.000000",
+      "notes": "Packaged in oz-sized portions",
+      "createdAt": "2025-12-28 19:46:55",
+      "updatedAt": "2025-12-28 19:46:55",
+      "ingredientName": "Habanero Tobiko"
+    },
+    {
+      "id": "60855",
+      "restaurantId": "1",
+      "ingredientId": "150018",
+      "fromUnit": "oz",
+      "toUnit": "each",
+      "conversionFactor": "0.250000",
+      "notes": "Micro greens package ~4 oz",
+      "createdAt": "2025-12-28 19:46:55",
+      "updatedAt": "2025-12-28 19:46:55",
+      "ingredientName": "Micro Cilantro"
+    },
+    {
+      "id": "90002",
+      "restaurantId": "1",
+      "ingredientId": "150002",
+      "fromUnit": "oz",
+      "toUnit": "pieces",
+      "conversionFactor": "1.000000",
+      "notes": "NULL",
+      "createdAt": "2025-12-31 00:51:53",
+      "updatedAt": "2025-12-31 00:51:53",
+      "ingredientName": "Scallops (Hokkaido Hotate)"
+    },
+    {
+      "id": "90003",
+      "restaurantId": "1",
+      "ingredientId": "150002",
+      "fromUnit": "pc",
+      "toUnit": "oz",
+      "conversionFactor": "1.500000",
+      "notes": "U10 Hokkaido scallops: 1 piece = 1.5 oz",
+      "createdAt": "2025-12-31 01:06:32",
+      "updatedAt": "2025-12-31 01:06:32",
+      "ingredientName": "Scallops (Hokkaido Hotate)"
+    },
+    {
+      "id": "90004",
+      "restaurantId": "1",
+      "ingredientId": "150002",
+      "fromUnit": "pc",
+      "toUnit": "lb",
+      "conversionFactor": "0.093750",
+      "notes": "U10 Hokkaido scallops: 1 piece = 1.5 oz = 0.09375 lb",
+      "createdAt": "2025-12-31 01:11:46",
+      "updatedAt": "2025-12-31 01:11:46",
+      "ingredientName": "Scallops (Hokkaido Hotate)"
+    },
+    {
+      "id": "60856",
+      "restaurantId": "1",
+      "ingredientId": "150020",
+      "fromUnit": "oz",
+      "toUnit": "each",
+      "conversionFactor": "0.500000",
+      "notes": "Average shiitake mushroom weighs ~0.5 oz",
+      "createdAt": "2025-12-28 19:46:55",
+      "updatedAt": "2025-12-28 19:46:55",
+      "ingredientName": "Shiitake Mushroom"
+    },
+    {
+      "id": "60857",
+      "restaurantId": "1",
+      "ingredientId": "150046",
+      "fromUnit": "pieces",
+      "toUnit": "sheet",
+      "conversionFactor": "1.000000",
+      "notes": "1 piece = 1 sheet (same unit)",
+      "createdAt": "2025-12-28 19:46:55",
+      "updatedAt": "2025-12-28 19:46:55",
+      "ingredientName": "Soy Paper"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\trestaurantId\tingredientId\tfromUnit\ttoUnit\tconversionFactor\tnotes\tcreatedAt\tupdatedAt\tingredientName\n60853\t1\t150019\toz\teach\t0.500000\tAverage cilantro bunch weighs ~2 oz\t2025-12-28 19:46:55\t2025-12-28 19:46:55\tFresh Cilantro\n60852\t1\t150016\toz\teach\t1.000000\tAverage 1 oz per green onion\t2025-12-28 19:45:54\t2025-12-28 19:45:54\tGreen Onion (Scallion)\n60854\t1\t150022\toz\teach\t1.000000\tPackaged in oz-sized portions\t2025-12-28 19:46:55\t2025-12-28 19:46:55\tHabanero Tobiko\n60855\t1\t150018\toz\teach\t0.250000\tMicro greens package ~4 oz\t2025-12-28 19:46:55\t2025-12-28 19:46:55\tMicro Cilantro\n90002\t1\t150002\toz\tpieces\t1.000000\tNULL\t2025-12-31 00:51:53\t2025-12-31 00:51:53\tScallops (Hokkaido Hotate)\n90003\t1\t150002\tpc\toz\t1.500000\tU10 Hokkaido scallops: 1 piece = 1.5 oz\t2025-12-31 01:06:32\t2025-12-31 01:06:32\tScallops (Hokkaido Hotate)\n90004\t1\t150002\tpc\tlb\t0.093750\tU10 Hokkaido scallops: 1 piece = 1.5 oz = 0.09375 lb\t2025-12-31 01:11:46\t2025-12-31 01:11:46\tScallops (Hokkaido Hotate)\n60856\t1\t150020\toz\teach\t0.500000\tAverage shiitake mushroom weighs ~0.5 oz\t2025-12-28 19:46:55\t2025-12-28 19:46:55\tShiitake Mushroom\n60857\t1\t150046\tpieces\tsheet\t1.000000\t1 piece = 1 sheet (same unit)\t2025-12-28 19:46:55\t2025-12-28 19:46:55\tSoy Paper\n",
+  "stderr": "",
+  "execution_time_ms": 80
+}

@@ -4,9 +4,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
-import { Building2, User, Bell, Key, Tags, ArrowRightLeft } from "lucide-react";
+import { Building2, User, Bell, Key, Tags } from "lucide-react";
 import { CategoriesUnitsManager } from "@/components/CategoriesUnitsManager";
-import { UnitConversionsManager } from "@/components/UnitConversionsManager";
 
 export default function Settings() {
   return (
@@ -40,10 +39,7 @@ export default function Settings() {
             <Tags className="mr-2 h-4 w-4" />
             Categories & Units
           </TabsTrigger>
-          <TabsTrigger value="unit-conversions">
-            <ArrowRightLeft className="mr-2 h-4 w-4" />
-            Unit Conversions
-          </TabsTrigger>
+
         </TabsList>
 
         <TabsContent value="restaurant" className="space-y-4">
@@ -263,19 +259,7 @@ export default function Settings() {
           </Card>
         </TabsContent>
 
-        <TabsContent value="unit-conversions" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Unit Conversions</CardTitle>
-              <CardDescription>
-                Define how custom units convert to standard measurements for accurate recipe costing
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <UnitConversionsManager />
-            </CardContent>
-          </Card>
-        </TabsContent>
+
       </Tabs>
     </div>
   );

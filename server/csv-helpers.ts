@@ -144,11 +144,33 @@ export function recipesToCSV(recipes: any[], visibleColumns?: string[]): string 
     "marginPercent",
   ];
   
-  // Use visible columns if provided, otherwise use all
-  const columns = visibleColumns || allColumns;
+  // Use visible columns if provided, otherwise use all (excluding 'actions')
+  let columns = visibleColumns || allColumns;
   
-  // Filter recipes to only include visible columns
-  const filteredData = recipes.map(recipe => filterColumns(recipe, columns));
+  // Replace 'ingredients' with 'ingredientsCount' if present
+  columns = columns.map(col => col === 'ingredients' ? 'ingredientsCount' : col);
+  
+  // Remove UI-only columns that shouldn't be in CSV
+  columns = columns.filter(col => col !== 'actions');
+  
+  // Transform recipes to flatten complex fields
+  const transformedRecipes = recipes.map(recipe => ({
+    id: recipe.id,
+    name: recipe.name,
+    category: recipe.category,
+    description: recipe.description,
+    servings: recipe.servings,
+    prepTime: recipe.prepTime,
+    cookTime: recipe.cookTime,
+    sellingPrice: recipe.sellingPrice,
+    ingredientsCount: Array.isArray(recipe.ingredients) ? recipe.ingredients.length : 0,
+    totalCost: recipe.totalCost,
+    foodCostPercent: recipe.foodCostPercent,
+    marginPercent: recipe.marginPercent,
+  }));
+  
+  // Filter to only include visible columns
+  const filteredData = transformedRecipes.map(recipe => filterColumns(recipe, columns));
   
   return arrayToCSV(filteredData, columns);
 }

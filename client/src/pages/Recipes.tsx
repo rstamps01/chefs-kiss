@@ -592,6 +592,51 @@ export default function Recipes() {
 
         {/* INGREDIENTS TAB */}
         <TabsContent value="ingredients" className="space-y-6">
+          {/* Ingredient Statistics */}
+          {!ingredientsLoading && ingredients && ingredients.length > 0 && (
+            <div className="grid gap-4 md:grid-cols-3">
+              <Card>
+                <CardHeader className="pb-3">
+                  <CardDescription>Total Ingredients</CardDescription>
+                  <CardTitle className="text-3xl">{ingredients.length}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-xs text-muted-foreground">
+                    {new Set(ingredients.map(i => i.category).filter(Boolean)).size} categories
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader className="pb-3">
+                  <CardDescription>With Cost Data</CardDescription>
+                  <CardTitle className="text-3xl">
+                    {ingredients.filter(i => i.costPerUnit).length}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-xs text-muted-foreground">
+                    {Math.round((ingredients.filter(i => i.costPerUnit).length / ingredients.length) * 100)}% of total
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader className="pb-3">
+                  <CardDescription>With Supplier Info</CardDescription>
+                  <CardTitle className="text-3xl">
+                    {ingredients.filter(i => i.supplier).length}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-xs text-muted-foreground">
+                    {Math.round((ingredients.filter(i => i.supplier).length / ingredients.length) * 100)}% of total
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
+          )}
+
           <div className="flex items-center justify-between gap-4">
             <div className="flex gap-4 flex-1">
               <div className="relative flex-1 max-w-md">
@@ -739,51 +784,6 @@ export default function Recipes() {
                 categories={Array.from(new Set(ingredients?.map(i => i.category).filter((c): c is string => c !== null) || []))}
               />
             )
-          )}
-
-          {/* Ingredient Statistics */}
-          {!ingredientsLoading && ingredients && ingredients.length > 0 && (
-            <div className="grid gap-4 md:grid-cols-3 mt-6">
-              <Card>
-                <CardHeader className="pb-3">
-                  <CardDescription>Total Ingredients</CardDescription>
-                  <CardTitle className="text-3xl">{ingredients.length}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-xs text-muted-foreground">
-                    {new Set(ingredients.map(i => i.category).filter(Boolean)).size} categories
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader className="pb-3">
-                  <CardDescription>With Cost Data</CardDescription>
-                  <CardTitle className="text-3xl">
-                    {ingredients.filter(i => i.costPerUnit).length}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-xs text-muted-foreground">
-                    {Math.round((ingredients.filter(i => i.costPerUnit).length / ingredients.length) * 100)}% of total
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader className="pb-3">
-                  <CardDescription>With Supplier Info</CardDescription>
-                  <CardTitle className="text-3xl">
-                    {ingredients.filter(i => i.supplier).length}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-xs text-muted-foreground">
-                    {Math.round((ingredients.filter(i => i.supplier).length / ingredients.length) * 100)}% of total
-                  </p>
-                </CardContent>
-              </Card>
-            </div>
           )}
         </TabsContent>
       </Tabs>

@@ -1361,3 +1361,8 @@ All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb
 - [x] Test bulk recipe ingredient unit type changes (cup → oz scenario)
 - [x] Write comprehensive test suite for CSV operations (12 tests passing)
 - [x] Document CSV format and bulk editing workflow
+
+## UI Layout Improvement (Current Task)
+- [x] Move ingredient metrics cards to top of Recipes page
+- [x] Verify metrics display correctly after repositioning
+- [x] Test responsive layout with metrics at top

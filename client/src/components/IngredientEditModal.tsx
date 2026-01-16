@@ -108,14 +108,7 @@ export function IngredientEditModal({ open, onOpenChange, ingredient }: Ingredie
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent 
-        className="max-w-md max-h-[90vh] overflow-y-auto"
-        onInteractOutside={(e) => {
-          // Prevent dialog from closing when clicking on nested interactive elements
-          // This fixes the issue where selecting a unit from the accordion closes the modal
-          e.preventDefault();
-        }}
-      >
+      <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Edit Ingredient</DialogTitle>
           <DialogDescription>

@@ -1200,3 +1200,14 @@ All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb
 - [x] Ensure modal only closes on Cancel or Update Ingredient button
 - [x] Test ingredient editing workflow
 - [x] Verify all form fields remain editable after unit selection
+
+
+## Fix Ingredient Edit Modal - Alternative Approach
+- [x] Investigate why onInteractOutside fix is not working in live application
+- [x] Check if Dialog is being re-rendered or state is being reset
+- [x] Implement alternative fix (add type="button" to UnitAccordionPicker buttons)
+- [x] Test modal behavior with unit selection in browser
+- [x] Verify modal stays open for all user interactions except explicit close actions
+- [x] Root cause: Buttons inside form defaulted to type="submit", triggering form submission
+- [x] Solution: Added type="button" to all Button components in UnitAccordionPicker
+- [x] All 5 tests passing

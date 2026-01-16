@@ -148,6 +148,7 @@ export function UnitAccordionPicker({
                         const isSelected = selectedUnit === unit.unit;
                         const button = (
                           <Button
+                            type="button"
                             key={unit.unit}
                             variant={isSelected ? "secondary" : "ghost"}
                             className={`w-full justify-between text-left h-auto py-2 ${
@@ -198,6 +199,7 @@ export function UnitAccordionPicker({
                         const isSelected = selectedUnit === unit.unit;
                         const button = (
                           <Button
+                            type="button"
                             key={unit.unit}
                             variant={isSelected ? "secondary" : "ghost"}
                             className={`w-full justify-between text-left h-auto py-2 ${
@@ -248,6 +250,7 @@ export function UnitAccordionPicker({
                         const isSelected = selectedUnit === unit.unit;
                         const button = (
                           <Button
+                            type="button"
                             key={unit.unit}
                             variant={isSelected ? "secondary" : "ghost"}
                             className={`w-full justify-between text-left h-auto py-2 ${

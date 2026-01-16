@@ -33,6 +33,7 @@ type RecipesTableViewProps = {
 };
 
 const DEFAULT_RECIPE_COLUMNS = [
+  { id: "id", label: "Recipe ID", visible: false },
   { id: "name", label: "Name", visible: true },
   { id: "category", label: "Category", visible: true },
   { id: "description", label: "Description", visible: true },
@@ -40,6 +41,7 @@ const DEFAULT_RECIPE_COLUMNS = [
   { id: "prepTime", label: "Prep Time (min)", visible: true },
   { id: "cookTime", label: "Cook Time (min)", visible: true },
   { id: "price", label: "Price", visible: true },
+  { id: "totalCost", label: "Total Cost ($)", visible: false },
   { id: "foodCost", label: "Food Cost %", visible: true },
   { id: "margin", label: "Margin %", visible: true },
   { id: "ingredients", label: "Ingredients Count", visible: true },
@@ -232,6 +234,9 @@ export function RecipesTableView({ recipes, onEdit, onDelete, categories }: Reci
       <Table>
         <TableHeader>
           <TableRow>
+            {isColumnVisible("id") && (
+            <TableHead className="text-right">ID</TableHead>
+            )}
             {isColumnVisible("name") && (
             <TableHead className="cursor-pointer" onClick={() => handleSort("name")}>
               <div className="flex items-center gap-1">
@@ -273,6 +278,9 @@ export function RecipesTableView({ recipes, onEdit, onDelete, categories }: Reci
               </div>
             </TableHead>
             )}
+            {isColumnVisible("totalCost") && (
+            <TableHead className="text-right">Total Cost</TableHead>
+            )}
             {isColumnVisible("foodCost") && (
             <TableHead className="cursor-pointer text-right" onClick={() => handleSort("foodCost")}>
               <div className="flex items-center justify-end gap-1">
@@ -303,6 +311,11 @@ export function RecipesTableView({ recipes, onEdit, onDelete, categories }: Reci
 
             return (
               <TableRow key={recipe.id}>
+                {isColumnVisible("id") && (
+                <TableCell className="text-right">
+                  {recipe.id}
+                </TableCell>
+                )}
                 {isColumnVisible("name") && (
                 <TableCell>
                   {isEditing ? (
@@ -412,6 +425,11 @@ export function RecipesTableView({ recipes, onEdit, onDelete, categories }: Reci
                   ) : (
                     recipe.sellingPrice ? `$${parseFloat(recipe.sellingPrice).toFixed(2)}` : "-"
                   )}
+                </TableCell>
+                )}
+                {isColumnVisible("totalCost") && (
+                <TableCell className="text-right">
+                  {recipe.totalCost !== undefined ? `$${recipe.totalCost.toFixed(2)}` : "-"}
                 </TableCell>
                 )}
                 {isColumnVisible("foodCost") && (

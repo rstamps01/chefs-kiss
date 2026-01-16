@@ -1372,3 +1372,13 @@ All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb
 - [x] Format ingredients as human-readable text instead of "[object Object]"
 - [x] Test CSV export with proper ingredient data (7 tests passing)
 - [x] Verify imported CSV works correctly
+
+## Recipe Export Enhancement (Current Task)
+- [x] Verify recipe ID is included in CSV export
+- [x] Verify price (sellingPrice) is included in CSV export
+- [x] Verify food cost (totalCost) is included in CSV export
+- [x] Verify food cost % (foodCostPercent) is included in CSV export
+- [x] Verify margin % (marginPercent) is included in CSV export
+- [x] Add frontend column mapping (price→sellingPrice, foodCost→foodCostPercent, margin→marginPercent)
+- [x] Add Recipe ID and Total Cost columns to table view (hidden by default)
+- [x] Test export with all financial fields present (14 tests passing)

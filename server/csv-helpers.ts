@@ -147,8 +147,15 @@ export function recipesToCSV(recipes: any[], visibleColumns?: string[]): string 
   // Use visible columns if provided, otherwise use all (excluding 'actions')
   let columns = visibleColumns || allColumns;
   
-  // Replace 'ingredients' with 'ingredientsCount' if present
-  columns = columns.map(col => col === 'ingredients' ? 'ingredientsCount' : col);
+  // Map frontend column IDs to backend field names
+  const columnMapping: Record<string, string> = {
+    'price': 'sellingPrice',
+    'foodCost': 'foodCostPercent',
+    'margin': 'marginPercent',
+    'ingredients': 'ingredientsCount',
+  };
+  
+  columns = columns.map(col => columnMapping[col] || col);
   
   // Remove UI-only columns that shouldn't be in CSV
   columns = columns.filter(col => col !== 'actions');

@@ -3,10 +3,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Edit, Save, X, ArrowUpDown, Trash2 } from "lucide-react";
+import { Edit, Save, X, ArrowUpDown, Trash2, Download, Upload } from "lucide-react";
 import { trpc } from "@/lib/trpc";
 import { ColumnVisibilityControl } from "./ColumnVisibilityControl";
 import { useColumnVisibility } from "@/hooks/useColumnVisibility";
+import { CSVImportModal } from "./CSVImportModal";
+import { useToast } from "@/hooks/use-toast";
 
 type Recipe = {
   id: number;
@@ -52,6 +54,10 @@ export function RecipesTableView({ recipes, onEdit, onDelete, categories }: Reci
   const [editedValues, setEditedValues] = useState<Partial<Recipe>>({});
   const [sortColumn, setSortColumn] = useState<SortColumn>("name");
   const [sortDirection, setSortDirection] = useState<SortDirection>("asc");
+  const [importModalOpen, setImportModalOpen] = useState(false);
+  const [importType, setImportType] = useState<"recipes" | "recipeIngredients">("recipes");
+  
+  const { toast } = useToast();
 
   const { columns, toggleColumn, resetToDefault, isColumnVisible } = useColumnVisibility(
     "recipes-table-columns",
@@ -59,6 +65,11 @@ export function RecipesTableView({ recipes, onEdit, onDelete, categories }: Reci
   );
 
   const utils = trpc.useUtils();
+  const exportRecipesQuery = trpc.csv.exportRecipes.useQuery(
+    { visibleColumns: columns.filter(c => c.visible).map(c => c.id) },
+    { enabled: false }
+  );
+  const exportRecipeIngredientsQuery = trpc.csv.exportRecipeIngredients.useQuery(undefined, { enabled: false });
   const updateMutation = trpc.recipes.update.useMutation({
     onSuccess: () => {
       utils.recipes.list.invalidate();
@@ -147,9 +158,70 @@ export function RecipesTableView({ recipes, onEdit, onDelete, categories }: Reci
     }
   });
 
+  const handleExportRecipes = async () => {
+    const visibleColumns = columns.filter(c => c.visible).map(c => c.id);
+    const result = await exportRecipesQuery.refetch();
+    
+    if (result.data?.csv) {
+      const blob = new Blob([result.data.csv], { type: "text/csv" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `recipes-${new Date().toISOString().split('T')[0]}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      
+      toast({
+        title: "Export successful",
+        description: `Exported ${recipes.length} recipes to CSV`,
+      });
+    }
+  };
+
+  const handleExportRecipeIngredients = async () => {
+    const result = await exportRecipeIngredientsQuery.refetch();
+    
+    if (result.data?.csv) {
+      const blob = new Blob([result.data.csv], { type: "text/csv" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `recipe-ingredients-${new Date().toISOString().split('T')[0]}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      
+      toast({
+        title: "Export successful",
+        description: "Exported all recipe ingredients to CSV for bulk editing",
+      });
+    }
+  };
+
   return (
     <div className="space-y-4">
-      <div className="flex justify-end">
+      <div className="flex justify-between items-center">
+        <div className="flex gap-2">
+          <Button variant="outline" size="sm" onClick={handleExportRecipes}>
+            <Download className="h-4 w-4 mr-2" />
+            Export Recipes
+          </Button>
+          <Button variant="outline" size="sm" onClick={handleExportRecipeIngredients}>
+            <Download className="h-4 w-4 mr-2" />
+            Export Recipe Ingredients
+          </Button>
+          <Button variant="outline" size="sm" onClick={() => { setImportType("recipes"); setImportModalOpen(true); }}>
+            <Upload className="h-4 w-4 mr-2" />
+            Import Recipes
+          </Button>
+          <Button variant="outline" size="sm" onClick={() => { setImportType("recipeIngredients"); setImportModalOpen(true); }}>
+            <Upload className="h-4 w-4 mr-2" />
+            Import Recipe Ingredients
+          </Button>
+        </div>
         <ColumnVisibilityControl
           columns={columns}
           onToggleColumn={toggleColumn}
@@ -403,6 +475,18 @@ export function RecipesTableView({ recipes, onEdit, onDelete, categories }: Reci
         </TableBody>
       </Table>
       </div>
+      
+      <CSVImportModal
+        open={importModalOpen}
+        onClose={() => setImportModalOpen(false)}
+        type={importType}
+        onSuccess={() => {
+          toast({
+            title: "Import successful",
+            description: importType === "recipes" ? "Recipes have been updated from CSV" : "Recipe ingredients have been updated from CSV",
+          });
+        }}
+      />
     </div>
   );
 }

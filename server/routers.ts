@@ -2,7 +2,8 @@ import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
-import { getUserRestaurant, getRecipesWithIngredients, getIngredients, getRestaurantLocations, createRecipe, addRecipeIngredients, updateRecipe, updateRecipeIngredients, deleteRecipe, createIngredient, updateIngredient, deleteIngredient, getRecipesUsingIngredient, importSalesData, checkExistingSalesData, getSalesAnalytics, getDailySalesData, getSalesByDayOfWeek, getSalesDateRange, getRecipeCategories, getActiveRecipeCategories, getIngredientCategories, createRecipeCategory, updateRecipeCategory, deleteRecipeCategory, getIngredientUnits, getActiveIngredientUnits, createIngredientUnit, updateIngredientUnit, deleteIngredientUnit, getUnitCategories } from "./db";
+import { getUserRestaurant, getRecipesWithIngredients, getIngredients, getRestaurantLocations, createRecipe, addRecipeIngredients, updateRecipe, updateRecipeIngredients, deleteRecipe, createIngredient, updateIngredient, deleteIngredient, getRecipesUsingIngredient, importSalesData, checkExistingSalesData, getSalesAnalytics, getDailySalesData, getSalesByDayOfWeek, getSalesDateRange, getRecipeCategories, getActiveRecipeCategories, getIngredientCategories, createRecipeCategory, updateRecipeCategory, deleteRecipeCategory, getIngredientUnits, getActiveIngredientUnits, createIngredientUnit, updateIngredientUnit, deleteIngredientUnit, getUnitCategories, getRecipeIngredientsForExport, bulkUpdateIngredients, bulkUpdateRecipes, bulkUpdateRecipeIngredients } from "./db";
+import { ingredientsToCSV, recipesToCSV, recipeIngredientsToCSV, parseIngredientCSV, parseRecipeCSV, parseRecipeIngredientsCSV } from "./csv-helpers";
 import { generateForecast } from "./forecasting";
 import { generatePrepPlan } from "./prep-planning";
 import { generateMultiDayPrepPlan } from "./multi-day-prep-planning";
@@ -716,6 +717,159 @@ export const appRouter = router({
         pieceWeightOz: i.pieceWeightOz,
       }));
     }),
+  }),
+
+  // CSV Export/Import
+  csv: router({
+    exportIngredients: protectedProcedure
+      .input(z.object({
+        visibleColumns: z.array(z.string()).optional(),
+      }))
+      .query(async ({ ctx, input }) => {
+        const restaurant = await getUserRestaurant(ctx.user.id);
+        if (!restaurant) {
+          return { csv: "" };
+        }
+        const ingredients = await getIngredients(restaurant.id);
+        const csv = ingredientsToCSV(ingredients, input.visibleColumns);
+        return { csv };
+      }),
+    
+    exportRecipes: protectedProcedure
+      .input(z.object({
+        visibleColumns: z.array(z.string()).optional(),
+      }))
+      .query(async ({ ctx, input }) => {
+        const restaurant = await getUserRestaurant(ctx.user.id);
+        if (!restaurant) {
+          return { csv: "" };
+        }
+        const recipes = await getRecipesWithIngredients(restaurant.id);
+        const csv = recipesToCSV(recipes, input.visibleColumns);
+        return { csv };
+      }),
+    
+    exportRecipeIngredients: protectedProcedure
+      .query(async ({ ctx }) => {
+        const restaurant = await getUserRestaurant(ctx.user.id);
+        if (!restaurant) {
+          return { csv: "" };
+        }
+        const recipeIngredients = await getRecipeIngredientsForExport(restaurant.id);
+        const csv = recipeIngredientsToCSV(recipeIngredients);
+        return { csv };
+      }),
+    
+    importIngredients: protectedProcedure
+      .input(z.object({
+        csvContent: z.string(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        const parsed = parseIngredientCSV(input.csvContent);
+        
+        if (!parsed.valid) {
+          return {
+            success: false,
+            errors: parsed.errors,
+            updated: 0,
+            failed: 0,
+          };
+        }
+        
+        // Convert CSV data to update format
+        const updateData = parsed.data.map(row => ({
+          id: parseInt(row.id),
+          name: row.name,
+          category: row.category || null,
+          unit: row.unit,
+          costPerUnit: row.costPerUnit ? parseFloat(row.costPerUnit) : undefined,
+          pieceWeightOz: row.pieceWeightOz ? parseFloat(row.pieceWeightOz) : undefined,
+          supplier: row.supplier || null,
+          shelfLife: row.shelfLife ? parseInt(row.shelfLife) : undefined,
+          minStock: row.minStock ? parseFloat(row.minStock) : undefined,
+        }));
+        
+        const results = await bulkUpdateIngredients(updateData);
+        
+        return {
+          success: results.failed === 0,
+          errors: results.errors,
+          updated: results.updated,
+          failed: results.failed,
+        };
+      }),
+    
+    importRecipes: protectedProcedure
+      .input(z.object({
+        csvContent: z.string(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        const parsed = parseRecipeCSV(input.csvContent);
+        
+        if (!parsed.valid) {
+          return {
+            success: false,
+            errors: parsed.errors,
+            updated: 0,
+            failed: 0,
+          };
+        }
+        
+        // Convert CSV data to update format
+        const updateData = parsed.data.map(row => ({
+          id: parseInt(row.id),
+          name: row.name,
+          category: row.category || null,
+          description: row.description || null,
+          servings: row.servings ? parseInt(row.servings) : undefined,
+          prepTime: row.prepTime ? parseInt(row.prepTime) : undefined,
+          cookTime: row.cookTime ? parseInt(row.cookTime) : undefined,
+          sellingPrice: row.sellingPrice ? parseFloat(row.sellingPrice) : undefined,
+        }));
+        
+        const results = await bulkUpdateRecipes(updateData);
+        
+        return {
+          success: results.failed === 0,
+          errors: results.errors,
+          updated: results.updated,
+          failed: results.failed,
+        };
+      }),
+    
+    importRecipeIngredients: protectedProcedure
+      .input(z.object({
+        csvContent: z.string(),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        const parsed = parseRecipeIngredientsCSV(input.csvContent);
+        
+        if (!parsed.valid) {
+          return {
+            success: false,
+            errors: parsed.errors,
+            updated: 0,
+            failed: 0,
+          };
+        }
+        
+        // Convert CSV data to update format
+        const updateData = parsed.data.map(row => ({
+          recipeId: parseInt(row.recipeId),
+          ingredientId: parseInt(row.ingredientId),
+          quantity: parseFloat(row.quantity),
+          unit: row.unit,
+        }));
+        
+        const results = await bulkUpdateRecipeIngredients(updateData);
+        
+        return {
+          success: results.failed === 0,
+          errors: results.errors,
+          updated: results.updated,
+          failed: results.failed,
+        };
+      }),
   }),
 });
 

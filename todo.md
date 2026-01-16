@@ -1338,3 +1338,26 @@ All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb
 - [x] Verify localStorage persistence works correctly
 - [x] Verify column toggling works for both tables
 - [x] Test that all column data is available in backend
+
+## CSV Export/Import Feature (Current Sprint)
+- [x] Design CSV data structure for ingredients export/import
+- [x] Design CSV data structure for recipes export/import
+- [x] Design CSV data structure for recipe ingredients export/import
+- [x] Create backend CSV generation helpers (ingredients, recipes, recipe ingredients)
+- [x] Create backend CSV parsing and validation helpers
+- [x] Implement tRPC endpoint for ingredients CSV export (respects column visibility)
+- [x] Implement tRPC endpoint for recipes CSV export (respects column visibility)
+- [x] Implement tRPC endpoint for recipe ingredients CSV export (for bulk editing)
+- [x] Implement tRPC endpoint for ingredients CSV import with validation
+- [x] Implement tRPC endpoint for recipes CSV import with validation
+- [x] Implement tRPC endpoint for recipe ingredients CSV import with validation
+- [x] Add CSV export button to IngredientsTableView
+- [x] Add CSV export button to RecipesTableView
+- [x] Add CSV import button to IngredientsTableView
+- [x] Add CSV import button to RecipesTableView
+- [x] Create CSV import modal with file upload and preview
+- [x] Implement CSV validation and error reporting
+- [x] Add progress indicator for import operations
+- [x] Test bulk recipe ingredient unit type changes (cup → oz scenario)
+- [x] Write comprehensive test suite for CSV operations (12 tests passing)
+- [x] Document CSV format and bulk editing workflow

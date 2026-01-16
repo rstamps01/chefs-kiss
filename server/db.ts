@@ -1302,3 +1302,175 @@ export async function getConversionFactor(
   // No conversion found
   return null;
 }
+
+// ============================================================================
+// CSV EXPORT/IMPORT FUNCTIONS
+// ============================================================================
+
+/**
+ * Get all recipe ingredients with names for CSV export
+ */
+export async function getRecipeIngredientsForExport(restaurantId: number) {
+  const db = await getDb();
+  if (!db) return [];
+
+  const result = await db
+    .select({
+      recipeId: recipeIngredients.recipeId,
+      recipeName: recipes.name,
+      ingredientId: recipeIngredients.ingredientId,
+      ingredientName: ingredients.name,
+      quantity: recipeIngredients.quantity,
+      unit: recipeIngredients.unit,
+    })
+    .from(recipeIngredients)
+    .innerJoin(recipes, eq(recipeIngredients.recipeId, recipes.id))
+    .innerJoin(ingredients, eq(recipeIngredients.ingredientId, ingredients.id))
+    .where(eq(recipes.restaurantId, restaurantId))
+    .orderBy(recipes.name, ingredients.name);
+
+  return result;
+}
+
+/**
+ * Bulk update ingredients from CSV import
+ */
+export async function bulkUpdateIngredients(ingredientsData: Array<{
+  id: number;
+  name?: string;
+  category?: string | null;
+  unit?: string;
+  costPerUnit?: number;
+  pieceWeightOz?: number;
+  supplier?: string | null;
+  shelfLife?: number;
+  minStock?: number;
+}>) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  const results = {
+    updated: 0,
+    failed: 0,
+    errors: [] as string[],
+  };
+
+  for (const item of ingredientsData) {
+    try {
+      const updateData: any = {};
+      
+      if (item.name !== undefined) updateData.name = item.name;
+      if (item.category !== undefined) updateData.category = item.category;
+      if (item.unit !== undefined) updateData.unit = item.unit;
+      if (item.costPerUnit !== undefined) updateData.costPerUnit = item.costPerUnit.toString();
+      if (item.pieceWeightOz !== undefined) updateData.pieceWeightOz = item.pieceWeightOz.toString();
+      if (item.supplier !== undefined) updateData.supplier = item.supplier;
+      if (item.shelfLife !== undefined) updateData.shelfLife = item.shelfLife;
+      if (item.minStock !== undefined) updateData.minStock = item.minStock.toString();
+
+      await db
+        .update(ingredients)
+        .set(updateData)
+        .where(eq(ingredients.id, item.id));
+      
+      results.updated++;
+    } catch (error) {
+      results.failed++;
+      results.errors.push(`Failed to update ingredient ID ${item.id}: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
+
+  return results;
+}
+
+/**
+ * Bulk update recipes from CSV import
+ */
+export async function bulkUpdateRecipes(recipesData: Array<{
+  id: number;
+  name?: string;
+  category?: string | null;
+  description?: string | null;
+  servings?: number;
+  prepTime?: number;
+  cookTime?: number;
+  sellingPrice?: number;
+}>) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  const results = {
+    updated: 0,
+    failed: 0,
+    errors: [] as string[],
+  };
+
+  for (const item of recipesData) {
+    try {
+      const updateData: any = {};
+      
+      if (item.name !== undefined) updateData.name = item.name;
+      if (item.category !== undefined) updateData.category = item.category;
+      if (item.description !== undefined) updateData.description = item.description;
+      if (item.servings !== undefined) updateData.servings = item.servings;
+      if (item.prepTime !== undefined) updateData.prepTime = item.prepTime;
+      if (item.cookTime !== undefined) updateData.cookTime = item.cookTime;
+      if (item.sellingPrice !== undefined) updateData.sellingPrice = item.sellingPrice.toString();
+
+      await db
+        .update(recipes)
+        .set(updateData)
+        .where(eq(recipes.id, item.id));
+      
+      results.updated++;
+    } catch (error) {
+      results.failed++;
+      results.errors.push(`Failed to update recipe ID ${item.id}: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
+
+  return results;
+}
+
+/**
+ * Bulk update recipe ingredients from CSV import
+ */
+export async function bulkUpdateRecipeIngredients(recipeIngredientsData: Array<{
+  recipeId: number;
+  ingredientId: number;
+  quantity: number;
+  unit: string;
+}>) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  const results = {
+    updated: 0,
+    failed: 0,
+    errors: [] as string[],
+  };
+
+  for (const item of recipeIngredientsData) {
+    try {
+      await db
+        .update(recipeIngredients)
+        .set({
+          quantity: item.quantity.toString(),
+          unit: item.unit,
+        })
+        .where(
+          and(
+            eq(recipeIngredients.recipeId, item.recipeId),
+            eq(recipeIngredients.ingredientId, item.ingredientId)
+          )
+        );
+      
+      results.updated++;
+    } catch (error) {
+      results.failed++;
+      results.errors.push(`Failed to update recipe ${item.recipeId} ingredient ${item.ingredientId}: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  }
+
+  return results;
+}

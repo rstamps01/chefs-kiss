@@ -3,10 +3,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Edit, Trash2, Check, X, ArrowUp, ArrowDown } from "lucide-react";
+import { Edit, Trash2, Check, X, ArrowUp, ArrowDown, Download, Upload } from "lucide-react";
 import { trpc } from "@/lib/trpc";
 import { ColumnVisibilityControl } from "./ColumnVisibilityControl";
 import { useColumnVisibility } from "@/hooks/useColumnVisibility";
+import { CSVImportModal } from "./CSVImportModal";
+import { useToast } from "@/hooks/use-toast";
 
 interface IngredientsTableViewProps {
   ingredients: any[];
@@ -42,6 +44,9 @@ export function IngredientsTableView({
   const [editedValues, setEditedValues] = useState<any>({});
   const [sortField, setSortField] = useState<SortField>("name");
   const [sortDirection, setSortDirection] = useState<SortDirection>("asc");
+  const [importModalOpen, setImportModalOpen] = useState(false);
+  
+  const { toast } = useToast();
   
   const { columns, toggleColumn, resetToDefault, isColumnVisible } = useColumnVisibility(
     "ingredients-table-columns",
@@ -49,6 +54,10 @@ export function IngredientsTableView({
   );
 
   const utils = trpc.useUtils();
+  const exportQuery = trpc.csv.exportIngredients.useQuery(
+    { visibleColumns: columns.filter(c => c.visible).map(c => c.id) },
+    { enabled: false }
+  );
   const updateMutation = trpc.ingredients.update.useMutation({
     onSuccess: () => {
       utils.ingredients.list.invalidate();
@@ -122,9 +131,42 @@ export function IngredientsTableView({
       <ArrowDown className="h-3 w-3 inline ml-1" />;
   };
 
+  const handleExport = async () => {
+    const visibleColumns = columns.filter(c => c.visible).map(c => c.id);
+    const result = await exportQuery.refetch();
+    
+    if (result.data?.csv) {
+      // Create download link
+      const blob = new Blob([result.data.csv], { type: "text/csv" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `ingredients-${new Date().toISOString().split('T')[0]}.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      
+      toast({
+        title: "Export successful",
+        description: `Exported ${ingredients.length} ingredients to CSV`,
+      });
+    }
+  };
+
   return (
     <div className="space-y-4">
-      <div className="flex justify-end">
+      <div className="flex justify-between items-center">
+        <div className="flex gap-2">
+          <Button variant="outline" size="sm" onClick={handleExport}>
+            <Download className="h-4 w-4 mr-2" />
+            Export CSV
+          </Button>
+          <Button variant="outline" size="sm" onClick={() => setImportModalOpen(true)}>
+            <Upload className="h-4 w-4 mr-2" />
+            Import CSV
+          </Button>
+        </div>
         <ColumnVisibilityControl
           columns={columns}
           onToggleColumn={toggleColumn}
@@ -374,6 +416,18 @@ export function IngredientsTableView({
         </TableBody>
       </Table>
       </div>
+      
+      <CSVImportModal
+        open={importModalOpen}
+        onClose={() => setImportModalOpen(false)}
+        type="ingredients"
+        onSuccess={() => {
+          toast({
+            title: "Import successful",
+            description: "Ingredients have been updated from CSV",
+          });
+        }}
+      />
     </div>
   );
 }

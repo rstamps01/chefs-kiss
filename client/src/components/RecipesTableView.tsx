@@ -5,6 +5,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Edit, Save, X, ArrowUpDown, Trash2 } from "lucide-react";
 import { trpc } from "@/lib/trpc";
+import { ColumnVisibilityControl } from "./ColumnVisibilityControl";
+import { useColumnVisibility } from "@/hooks/useColumnVisibility";
 
 type Recipe = {
   id: number;
@@ -28,6 +30,20 @@ type RecipesTableViewProps = {
   categories: string[];
 };
 
+const DEFAULT_RECIPE_COLUMNS = [
+  { id: "name", label: "Name", visible: true },
+  { id: "category", label: "Category", visible: true },
+  { id: "description", label: "Description", visible: true },
+  { id: "servings", label: "Servings", visible: true },
+  { id: "prepTime", label: "Prep Time (min)", visible: true },
+  { id: "cookTime", label: "Cook Time (min)", visible: true },
+  { id: "price", label: "Price", visible: true },
+  { id: "foodCost", label: "Food Cost %", visible: true },
+  { id: "margin", label: "Margin %", visible: true },
+  { id: "ingredients", label: "Ingredients Count", visible: true },
+  { id: "actions", label: "Actions", visible: true },
+];
+
 type SortColumn = "name" | "category" | "servings" | "price" | "foodCost" | "margin";
 type SortDirection = "asc" | "desc";
 
@@ -36,6 +52,11 @@ export function RecipesTableView({ recipes, onEdit, onDelete, categories }: Reci
   const [editedValues, setEditedValues] = useState<Partial<Recipe>>({});
   const [sortColumn, setSortColumn] = useState<SortColumn>("name");
   const [sortDirection, setSortDirection] = useState<SortDirection>("asc");
+
+  const { columns, toggleColumn, resetToDefault, isColumnVisible } = useColumnVisibility(
+    "recipes-table-columns",
+    DEFAULT_RECIPE_COLUMNS
+  );
 
   const utils = trpc.useUtils();
   const updateMutation = trpc.recipes.update.useMutation({
@@ -127,51 +148,81 @@ export function RecipesTableView({ recipes, onEdit, onDelete, categories }: Reci
   });
 
   return (
-    <div className="border rounded-lg overflow-hidden">
+    <div className="space-y-4">
+      <div className="flex justify-end">
+        <ColumnVisibilityControl
+          columns={columns}
+          onToggleColumn={toggleColumn}
+          onResetToDefault={resetToDefault}
+        />
+      </div>
+      <div className="border rounded-lg overflow-hidden">
       <Table>
         <TableHeader>
           <TableRow>
+            {isColumnVisible("name") && (
             <TableHead className="cursor-pointer" onClick={() => handleSort("name")}>
               <div className="flex items-center gap-1">
                 Name
                 <ArrowUpDown className="h-3 w-3" />
               </div>
             </TableHead>
+            )}
+            {isColumnVisible("category") && (
             <TableHead className="cursor-pointer" onClick={() => handleSort("category")}>
               <div className="flex items-center gap-1">
                 Category
                 <ArrowUpDown className="h-3 w-3" />
               </div>
             </TableHead>
+            )}
+            {isColumnVisible("description") && (
             <TableHead>Description</TableHead>
+            )}
+            {isColumnVisible("servings") && (
             <TableHead className="cursor-pointer text-right" onClick={() => handleSort("servings")}>
               <div className="flex items-center justify-end gap-1">
                 Servings
                 <ArrowUpDown className="h-3 w-3" />
               </div>
             </TableHead>
+            )}
+            {isColumnVisible("prepTime") && (
             <TableHead className="text-right">Prep (min)</TableHead>
+            )}
+            {isColumnVisible("cookTime") && (
             <TableHead className="text-right">Cook (min)</TableHead>
+            )}
+            {isColumnVisible("price") && (
             <TableHead className="cursor-pointer text-right" onClick={() => handleSort("price")}>
               <div className="flex items-center justify-end gap-1">
                 Price
                 <ArrowUpDown className="h-3 w-3" />
               </div>
             </TableHead>
+            )}
+            {isColumnVisible("foodCost") && (
             <TableHead className="cursor-pointer text-right" onClick={() => handleSort("foodCost")}>
               <div className="flex items-center justify-end gap-1">
                 Food Cost %
                 <ArrowUpDown className="h-3 w-3" />
               </div>
             </TableHead>
+            )}
+            {isColumnVisible("margin") && (
             <TableHead className="cursor-pointer text-right" onClick={() => handleSort("margin")}>
               <div className="flex items-center justify-end gap-1">
                 Margin %
                 <ArrowUpDown className="h-3 w-3" />
               </div>
             </TableHead>
+            )}
+            {isColumnVisible("ingredients") && (
             <TableHead className="text-right">Ingredients</TableHead>
+            )}
+            {isColumnVisible("actions") && (
             <TableHead className="text-right">Actions</TableHead>
+            )}
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -180,6 +231,7 @@ export function RecipesTableView({ recipes, onEdit, onDelete, categories }: Reci
 
             return (
               <TableRow key={recipe.id}>
+                {isColumnVisible("name") && (
                 <TableCell>
                   {isEditing ? (
                     <Input
@@ -191,6 +243,8 @@ export function RecipesTableView({ recipes, onEdit, onDelete, categories }: Reci
                     recipe.name
                   )}
                 </TableCell>
+                )}
+                {isColumnVisible("category") && (
                 <TableCell>
                   {isEditing ? (
                     <Select
@@ -212,6 +266,8 @@ export function RecipesTableView({ recipes, onEdit, onDelete, categories }: Reci
                     recipe.category || "-"
                   )}
                 </TableCell>
+                )}
+                {isColumnVisible("description") && (
                 <TableCell className="max-w-xs truncate">
                   {isEditing ? (
                     <Input
@@ -224,6 +280,8 @@ export function RecipesTableView({ recipes, onEdit, onDelete, categories }: Reci
                     recipe.description || "-"
                   )}
                 </TableCell>
+                )}
+                {isColumnVisible("servings") && (
                 <TableCell className="text-right">
                   {isEditing ? (
                     <Input
@@ -237,6 +295,8 @@ export function RecipesTableView({ recipes, onEdit, onDelete, categories }: Reci
                     recipe.servings || "-"
                   )}
                 </TableCell>
+                )}
+                {isColumnVisible("prepTime") && (
                 <TableCell className="text-right">
                   {isEditing ? (
                     <Input
@@ -250,6 +310,8 @@ export function RecipesTableView({ recipes, onEdit, onDelete, categories }: Reci
                     recipe.prepTime || "-"
                   )}
                 </TableCell>
+                )}
+                {isColumnVisible("cookTime") && (
                 <TableCell className="text-right">
                   {isEditing ? (
                     <Input
@@ -263,6 +325,8 @@ export function RecipesTableView({ recipes, onEdit, onDelete, categories }: Reci
                     recipe.cookTime || "-"
                   )}
                 </TableCell>
+                )}
+                {isColumnVisible("price") && (
                 <TableCell className="text-right">
                   {isEditing ? (
                     <Input
@@ -277,15 +341,23 @@ export function RecipesTableView({ recipes, onEdit, onDelete, categories }: Reci
                     recipe.sellingPrice ? `$${parseFloat(recipe.sellingPrice).toFixed(2)}` : "-"
                   )}
                 </TableCell>
+                )}
+                {isColumnVisible("foodCost") && (
                 <TableCell className="text-right">
                   {recipe.foodCostPercent !== undefined ? `${recipe.foodCostPercent.toFixed(1)}%` : "-"}
                 </TableCell>
+                )}
+                {isColumnVisible("margin") && (
                 <TableCell className="text-right">
                   {recipe.marginPercent !== undefined ? `${recipe.marginPercent.toFixed(1)}%` : "-"}
                 </TableCell>
+                )}
+                {isColumnVisible("ingredients") && (
                 <TableCell className="text-right">
                   {recipe.ingredientsCount || 0}
                 </TableCell>
+                )}
+                {isColumnVisible("actions") && (
                 <TableCell className="text-right">
                   {isEditing ? (
                     <div className="flex gap-1 justify-end">
@@ -324,11 +396,13 @@ export function RecipesTableView({ recipes, onEdit, onDelete, categories }: Reci
                     </div>
                   )}
                 </TableCell>
+                )}
               </TableRow>
             );
           })}
         </TableBody>
       </Table>
+      </div>
     </div>
   );
 }

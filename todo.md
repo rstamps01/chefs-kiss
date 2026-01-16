@@ -1312,3 +1312,29 @@ All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb
 - [x] All columns: Name, Category, Description, Servings, Prep Time, Cook Time, Selling Price, Food Cost %, Margin %, Ingredients Count
 - [x] Sortable columns with ascending/descending toggle
 - [x] Inline editing with dropdown for category selection
+
+
+## Add Column Visibility Controls
+- [ ] Design column visibility dropdown/popover UI with checkboxes
+- [ ] Implement localStorage persistence for column preferences
+- [ ] Add column visibility state management for ingredients table
+- [ ] Add column visibility state management for recipes table
+- [ ] Add ingredient columns to recipes table (show each ingredient + unit)
+- [ ] Wire up visibility controls to dynamically show/hide columns
+- [ ] Test column visibility toggles and persistence
+- [ ] Verify preferences persist across browser sessions
+
+## Column Visibility Feature (Current Sprint)
+- [x] Create ColumnVisibilityControl component with checkbox interface
+- [x] Create useColumnVisibility custom hook with localStorage persistence
+- [x] Integrate column visibility controls into Recipes page for both tabs
+- [x] Update IngredientsTableView with conditional column rendering
+- [x] Update RecipesTableView with conditional column rendering
+- [x] Define default visible columns for ingredients table (7 visible, 2 hidden)
+- [x] Define default visible columns for recipes table (all 11 visible)
+- [x] Implement independent localStorage keys for each table
+- [x] Implement Reset to Default functionality
+- [x] Write comprehensive test suite (9 tests passing)
+- [x] Verify localStorage persistence works correctly
+- [x] Verify column toggling works for both tables
+- [x] Test that all column data is available in backend

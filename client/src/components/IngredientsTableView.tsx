@@ -5,6 +5,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Edit, Trash2, Check, X, ArrowUp, ArrowDown } from "lucide-react";
 import { trpc } from "@/lib/trpc";
+import { ColumnVisibilityControl } from "./ColumnVisibilityControl";
+import { useColumnVisibility } from "@/hooks/useColumnVisibility";
 
 interface IngredientsTableViewProps {
   ingredients: any[];
@@ -13,6 +15,18 @@ interface IngredientsTableViewProps {
   activeUnits: any[];
   categories: string[];
 }
+
+const DEFAULT_INGREDIENT_COLUMNS = [
+  { id: "name", label: "Name", visible: true },
+  { id: "category", label: "Category", visible: true },
+  { id: "unit", label: "Unit Type", visible: true },
+  { id: "costPerUnit", label: "Cost Per Unit", visible: true },
+  { id: "pieceWeightOz", label: "Piece Weight (oz)", visible: true },
+  { id: "supplier", label: "Supplier", visible: true },
+  { id: "shelfLife", label: "Shelf Life (days)", visible: false },
+  { id: "minStock", label: "Min Stock", visible: false },
+  { id: "actions", label: "Actions", visible: true },
+];
 
 type SortField = "name" | "category" | "unit" | "costPerUnit" | "supplier";
 type SortDirection = "asc" | "desc";
@@ -28,6 +42,11 @@ export function IngredientsTableView({
   const [editedValues, setEditedValues] = useState<any>({});
   const [sortField, setSortField] = useState<SortField>("name");
   const [sortDirection, setSortDirection] = useState<SortDirection>("asc");
+  
+  const { columns, toggleColumn, resetToDefault, isColumnVisible } = useColumnVisibility(
+    "ingredients-table-columns",
+    DEFAULT_INGREDIENT_COLUMNS
+  );
 
   const utils = trpc.useUtils();
   const updateMutation = trpc.ingredients.update.useMutation({
@@ -104,29 +123,55 @@ export function IngredientsTableView({
   };
 
   return (
-    <div className="border rounded-lg overflow-hidden">
+    <div className="space-y-4">
+      <div className="flex justify-end">
+        <ColumnVisibilityControl
+          columns={columns}
+          onToggleColumn={toggleColumn}
+          onResetToDefault={resetToDefault}
+        />
+      </div>
+      <div className="border rounded-lg overflow-hidden">
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="cursor-pointer hover:bg-muted/50" onClick={() => handleSort("name")}>
-              Name <SortIcon field="name" />
-            </TableHead>
-            <TableHead className="cursor-pointer hover:bg-muted/50" onClick={() => handleSort("category")}>
-              Category <SortIcon field="category" />
-            </TableHead>
-            <TableHead className="cursor-pointer hover:bg-muted/50" onClick={() => handleSort("unit")}>
-              Unit <SortIcon field="unit" />
-            </TableHead>
-            <TableHead className="cursor-pointer hover:bg-muted/50" onClick={() => handleSort("costPerUnit")}>
-              Cost/Unit <SortIcon field="costPerUnit" />
-            </TableHead>
-            <TableHead>Piece Weight (oz)</TableHead>
-            <TableHead className="cursor-pointer hover:bg-muted/50" onClick={() => handleSort("supplier")}>
-              Supplier <SortIcon field="supplier" />
-            </TableHead>
-            <TableHead>Shelf Life (days)</TableHead>
-            <TableHead>Min Stock</TableHead>
-            <TableHead className="text-right">Actions</TableHead>
+            {isColumnVisible("name") && (
+              <TableHead className="cursor-pointer hover:bg-muted/50" onClick={() => handleSort("name")}>
+                Name <SortIcon field="name" />
+              </TableHead>
+            )}
+            {isColumnVisible("category") && (
+              <TableHead className="cursor-pointer hover:bg-muted/50" onClick={() => handleSort("category")}>
+                Category <SortIcon field="category" />
+              </TableHead>
+            )}
+            {isColumnVisible("unit") && (
+              <TableHead className="cursor-pointer hover:bg-muted/50" onClick={() => handleSort("unit")}>
+                Unit <SortIcon field="unit" />
+              </TableHead>
+            )}
+            {isColumnVisible("costPerUnit") && (
+              <TableHead className="cursor-pointer hover:bg-muted/50" onClick={() => handleSort("costPerUnit")}>
+                Cost/Unit <SortIcon field="costPerUnit" />
+              </TableHead>
+            )}
+            {isColumnVisible("pieceWeightOz") && (
+              <TableHead>Piece Weight (oz)</TableHead>
+            )}
+            {isColumnVisible("supplier") && (
+              <TableHead className="cursor-pointer hover:bg-muted/50" onClick={() => handleSort("supplier")}>
+                Supplier <SortIcon field="supplier" />
+              </TableHead>
+            )}
+            {isColumnVisible("shelfLife") && (
+              <TableHead>Shelf Life (days)</TableHead>
+            )}
+            {isColumnVisible("minStock") && (
+              <TableHead>Min Stock</TableHead>
+            )}
+            {isColumnVisible("actions") && (
+              <TableHead className="text-right">Actions</TableHead>
+            )}
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -135,6 +180,7 @@ export function IngredientsTableView({
 
             return (
               <TableRow key={ingredient.id}>
+                {isColumnVisible("name") && (
                 <TableCell>
                   {isEditing ? (
                     <Input
@@ -146,7 +192,9 @@ export function IngredientsTableView({
                     ingredient.name
                   )}
                 </TableCell>
+                )}
                 
+                {isColumnVisible("category") && (
                 <TableCell>
                   {isEditing ? (
                     <Select
@@ -168,7 +216,9 @@ export function IngredientsTableView({
                     ingredient.category || "-"
                   )}
                 </TableCell>
+                )}
 
+                {isColumnVisible("unit") && (
                 <TableCell>
                   {isEditing ? (
                     <Select
@@ -190,7 +240,9 @@ export function IngredientsTableView({
                     ingredient.unitDisplayName || ingredient.unit
                   )}
                 </TableCell>
+                )}
 
+                {isColumnVisible("costPerUnit") && (
                 <TableCell>
                   {isEditing ? (
                     <Input
@@ -205,7 +257,9 @@ export function IngredientsTableView({
                     ingredient.costPerUnit ? `$${parseFloat(ingredient.costPerUnit).toFixed(2)}` : "-"
                   )}
                 </TableCell>
+                )}
 
+                {isColumnVisible("pieceWeightOz") && (
                 <TableCell>
                   {isEditing ? (
                     <Input
@@ -220,7 +274,9 @@ export function IngredientsTableView({
                     ingredient.pieceWeightOz ? parseFloat(ingredient.pieceWeightOz).toFixed(2) : "-"
                   )}
                 </TableCell>
+                )}
 
+                {isColumnVisible("supplier") && (
                 <TableCell>
                   {isEditing ? (
                     <Input
@@ -233,7 +289,9 @@ export function IngredientsTableView({
                     ingredient.supplier || "-"
                   )}
                 </TableCell>
+                )}
 
+                {isColumnVisible("shelfLife") && (
                 <TableCell>
                   {isEditing ? (
                     <Input
@@ -247,7 +305,9 @@ export function IngredientsTableView({
                     ingredient.shelfLife || "-"
                   )}
                 </TableCell>
+                )}
 
+                {isColumnVisible("minStock") && (
                 <TableCell>
                   {isEditing ? (
                     <Input
@@ -262,7 +322,9 @@ export function IngredientsTableView({
                     ingredient.minStock ? parseFloat(ingredient.minStock).toFixed(2) : "-"
                   )}
                 </TableCell>
+                )}
 
+                {isColumnVisible("actions") && (
                 <TableCell className="text-right">
                   {isEditing ? (
                     <div className="flex gap-1 justify-end">
@@ -305,11 +367,13 @@ export function IngredientsTableView({
                     </div>
                   )}
                 </TableCell>
+                )}
               </TableRow>
             );
           })}
         </TableBody>
       </Table>
+      </div>
     </div>
   );
 }

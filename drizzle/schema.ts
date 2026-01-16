@@ -133,6 +133,9 @@ export const recipes = mysqlTable("recipes", {
   cookTime: int("cookTime"), // minutes
   costPerServing: decimal("costPerServing", { precision: 10, scale: 2 }),
   sellingPrice: decimal("sellingPrice", { precision: 10, scale: 2 }),
+  totalCost: decimal("totalCost", { precision: 10, scale: 2 }), // Total ingredient cost
+  foodCostPercent: decimal("foodCostPercent", { precision: 5, scale: 2 }), // Food cost as percentage
+  marginPercent: decimal("marginPercent", { precision: 5, scale: 2 }), // Profit margin as percentage
   isActive: boolean("isActive").default(true).notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),

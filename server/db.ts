@@ -187,9 +187,23 @@ export async function getRecipesWithIngredients(restaurantId: number) {
         })
       );
 
+      // Calculate total cost from ingredients
+      const totalCost = ingredientsWithCosts.reduce(
+        (sum, ing) => sum + Number(ing.convertedCost || 0),
+        0
+      );
+
+      // Calculate food cost percentage and margin
+      const sellingPrice = Number(recipe.sellingPrice || 0);
+      const foodCostPercent = sellingPrice > 0 ? (totalCost / sellingPrice) * 100 : 0;
+      const marginPercent = sellingPrice > 0 ? ((sellingPrice - totalCost) / sellingPrice) * 100 : 0;
+
       return {
         ...recipe,
         ingredients: ingredientsWithCosts,
+        totalCost: totalCost.toFixed(2),
+        foodCostPercent: foodCostPercent.toFixed(2),
+        marginPercent: marginPercent.toFixed(2),
       };
     })
   );

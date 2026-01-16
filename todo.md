@@ -1389,3 +1389,11 @@ All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb
 - [x] Modify export logic to include critical fields regardless of column visibility
 - [x] Test that hidden columns (id, totalCost) still appear in export (5 tests passing)
 - [x] Verify all financial fields present in exported CSV (19 total tests passing)
+
+## Recipe Financial Fields Empty Issue (Current Task)
+- [x] Investigate why totalCost, foodCostPercent, marginPercent are empty in CSV
+- [x] Check if recipes have ingredients with cost data
+- [x] Add totalCost, foodCostPercent, marginPercent columns to database schema
+- [x] Run database migration to add new columns
+- [x] Implement financial calculation logic in getRecipesWithIngredients
+- [x] Test that financial fields populate correctly (4 tests passing)

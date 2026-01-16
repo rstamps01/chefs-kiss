@@ -1239,3 +1239,17 @@ All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb
 - [ ] Remove ingredientConversions table from schema (optional cleanup)
 - [x] Test all piece-to-weight conversions after removal (8/8 tests passing)
 - [x] Confirmed: Piece Weight field is the single source for conversions
+
+
+## Fix Ingredient Supplier Deletion
+- [x] Investigate why clearing supplier field doesn't remove supplier
+- [x] Check backend updateIngredient validation for supplier field
+- [x] Fix backend to accept null/empty string for supplier
+- [x] Check frontend IngredientEditModal supplier field handling
+- [x] Fix frontend to send null when supplier field is cleared
+- [x] Update ingredient display to hide supplier row when null
+- [x] Test supplier deletion in edit modal (3/3 tests passing)
+- [x] Verify supplier row disappears from ingredient tile
+- [x] Root cause: Frontend sent undefined, backend skipped update
+- [x] Solution: Frontend sends null, backend accepts and stores null
+- [x] Frontend already hides supplier row when null (conditional rendering)

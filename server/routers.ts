@@ -183,7 +183,7 @@ export const appRouter = router({
         category: z.string().optional(),
         unit: z.string().min(1),
         costPerUnit: z.number().positive().optional(),
-        supplier: z.string().optional(),
+        supplier: z.string().nullable().optional(),
         shelfLife: z.number().int().positive().optional(),
         minStock: z.number().positive().optional(),
       }))
@@ -207,7 +207,7 @@ export const appRouter = router({
         category: z.string().optional(),
         unit: z.string().min(1).optional(),
         costPerUnit: z.number().positive().optional(),
-        supplier: z.string().optional(),
+        supplier: z.string().nullable().optional(),
         shelfLife: z.number().int().positive().optional(),
         minStock: z.number().positive().optional(),
         pieceWeightOz: z.number().positive().optional(),

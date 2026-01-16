@@ -99,7 +99,7 @@ export function IngredientEditModal({ open, onOpenChange, ingredient }: Ingredie
       category: category.trim() || undefined,
       unit: unit.trim(),
       costPerUnit: costPerUnit ? parseFloat(costPerUnit) : undefined,
-      supplier: supplier.trim() || undefined,
+      supplier: supplier.trim() || null,
       pieceWeightOz: pieceWeightOz ? parseFloat(pieceWeightOz) : undefined,
     });
   };

@@ -702,7 +702,7 @@ export async function createIngredient(data: {
   category?: string;
   unit: string;
   costPerUnit?: number;
-  supplier?: string;
+  supplier?: string | null;
   shelfLife?: number;
   minStock?: number;
 }) {
@@ -733,7 +733,7 @@ export async function updateIngredient(ingredientId: number, data: {
   category?: string;
   unit?: string;
   costPerUnit?: number;
-  supplier?: string;
+  supplier?: string | null;
   shelfLife?: number;
   minStock?: number;
   pieceWeightOz?: number;

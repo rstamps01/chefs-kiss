@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Plus, Search, Edit, Trash2, Loader2, ArrowUpDown, Filter } from "lucide-react";
+import { Plus, Search, Edit, Trash2, Loader2, ArrowUpDown, Filter, LayoutGrid, Table } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { trpc } from "@/lib/trpc";
 import { useState, useMemo } from "react";
@@ -11,6 +11,7 @@ import { RecipeEditModal } from "@/components/RecipeEditModal";
 import { RecipeCreateModal } from "@/components/RecipeCreateModal";
 import { IngredientCreateModal } from "@/components/IngredientCreateModal";
 import { IngredientEditModal } from "@/components/IngredientEditModal";
+import { IngredientsTableView } from "@/components/IngredientsTableView";
 import { useToast } from "@/hooks/use-toast";
 
 type RecipeSortOption = "name-asc" | "name-desc" | "price-high" | "price-low" | "category";
@@ -25,6 +26,7 @@ export default function Recipes() {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isIngredientCreateModalOpen, setIsIngredientCreateModalOpen] = useState(false);
   const [editingIngredient, setEditingIngredient] = useState<any>(null);
+  const [ingredientView, setIngredientView] = useState<"card" | "table">("card");
   const { toast } = useToast();
   const utils = trpc.useUtils();
   
@@ -33,6 +35,9 @@ export default function Recipes() {
   
   // Fetch ingredients from database
   const { data: ingredients, isLoading: ingredientsLoading } = trpc.ingredients.list.useQuery();
+  
+  // Fetch active ingredient units
+  const { data: activeUnits = [] } = trpc.ingredientUnits.listActive.useQuery();
   
   // Fetch category lists to determine category types
   const { data: recipeCategories = [] } = trpc.recipeCategories.listActive.useQuery();
@@ -574,10 +579,30 @@ export default function Recipes() {
                 </SelectContent>
               </Select>
             </div>
-            <Button onClick={() => setIsIngredientCreateModalOpen(true)}>
-              <Plus className="mr-2 h-4 w-4" />
-              New Ingredient
-            </Button>
+            <div className="flex gap-2">
+              <div className="flex border rounded-md">
+                <Button
+                  variant={ingredientView === "card" ? "default" : "ghost"}
+                  size="sm"
+                  onClick={() => setIngredientView("card")}
+                  className="rounded-r-none"
+                >
+                  <LayoutGrid className="h-4 w-4" />
+                </Button>
+                <Button
+                  variant={ingredientView === "table" ? "default" : "ghost"}
+                  size="sm"
+                  onClick={() => setIngredientView("table")}
+                  className="rounded-l-none"
+                >
+                  <Table className="h-4 w-4" />
+                </Button>
+              </div>
+              <Button onClick={() => setIsIngredientCreateModalOpen(true)}>
+                <Plus className="mr-2 h-4 w-4" />
+                New Ingredient
+              </Button>
+            </div>
           </div>
 
           {/* Loading State */}
@@ -606,66 +631,76 @@ export default function Recipes() {
 
           {/* Ingredient List */}
           {!ingredientsLoading && filteredIngredients.length > 0 && (
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {filteredIngredients.map((ingredient) => (
-                <Card key={ingredient.id} className="hover:shadow-md transition-shadow">
-                  <CardHeader>
-                    <div className="flex items-start justify-between">
-                      <div>
-                        <CardTitle className="text-lg">{ingredient.name}</CardTitle>
-                        <CardDescription>{ingredient.category || "Uncategorized"}</CardDescription>
-                      </div>
-                      {ingredient.costPerUnit && (
-                        <Badge variant="secondary">
-                          ${parseFloat(ingredient.costPerUnit).toFixed(2)}/{ingredient.unitDisplayName || ingredient.unit}
-                        </Badge>
-                      )}
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-3">
-                      <div className="flex justify-between text-sm">
-                        <span className="text-muted-foreground">Unit Type:</span>
-                        <span className="font-medium">{ingredient.unitDisplayName || ingredient.unit}</span>
-                      </div>
-                      {ingredient.costPerUnit && (
-                        <div className="flex justify-between text-sm">
-                          <span className="text-muted-foreground">Cost Per Unit:</span>
-                          <span className="font-medium">${parseFloat(ingredient.costPerUnit).toFixed(4)}</span>
+            ingredientView === "card" ? (
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                {filteredIngredients.map((ingredient) => (
+                  <Card key={ingredient.id} className="hover:shadow-md transition-shadow">
+                    <CardHeader>
+                      <div className="flex items-start justify-between">
+                        <div>
+                          <CardTitle className="text-lg">{ingredient.name}</CardTitle>
+                          <CardDescription>{ingredient.category || "Uncategorized"}</CardDescription>
                         </div>
-                      )}
-                      {ingredient.supplier && (
-                        <div className="flex justify-between text-sm">
-                          <span className="text-muted-foreground">Supplier:</span>
-                          <span className="font-medium truncate ml-2">{ingredient.supplier}</span>
-                        </div>
-                      )}
-                      <div className="flex gap-2 pt-2">
-                        <Button 
-                          variant="outline" 
-                          size="sm" 
-                          className="flex-1"
-                          onClick={() => setEditingIngredient(ingredient)}
-                        >
-                          <Edit className="mr-2 h-3 w-3" />
-                          Edit
-                        </Button>
-                        <Button 
-                          variant="outline" 
-                          size="sm" 
-                          className="flex-1"
-                          onClick={() => handleDeleteIngredient(ingredient.id, ingredient.name)}
-                          disabled={deleteIngredientMutation.isPending}
-                        >
-                          <Trash2 className="mr-2 h-3 w-3" />
-                          Delete
-                        </Button>
+                        {ingredient.costPerUnit && (
+                          <Badge variant="secondary">
+                            ${parseFloat(ingredient.costPerUnit).toFixed(2)}/{ingredient.unitDisplayName || ingredient.unit}
+                          </Badge>
+                        )}
                       </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-3">
+                        <div className="flex justify-between text-sm">
+                          <span className="text-muted-foreground">Unit Type:</span>
+                          <span className="font-medium">{ingredient.unitDisplayName || ingredient.unit}</span>
+                        </div>
+                        {ingredient.costPerUnit && (
+                          <div className="flex justify-between text-sm">
+                            <span className="text-muted-foreground">Cost Per Unit:</span>
+                            <span className="font-medium">${parseFloat(ingredient.costPerUnit).toFixed(4)}</span>
+                          </div>
+                        )}
+                        {ingredient.supplier && (
+                          <div className="flex justify-between text-sm">
+                            <span className="text-muted-foreground">Supplier:</span>
+                            <span className="font-medium truncate ml-2">{ingredient.supplier}</span>
+                          </div>
+                        )}
+                        <div className="flex gap-2 pt-2">
+                          <Button 
+                            variant="outline" 
+                            size="sm" 
+                            className="flex-1"
+                            onClick={() => setEditingIngredient(ingredient)}
+                          >
+                            <Edit className="mr-2 h-3 w-3" />
+                            Edit
+                          </Button>
+                          <Button 
+                            variant="outline" 
+                            size="sm" 
+                            className="flex-1"
+                            onClick={() => handleDeleteIngredient(ingredient.id, ingredient.name)}
+                            disabled={deleteIngredientMutation.isPending}
+                          >
+                            <Trash2 className="mr-2 h-3 w-3" />
+                            Delete
+                          </Button>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            ) : (
+              <IngredientsTableView
+                ingredients={filteredIngredients}
+                onEdit={setEditingIngredient}
+                onDelete={handleDeleteIngredient}
+                activeUnits={activeUnits || []}
+                categories={Array.from(new Set(ingredients?.map(i => i.category).filter((c): c is string => c !== null) || []))}
+              />
+            )
           )}
 
           {/* Ingredient Statistics */}

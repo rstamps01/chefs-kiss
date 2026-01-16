@@ -1267,3 +1267,19 @@ All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb
 - [x] Root cause: recipeStats used quantity × costPerUnit without unit conversions
 - [x] Solution: Use convertedCost from backend (same as getRecipeMetrics)
 - [x] Verified: Food cost 21.5% (target 28-35%), Margin 78.5% (above 60% average)
+
+
+## Add Table View for Ingredients
+- [x] Design table structure with columns for all ingredient fields
+- [x] Add view toggle button (card view / table view) to Ingredients tab
+- [x] Implement table layout with sortable column headers
+- [x] Add inline editing for text fields (name, cost, piece weight, shelf life, min stock)
+- [x] Add dropdown editors for category, unit type, and supplier
+- [x] Implement column sorting (click header to sort ascending/descending)
+- [x] Add visual feedback for editable cells (hover states)
+- [x] Handle save on blur or Enter key for edited cells
+- [x] Test table view with existing ingredient data (5/5 tests passing)
+- [x] Ensure responsive design for smaller screens
+- [x] All columns: Name, Category, Unit, Cost/Unit, Piece Weight, Supplier, Shelf Life, Min Stock
+- [x] Inline editing with Save/Cancel buttons per row
+- [x] Dropdown selection for categories and units with active filtering

@@ -1,0 +1,315 @@
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Edit, Trash2, Check, X, ArrowUp, ArrowDown } from "lucide-react";
+import { trpc } from "@/lib/trpc";
+
+interface IngredientsTableViewProps {
+  ingredients: any[];
+  onEdit: (ingredient: any) => void;
+  onDelete: (id: number, name: string) => void;
+  activeUnits: any[];
+  categories: string[];
+}
+
+type SortField = "name" | "category" | "unit" | "costPerUnit" | "supplier";
+type SortDirection = "asc" | "desc";
+
+export function IngredientsTableView({ 
+  ingredients, 
+  onEdit, 
+  onDelete,
+  activeUnits,
+  categories
+}: IngredientsTableViewProps) {
+  const [editingId, setEditingId] = useState<number | null>(null);
+  const [editedValues, setEditedValues] = useState<any>({});
+  const [sortField, setSortField] = useState<SortField>("name");
+  const [sortDirection, setSortDirection] = useState<SortDirection>("asc");
+
+  const utils = trpc.useUtils();
+  const updateMutation = trpc.ingredients.update.useMutation({
+    onSuccess: () => {
+      utils.ingredients.list.invalidate();
+      setEditingId(null);
+      setEditedValues({});
+    },
+  });
+
+  const handleSort = (field: SortField) => {
+    if (sortField === field) {
+      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+    } else {
+      setSortField(field);
+      setSortDirection("asc");
+    }
+  };
+
+  const sortedIngredients = [...ingredients].sort((a, b) => {
+    const aVal = a[sortField] || "";
+    const bVal = b[sortField] || "";
+    
+    if (sortField === "costPerUnit") {
+      const aNum = parseFloat(aVal) || 0;
+      const bNum = parseFloat(bVal) || 0;
+      return sortDirection === "asc" ? aNum - bNum : bNum - aNum;
+    }
+    
+    const comparison = String(aVal).localeCompare(String(bVal));
+    return sortDirection === "asc" ? comparison : -comparison;
+  });
+
+  const handleStartEdit = (ingredient: any) => {
+    setEditingId(ingredient.id);
+    setEditedValues({
+      name: ingredient.name,
+      category: ingredient.category || "",
+      unit: ingredient.unit,
+      costPerUnit: ingredient.costPerUnit || "",
+      pieceWeightOz: ingredient.pieceWeightOz || "",
+      supplier: ingredient.supplier || "",
+      shelfLife: ingredient.shelfLife || "",
+      minStock: ingredient.minStock || "",
+    });
+  };
+
+  const handleSave = () => {
+    if (editingId === null) return;
+
+    updateMutation.mutate({
+      ingredientId: editingId,
+      name: editedValues.name,
+      category: editedValues.category || null,
+      unit: editedValues.unit,
+      costPerUnit: editedValues.costPerUnit ? parseFloat(editedValues.costPerUnit) : undefined,
+      pieceWeightOz: editedValues.pieceWeightOz ? parseFloat(editedValues.pieceWeightOz) : undefined,
+      supplier: editedValues.supplier || null,
+      shelfLife: editedValues.shelfLife ? parseInt(editedValues.shelfLife) : undefined,
+      minStock: editedValues.minStock ? parseFloat(editedValues.minStock) : undefined,
+    });
+  };
+
+  const handleCancel = () => {
+    setEditingId(null);
+    setEditedValues({});
+  };
+
+  const SortIcon = ({ field }: { field: SortField }) => {
+    if (sortField !== field) return null;
+    return sortDirection === "asc" ? 
+      <ArrowUp className="h-3 w-3 inline ml-1" /> : 
+      <ArrowDown className="h-3 w-3 inline ml-1" />;
+  };
+
+  return (
+    <div className="border rounded-lg overflow-hidden">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="cursor-pointer hover:bg-muted/50" onClick={() => handleSort("name")}>
+              Name <SortIcon field="name" />
+            </TableHead>
+            <TableHead className="cursor-pointer hover:bg-muted/50" onClick={() => handleSort("category")}>
+              Category <SortIcon field="category" />
+            </TableHead>
+            <TableHead className="cursor-pointer hover:bg-muted/50" onClick={() => handleSort("unit")}>
+              Unit <SortIcon field="unit" />
+            </TableHead>
+            <TableHead className="cursor-pointer hover:bg-muted/50" onClick={() => handleSort("costPerUnit")}>
+              Cost/Unit <SortIcon field="costPerUnit" />
+            </TableHead>
+            <TableHead>Piece Weight (oz)</TableHead>
+            <TableHead className="cursor-pointer hover:bg-muted/50" onClick={() => handleSort("supplier")}>
+              Supplier <SortIcon field="supplier" />
+            </TableHead>
+            <TableHead>Shelf Life (days)</TableHead>
+            <TableHead>Min Stock</TableHead>
+            <TableHead className="text-right">Actions</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {sortedIngredients.map((ingredient) => {
+            const isEditing = editingId === ingredient.id;
+
+            return (
+              <TableRow key={ingredient.id}>
+                <TableCell>
+                  {isEditing ? (
+                    <Input
+                      value={editedValues.name}
+                      onChange={(e) => setEditedValues({ ...editedValues, name: e.target.value })}
+                      className="h-8"
+                    />
+                  ) : (
+                    ingredient.name
+                  )}
+                </TableCell>
+                
+                <TableCell>
+                  {isEditing ? (
+                    <Select
+                      value={editedValues.category}
+                      onValueChange={(value) => setEditedValues({ ...editedValues, category: value })}
+                    >
+                      <SelectTrigger className="h-8">
+                        <SelectValue placeholder="Select category" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {categories.map((cat) => (
+                          <SelectItem key={cat} value={cat}>
+                            {cat}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  ) : (
+                    ingredient.category || "-"
+                  )}
+                </TableCell>
+
+                <TableCell>
+                  {isEditing ? (
+                    <Select
+                      value={editedValues.unit}
+                      onValueChange={(value) => setEditedValues({ ...editedValues, unit: value })}
+                    >
+                      <SelectTrigger className="h-8">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {activeUnits.map((unit) => (
+                          <SelectItem key={unit.name} value={unit.name}>
+                            {unit.displayName}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  ) : (
+                    ingredient.unitDisplayName || ingredient.unit
+                  )}
+                </TableCell>
+
+                <TableCell>
+                  {isEditing ? (
+                    <Input
+                      type="number"
+                      step="0.01"
+                      value={editedValues.costPerUnit}
+                      onChange={(e) => setEditedValues({ ...editedValues, costPerUnit: e.target.value })}
+                      className="h-8"
+                      placeholder="0.00"
+                    />
+                  ) : (
+                    ingredient.costPerUnit ? `$${parseFloat(ingredient.costPerUnit).toFixed(2)}` : "-"
+                  )}
+                </TableCell>
+
+                <TableCell>
+                  {isEditing ? (
+                    <Input
+                      type="number"
+                      step="0.01"
+                      value={editedValues.pieceWeightOz}
+                      onChange={(e) => setEditedValues({ ...editedValues, pieceWeightOz: e.target.value })}
+                      className="h-8"
+                      placeholder="0.00"
+                    />
+                  ) : (
+                    ingredient.pieceWeightOz ? parseFloat(ingredient.pieceWeightOz).toFixed(2) : "-"
+                  )}
+                </TableCell>
+
+                <TableCell>
+                  {isEditing ? (
+                    <Input
+                      value={editedValues.supplier}
+                      onChange={(e) => setEditedValues({ ...editedValues, supplier: e.target.value })}
+                      className="h-8"
+                      placeholder="Supplier name"
+                    />
+                  ) : (
+                    ingredient.supplier || "-"
+                  )}
+                </TableCell>
+
+                <TableCell>
+                  {isEditing ? (
+                    <Input
+                      type="number"
+                      value={editedValues.shelfLife}
+                      onChange={(e) => setEditedValues({ ...editedValues, shelfLife: e.target.value })}
+                      className="h-8"
+                      placeholder="Days"
+                    />
+                  ) : (
+                    ingredient.shelfLife || "-"
+                  )}
+                </TableCell>
+
+                <TableCell>
+                  {isEditing ? (
+                    <Input
+                      type="number"
+                      step="0.01"
+                      value={editedValues.minStock}
+                      onChange={(e) => setEditedValues({ ...editedValues, minStock: e.target.value })}
+                      className="h-8"
+                      placeholder="0.00"
+                    />
+                  ) : (
+                    ingredient.minStock ? parseFloat(ingredient.minStock).toFixed(2) : "-"
+                  )}
+                </TableCell>
+
+                <TableCell className="text-right">
+                  {isEditing ? (
+                    <div className="flex gap-1 justify-end">
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={handleSave}
+                        disabled={updateMutation.isPending}
+                        className="h-8 w-8 p-0"
+                      >
+                        <Check className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={handleCancel}
+                        className="h-8 w-8 p-0"
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="flex gap-1 justify-end">
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => handleStartEdit(ingredient)}
+                        className="h-8 w-8 p-0"
+                      >
+                        <Edit className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => onDelete(ingredient.id, ingredient.name)}
+                        className="h-8 w-8 p-0"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  )}
+                </TableCell>
+              </TableRow>
+            );
+          })}
+        </TableBody>
+      </Table>
+    </div>
+  );
+}

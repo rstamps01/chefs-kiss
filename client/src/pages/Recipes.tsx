@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Plus, Search, Edit, Trash2, Loader2, ArrowUpDown, Filter, LayoutGrid, Table } from "lucide-react";
+import { Plus, Search, Edit, Trash2, Loader2, ArrowUpDown, Filter, LayoutGrid, Table, Table2 } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { trpc } from "@/lib/trpc";
 import { useState, useMemo } from "react";
@@ -12,6 +12,7 @@ import { RecipeCreateModal } from "@/components/RecipeCreateModal";
 import { IngredientCreateModal } from "@/components/IngredientCreateModal";
 import { IngredientEditModal } from "@/components/IngredientEditModal";
 import { IngredientsTableView } from "@/components/IngredientsTableView";
+import { RecipesTableView } from "@/components/RecipesTableView";
 import { useToast } from "@/hooks/use-toast";
 
 type RecipeSortOption = "name-asc" | "name-desc" | "price-high" | "price-low" | "category";
@@ -27,6 +28,7 @@ export default function Recipes() {
   const [isIngredientCreateModalOpen, setIsIngredientCreateModalOpen] = useState(false);
   const [editingIngredient, setEditingIngredient] = useState<any>(null);
   const [ingredientView, setIngredientView] = useState<"card" | "table">("card");
+  const [recipeView, setRecipeView] = useState<"card" | "table">("card");
   const { toast } = useToast();
   const utils = trpc.useUtils();
   
@@ -424,6 +426,22 @@ export default function Recipes() {
                 </SelectContent>
               </Select>
             </div>
+            <div className="flex gap-1 border rounded-md p-1">
+              <Button
+                variant={recipeView === "card" ? "secondary" : "ghost"}
+                size="sm"
+                onClick={() => setRecipeView("card")}
+              >
+                <LayoutGrid className="h-4 w-4" />
+              </Button>
+              <Button
+                variant={recipeView === "table" ? "secondary" : "ghost"}
+                size="sm"
+                onClick={() => setRecipeView("table")}
+              >
+                <Table2 className="h-4 w-4" />
+              </Button>
+            </div>
             <Button onClick={() => setIsCreateModalOpen(true)}>
               <Plus className="mr-2 h-4 w-4" />
               Add Recipe
@@ -456,97 +474,117 @@ export default function Recipes() {
 
           {/* Recipe List */}
           {!recipesLoading && filteredRecipes.length > 0 && (
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {filteredRecipes.map((recipe) => {
-                const metrics = getRecipeMetrics(recipe);
-                
-                return (
-                  <Card key={recipe.id} className="hover:shadow-md transition-shadow">
-                    <CardHeader>
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-1">
-                            <CardTitle className="text-lg">{recipe.name}</CardTitle>
-                            {recipe.category && (() => {
-                              const categoryType = getCategoryType(recipe.category);
-                              return (
-                                <Badge 
-                                  variant="outline"
-                                  className={
-                                    categoryType === 'recipe' 
-                                      ? 'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950 dark:text-blue-300 dark:border-blue-800'
-                                      : categoryType === 'ingredient'
-                                      ? 'bg-green-50 text-green-700 border-green-200 dark:bg-green-950 dark:text-green-300 dark:border-green-800'
-                                      : 'bg-gray-50 text-gray-700 border-gray-200 dark:bg-gray-950 dark:text-gray-300 dark:border-gray-800'
-                                  }
-                                >
-                                  {recipe.category}
-                                </Badge>
-                              );
-                            })()}
+            <>
+              {recipeView === "card" ? (
+                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                  {filteredRecipes.map((recipe) => {
+                    const metrics = getRecipeMetrics(recipe);
+                    
+                    return (
+                      <Card key={recipe.id} className="hover:shadow-md transition-shadow">
+                        <CardHeader>
+                          <div className="flex items-start justify-between">
+                            <div className="flex-1">
+                              <div className="flex items-center gap-2 mb-1">
+                                <CardTitle className="text-lg">{recipe.name}</CardTitle>
+                                {recipe.category && (() => {
+                                  const categoryType = getCategoryType(recipe.category);
+                                  return (
+                                    <Badge 
+                                      variant="outline"
+                                      className={
+                                        categoryType === 'recipe' 
+                                          ? 'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950 dark:text-blue-300 dark:border-blue-800'
+                                          : categoryType === 'ingredient'
+                                          ? 'bg-green-50 text-green-700 border-green-200 dark:bg-green-950 dark:text-green-300 dark:border-green-800'
+                                          : 'bg-gray-50 text-gray-700 border-gray-200 dark:bg-gray-950 dark:text-gray-300 dark:border-gray-800'
+                                      }
+                                    >
+                                      {recipe.category}
+                                    </Badge>
+                                  );
+                                })()}
+                              </div>
+                              <CardDescription>{recipe.description || "No description"}</CardDescription>
+                            </div>
+                            <Badge variant="secondary" className="ml-2">{metrics.margin}%</Badge>
                           </div>
-                          <CardDescription>{recipe.description || "No description"}</CardDescription>
-                        </div>
-                        <Badge variant="secondary" className="ml-2">{metrics.margin}%</Badge>
-                      </div>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="space-y-3">
-                        <div className="flex justify-between text-sm">
-                          <span className="text-muted-foreground">Ingredients:</span>
-                          <span className="font-medium">{recipe.ingredients.length} items</span>
-                        </div>
-                        <div className="flex justify-between text-sm">
-                          <span className="text-muted-foreground">Cost:</span>
-                          <span className="font-medium">${metrics.cost}</span>
-                        </div>
-                        <div className="flex justify-between text-sm">
-                          <span className="text-muted-foreground">Price:</span>
-                          <span className="font-medium">${parseFloat(recipe.sellingPrice || "0").toFixed(2)}</span>
-                        </div>
-                        {metrics.conversionCount > 0 && (
-                          <div className="flex items-center gap-2 pt-2 text-xs text-blue-600 dark:text-blue-400">
-                            <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
-                            </svg>
-                            <span>{metrics.conversionCount} unit conversion{metrics.conversionCount > 1 ? 's' : ''} applied</span>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="space-y-3">
+                            <div className="flex justify-between text-sm">
+                              <span className="text-muted-foreground">Ingredients:</span>
+                              <span className="font-medium">{recipe.ingredients.length} items</span>
+                            </div>
+                            <div className="flex justify-between text-sm">
+                              <span className="text-muted-foreground">Cost:</span>
+                              <span className="font-medium">${metrics.cost}</span>
+                            </div>
+                            <div className="flex justify-between text-sm">
+                              <span className="text-muted-foreground">Price:</span>
+                              <span className="font-medium">${parseFloat(recipe.sellingPrice || "0").toFixed(2)}</span>
+                            </div>
+                            {metrics.conversionCount > 0 && (
+                              <div className="flex items-center gap-2 pt-2 text-xs text-blue-600 dark:text-blue-400">
+                                <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+                                </svg>
+                                <span>{metrics.conversionCount} unit conversion{metrics.conversionCount > 1 ? 's' : ''} applied</span>
+                              </div>
+                            )}
+                            {metrics.hasConversionWarnings && (
+                              <div className="flex items-center gap-2 pt-2 text-xs text-amber-600 dark:text-amber-400">
+                                <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                </svg>
+                                <span>Missing unit conversions</span>
+                              </div>
+                            )}
+                            <div className="flex gap-2 pt-2">
+                              <Button 
+                                variant="outline" 
+                                size="sm" 
+                                className="flex-1"
+                                onClick={() => setEditingRecipe(recipe)}
+                              >
+                                <Edit className="mr-2 h-3 w-3" />
+                                Edit
+                              </Button>
+                              <Button 
+                                variant="outline" 
+                                size="sm" 
+                                className="flex-1"
+                                onClick={() => handleDeleteRecipe(recipe.id, recipe.name)}
+                                disabled={deleteRecipeMutation.isPending}
+                              >
+                                <Trash2 className="mr-2 h-3 w-3" />
+                                Delete
+                              </Button>
+                            </div>
                           </div>
-                        )}
-                        {metrics.hasConversionWarnings && (
-                          <div className="flex items-center gap-2 pt-2 text-xs text-amber-600 dark:text-amber-400">
-                            <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                            </svg>
-                            <span>Missing unit conversions</span>
-                          </div>
-                        )}
-                        <div className="flex gap-2 pt-2">
-                          <Button 
-                            variant="outline" 
-                            size="sm" 
-                            className="flex-1"
-                            onClick={() => setEditingRecipe(recipe)}
-                          >
-                            <Edit className="mr-2 h-3 w-3" />
-                            Edit
-                          </Button>
-                          <Button 
-                            variant="outline" 
-                            size="sm" 
-                            className="flex-1"
-                            onClick={() => handleDeleteRecipe(recipe.id, recipe.name)}
-                            disabled={deleteRecipeMutation.isPending}
-                          >
-                            <Trash2 className="mr-2 h-3 w-3" />
-                            Delete
-                          </Button>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                );
-              })}
-            </div>
+                        </CardContent>
+                      </Card>
+                    );
+                  })}
+                </div>
+              ) : (
+                <RecipesTableView
+                  recipes={filteredRecipes.map(recipe => {
+                    const metrics = getRecipeMetrics(recipe);
+                    return {
+                      ...recipe,
+                      ingredientsCount: recipe.ingredients.length,
+                      totalCost: parseFloat(metrics.cost),
+                      foodCostPercent: metrics.foodCostPercent,
+                      marginPercent: metrics.margin,
+                    };
+                  })}
+                  onEdit={setEditingRecipe}
+                  onDelete={handleDeleteRecipe}
+                  categories={Array.from(new Set(recipes?.map(r => r.category).filter((cat): cat is string => Boolean(cat)))).sort((a, b) => a.localeCompare(b))}
+                />
+              )}
+            </>
           )}
 
 

@@ -1283,3 +1283,32 @@ All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb
 - [x] All columns: Name, Category, Unit, Cost/Unit, Piece Weight, Supplier, Shelf Life, Min Stock
 - [x] Inline editing with Save/Cancel buttons per row
 - [x] Dropdown selection for categories and units with active filtering
+
+
+## Add Table View for Recipes
+- [ ] Design table structure with columns for all recipe fields
+- [ ] Add view toggle button (card view / table view) to Recipes tab
+- [ ] Implement table layout with sortable column headers
+- [ ] Add inline editing for text fields (name, description, price, servings)
+- [ ] Add dropdown editor for category
+- [ ] Implement column sorting (click header to sort ascending/descending)
+- [ ] Add visual feedback for editable cells (hover states)
+- [ ] Handle save on blur or Enter key for edited cells
+- [ ] Test table view with existing recipe data
+- [ ] Ensure responsive design for smaller screens
+- [ ] All columns: Name, Category, Description, Servings, Price, Food Cost %, Margin %, Ingredients Count
+- [ ] Inline editing with Save/Cancel buttons per row
+- [ ] Dropdown selection for categories with active filtering
+
+## Add Table View for Recipes - COMPLETED
+- [x] Design table structure with all recipe columns
+- [x] Implement view toggle (card/table) with icons
+- [x] Create RecipesTableView component
+- [x] Add inline editing for all fields
+- [x] Implement dropdown selectors for category
+- [x] Add column sorting functionality
+- [x] Test table view with sample data (5/5 tests passing)
+- [x] Verify inline editing saves correctly
+- [x] All columns: Name, Category, Description, Servings, Prep Time, Cook Time, Selling Price, Food Cost %, Margin %, Ingredients Count
+- [x] Sortable columns with ascending/descending toggle
+- [x] Inline editing with dropdown for category selection

@@ -1,0 +1,28 @@
+{
+  "query": "SELECT name, displayName, categoryId, isActive FROM ingredientUnits WHERE name IN ('gal', 'fl oz', 'gallon', 'fluid ounce') ORDER BY name;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 49cxSE1jUeHq7LY.root --database KMmUaMc2BgFeVkUfVYZGPD --execute SELECT name, displayName, categoryId, isActive FROM ingredientUnits WHERE name IN ('gal', 'fl oz', 'gallon', 'fluid ounce') ORDER BY name;",
+  "rows": [
+    {
+      "name": "fl oz",
+      "displayName": "Fluid Ounce (fl oz)",
+      "categoryId": "NULL",
+      "isActive": "1"
+    },
+    {
+      "name": "gal",
+      "displayName": "Gallon (gal)",
+      "categoryId": "2",
+      "isActive": "1"
+    },
+    {
+      "name": "gallon",
+      "displayName": "(gal)",
+      "categoryId": "4",
+      "isActive": "1"
+    }
+  ],
+  "messages": [],
+  "stdout": "name\tdisplayName\tcategoryId\tisActive\nfl oz\tFluid Ounce (fl oz)\tNULL\t1\ngal\tGallon (gal)\t2\t1\ngallon\t(gal)\t4\t1\n",
+  "stderr": "",
+  "execution_time_ms": 54
+}

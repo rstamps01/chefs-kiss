@@ -1,0 +1,9 @@
+{
+  "query": "UPDATE ingredientUnits SET categoryId = 3 WHERE name IN ('sheet', 'roll') AND restaurantId = 1;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 49cxSE1jUeHq7LY.root --database KMmUaMc2BgFeVkUfVYZGPD --execute UPDATE ingredientUnits SET categoryId = 3 WHERE name IN ('sheet', 'roll') AND restaurantId = 1;",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 65
+}

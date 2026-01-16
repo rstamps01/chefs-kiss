@@ -1211,3 +1211,15 @@ All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb
 - [x] Root cause: Buttons inside form defaulted to type="submit", triggering form submission
 - [x] Solution: Added type="button" to all Button components in UnitAccordionPicker
 - [x] All 5 tests passing
+
+
+## Fix Gallon to Fluid Ounce Conversion in Recipe Ingredients
+- [x] Investigate why fluid ounce is disabled when ingredient base unit is gallon
+- [x] Check UnitAccordionPicker disabling logic for volume units
+- [x] Fix unit compatibility check to allow all valid volume-to-volume conversions
+- [x] Test gallon to fluid ounce conversion in recipe editing
+- [x] Verify conversion works correctly with test data
+- [x] Root cause: fl oz, pt, qt had null categoryId instead of 2 (Volume)
+- [x] Also fixed: sheet, roll had categoryId 4 instead of 3 (Piece-Based)
+- [x] Solution: Updated database to set correct categoryId for all units
+- [x] All unit conversion tests passing (2/2 tests)

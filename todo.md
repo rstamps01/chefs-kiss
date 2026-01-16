@@ -1193,3 +1193,10 @@ All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb
 - [x] Improve error toast messaging with actionable information
 - [x] Display recipe list with quantities in error message
 - [x] Test ingredient deletion flow (5 passing tests)
+
+## Fix Ingredient Edit Modal Unit Selection
+- [x] Investigate why ingredient edit modal closes after unit type selection
+- [x] Fix Select component to keep modal open after selection
+- [x] Ensure modal only closes on Cancel or Update Ingredient button
+- [x] Test ingredient editing workflow
+- [x] Verify all form fields remain editable after unit selection

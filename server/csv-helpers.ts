@@ -144,6 +144,9 @@ export function recipesToCSV(recipes: any[], visibleColumns?: string[]): string 
     "marginPercent",
   ];
   
+  // Critical fields that should always be included in export
+  const criticalFields = ['id', 'totalCost'];
+  
   // Use visible columns if provided, otherwise use all (excluding 'actions')
   let columns = visibleColumns || allColumns;
   
@@ -159,6 +162,14 @@ export function recipesToCSV(recipes: any[], visibleColumns?: string[]): string 
   
   // Remove UI-only columns that shouldn't be in CSV
   columns = columns.filter(col => col !== 'actions');
+  
+  // Always include critical financial fields even if not visible in UI
+  for (const field of criticalFields) {
+    if (!columns.includes(field)) {
+      // Insert critical fields at the beginning for better visibility
+      columns.unshift(field);
+    }
+  }
   
   // Transform recipes to flatten complex fields
   const transformedRecipes = recipes.map(recipe => ({

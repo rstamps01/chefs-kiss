@@ -1382,3 +1382,10 @@ All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb
 - [x] Add frontend column mapping (price→sellingPrice, foodCost→foodCostPercent, margin→marginPercent)
 - [x] Add Recipe ID and Total Cost columns to table view (hidden by default)
 - [x] Test export with all financial fields present (14 tests passing)
+
+## Recipe Export Critical Fields Fix (Current Task)
+- [x] Ensure recipe ID (id) is always included in CSV export
+- [x] Ensure total cost (totalCost) is always included in CSV export
+- [x] Modify export logic to include critical fields regardless of column visibility
+- [x] Test that hidden columns (id, totalCost) still appear in export (5 tests passing)
+- [x] Verify all financial fields present in exported CSV (19 total tests passing)

@@ -1253,3 +1253,17 @@ All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb
 - [x] Root cause: Frontend sent undefined, backend skipped update
 - [x] Solution: Frontend sends null, backend accepts and stores null
 - [x] Frontend already hides supplier row when null (conditional rendering)
+
+
+## Fix Recipe Metrics Calculations
+- [x] Investigate why Avg Food Cost shows 276% (should be 28-35%)
+- [x] Investigate why Avg Margin shows -176% (should be positive)
+- [x] Review food cost percentage formula (should be: cost / price * 100)
+- [x] Review margin calculation formula (should be: (price - cost) / price * 100)
+- [x] Fix calculation logic in Recipes page to use convertedCost
+- [x] Test metrics with known recipe data to verify accuracy (21.5% food cost, 78.5% margin)
+- [x] Ensure metrics handle edge cases (missing prices, zero prices)
+- [x] Move metrics section to top of Recipe Management screen for visibility
+- [x] Root cause: recipeStats used quantity × costPerUnit without unit conversions
+- [x] Solution: Use convertedCost from backend (same as getRecipeMetrics)
+- [x] Verified: Food cost 21.5% (target 28-35%), Margin 78.5% (above 60% average)

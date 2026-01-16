@@ -243,8 +243,12 @@ export default function Recipes() {
     recipes.forEach(recipe => {
       const sellingPrice = parseFloat(recipe.sellingPrice || "0");
       if (sellingPrice > 0) {
-        // Calculate ingredient cost
+        // Calculate ingredient cost using convertedCost (accounts for unit conversions)
         const ingredientCost = recipe.ingredients.reduce((sum, ing) => {
+          if (ing.convertedCost) {
+            return sum + parseFloat(ing.convertedCost);
+          }
+          // Fallback for old data without conversions
           const quantity = parseFloat(ing.quantity || "0");
           const costPerUnit = parseFloat(ing.costPerUnit || "0");
           return sum + (quantity * costPerUnit);
@@ -316,6 +320,47 @@ export default function Recipes() {
 
         {/* RECIPES TAB */}
         <TabsContent value="recipes" className="space-y-6">
+          {/* Statistics */}
+          {!recipesLoading && recipes && recipes.length > 0 && (
+            <div className="grid gap-4 md:grid-cols-3">
+              <Card>
+                <CardHeader className="pb-3">
+                  <CardDescription>Total Recipes</CardDescription>
+                  <CardTitle className="text-3xl">{recipeStats.totalRecipes}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-xs text-muted-foreground">
+                    Across {new Set(recipes.map(r => r.category).filter(Boolean)).size} categories
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader className="pb-3">
+                  <CardDescription>Avg Food Cost</CardDescription>
+                  <CardTitle className="text-3xl">{recipeStats.avgFoodCost}%</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-xs text-muted-foreground">
+                    Target: 28-35%
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader className="pb-3">
+                  <CardDescription>Avg Margin</CardDescription>
+                  <CardTitle className="text-3xl">{recipeStats.avgMargin}%</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-xs text-muted-foreground">
+                    {recipeStats.avgMargin >= 60 ? "Above" : "Below"} industry average
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
+          )}
+
           <div className="flex items-center justify-between gap-4">
             <div className="flex gap-4 flex-1">
               <div className="relative flex-1 max-w-md">
@@ -499,46 +544,7 @@ export default function Recipes() {
             </div>
           )}
 
-          {/* Statistics */}
-          {!recipesLoading && recipes && recipes.length > 0 && (
-            <div className="grid gap-4 md:grid-cols-3 mt-6">
-              <Card>
-                <CardHeader className="pb-3">
-                  <CardDescription>Total Recipes</CardDescription>
-                  <CardTitle className="text-3xl">{recipeStats.totalRecipes}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-xs text-muted-foreground">
-                    Across {new Set(recipes.map(r => r.category).filter(Boolean)).size} categories
-                  </p>
-                </CardContent>
-              </Card>
 
-              <Card>
-                <CardHeader className="pb-3">
-                  <CardDescription>Avg Food Cost</CardDescription>
-                  <CardTitle className="text-3xl">{recipeStats.avgFoodCost}%</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-xs text-muted-foreground">
-                    Target: 28-35%
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader className="pb-3">
-                  <CardDescription>Avg Margin</CardDescription>
-                  <CardTitle className="text-3xl">{recipeStats.avgMargin}%</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-xs text-muted-foreground">
-                    {recipeStats.avgMargin >= 60 ? "Above" : "Below"} industry average
-                  </p>
-                </CardContent>
-              </Card>
-            </div>
-          )}
         </TabsContent>
 
         {/* INGREDIENTS TAB */}

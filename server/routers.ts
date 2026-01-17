@@ -4,6 +4,7 @@ import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
 import { getUserRestaurant, getRecipesWithIngredients, getIngredients, getRestaurantLocations, createRecipe, addRecipeIngredients, updateRecipe, updateRecipeIngredients, deleteRecipe, createIngredient, updateIngredient, deleteIngredient, getRecipesUsingIngredient, importSalesData, checkExistingSalesData, getSalesAnalytics, getDailySalesData, getSalesByDayOfWeek, getSalesDateRange, getRecipeCategories, getActiveRecipeCategories, getIngredientCategories, createRecipeCategory, updateRecipeCategory, deleteRecipeCategory, getIngredientUnits, getActiveIngredientUnits, createIngredientUnit, updateIngredientUnit, deleteIngredientUnit, getUnitCategories, getRecipeIngredientsForExport, bulkUpdateIngredients, bulkUpdateRecipes, bulkUpdateRecipeIngredients } from "./db";
 import { ingredientsToCSV, recipesToCSV, recipeIngredientsToCSV, parseIngredientCSV, parseRecipeCSV, parseRecipeIngredientsCSV } from "./csv-helpers";
+import { generateTemplateWithInstructions } from "./csv-templates";
 import { generateForecast } from "./forecasting";
 import { generatePrepPlan } from "./prep-planning";
 import { generateMultiDayPrepPlan } from "./multi-day-prep-planning";
@@ -721,6 +722,26 @@ export const appRouter = router({
 
   // CSV Export/Import
   csv: router({
+    // Template downloads
+    downloadIngredientsTemplate: protectedProcedure
+      .query(() => {
+        const template = generateTemplateWithInstructions('ingredients');
+        return { csv: template };
+      }),
+    
+    downloadRecipesTemplate: protectedProcedure
+      .query(() => {
+        const template = generateTemplateWithInstructions('recipes');
+        return { csv: template };
+      }),
+    
+    downloadRecipeIngredientsTemplate: protectedProcedure
+      .query(() => {
+        const template = generateTemplateWithInstructions('recipeIngredients');
+        return { csv: template };
+      }),
+    
+    // Data exports
     exportIngredients: protectedProcedure
       .input(z.object({
         visibleColumns: z.array(z.string()).optional(),

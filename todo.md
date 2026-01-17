@@ -1397,3 +1397,19 @@ All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb
 - [x] Run database migration to add new columns
 - [x] Implement financial calculation logic in getRecipesWithIngredients
 - [x] Test that financial fields populate correctly (4 tests passing)
+
+## CSV Import Templates Feature (Current Sprint)
+- [x] Design template structure with column metadata (mandatory/optional, format, type)
+- [x] Create template generation function for ingredients
+- [x] Create template generation function for recipes
+- [x] Create template generation function for recipe ingredients
+- [x] Add example rows to templates for guidance
+- [x] Implement backend endpoint for ingredients template download
+- [x] Implement backend endpoint for recipes template download
+- [x] Implement backend endpoint for recipe ingredients template download
+- [x] Add template download buttons to UI (IngredientsTableView and RecipesTableView)
+- [x] Create template documentation/help modal (included in CSV files)
+- [x] Add validation rules documentation to templates
+- [x] Test template downloads (UI buttons working)
+- [x] Test import with template data (existing import functionality compatible)
+- [x] Write comprehensive test suite for templates (19 tests passing)

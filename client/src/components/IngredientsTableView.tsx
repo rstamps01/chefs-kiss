@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Edit, Trash2, Check, X, ArrowUp, ArrowDown, Download, Upload } from "lucide-react";
+import { Edit, Trash2, Check, X, ArrowUp, ArrowDown, Download, Upload, FileText } from "lucide-react";
 import { trpc } from "@/lib/trpc";
 import { ColumnVisibilityControl } from "./ColumnVisibilityControl";
 import { useColumnVisibility } from "@/hooks/useColumnVisibility";
@@ -56,6 +56,10 @@ export function IngredientsTableView({
   const utils = trpc.useUtils();
   const exportQuery = trpc.csv.exportIngredients.useQuery(
     { visibleColumns: columns.filter(c => c.visible).map(c => c.id) },
+    { enabled: false }
+  );
+  const templateQuery = trpc.csv.downloadIngredientsTemplate.useQuery(
+    undefined,
     { enabled: false }
   );
   const updateMutation = trpc.ingredients.update.useMutation({
@@ -131,6 +135,35 @@ export function IngredientsTableView({
       <ArrowDown className="h-3 w-3 inline ml-1" />;
   };
 
+  const handleDownloadTemplate = async () => {
+    try {
+      const result = await templateQuery.refetch();
+      if (result.data?.csv) {
+        const blob = new Blob([result.data.csv], { type: 'text/csv' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `ingredients-import-template.csv`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+        
+        toast({
+          title: "Template downloaded",
+          description: "Import template with instructions has been downloaded. Fill it out and use Import CSV to upload.",
+        });
+      }
+    } catch (error) {
+      console.error('Template download failed:', error);
+      toast({
+        title: "Download failed",
+        description: "Failed to download template. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
   const handleExport = async () => {
     const visibleColumns = columns.filter(c => c.visible).map(c => c.id);
     const result = await exportQuery.refetch();
@@ -158,9 +191,13 @@ export function IngredientsTableView({
     <div className="space-y-4">
       <div className="flex justify-between items-center">
         <div className="flex gap-2">
+          <Button variant="outline" size="sm" onClick={handleDownloadTemplate}>
+            <FileText className="h-4 w-4 mr-2" />
+            Download Template
+          </Button>
           <Button variant="outline" size="sm" onClick={handleExport}>
             <Download className="h-4 w-4 mr-2" />
-            Export CSV
+            Export Data
           </Button>
           <Button variant="outline" size="sm" onClick={() => setImportModalOpen(true)}>
             <Upload className="h-4 w-4 mr-2" />

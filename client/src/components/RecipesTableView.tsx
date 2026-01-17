@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Edit, Save, X, ArrowUpDown, Trash2, Download, Upload } from "lucide-react";
+import { Edit, Save, X, ArrowUpDown, Trash2, Download, Upload, FileText } from "lucide-react";
 import { trpc } from "@/lib/trpc";
 import { ColumnVisibilityControl } from "./ColumnVisibilityControl";
 import { useColumnVisibility } from "@/hooks/useColumnVisibility";
@@ -72,6 +72,8 @@ export function RecipesTableView({ recipes, onEdit, onDelete, categories }: Reci
     { enabled: false }
   );
   const exportRecipeIngredientsQuery = trpc.csv.exportRecipeIngredients.useQuery(undefined, { enabled: false });
+  const recipesTemplateQuery = trpc.csv.downloadRecipesTemplate.useQuery(undefined, { enabled: false });
+  const recipeIngredientsTemplateQuery = trpc.csv.downloadRecipeIngredientsTemplate.useQuery(undefined, { enabled: false });
   const updateMutation = trpc.recipes.update.useMutation({
     onSuccess: () => {
       utils.recipes.list.invalidate();
@@ -160,6 +162,64 @@ export function RecipesTableView({ recipes, onEdit, onDelete, categories }: Reci
     }
   });
 
+  const handleDownloadRecipesTemplate = async () => {
+    try {
+      const result = await recipesTemplateQuery.refetch();
+      if (result.data?.csv) {
+        const blob = new Blob([result.data.csv], { type: 'text/csv' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `recipes-import-template.csv`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+        
+        toast({
+          title: "Template downloaded",
+          description: "Recipes import template with instructions has been downloaded.",
+        });
+      }
+    } catch (error) {
+      console.error('Template download failed:', error);
+      toast({
+        title: "Download failed",
+        description: "Failed to download template. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleDownloadRecipeIngredientsTemplate = async () => {
+    try {
+      const result = await recipeIngredientsTemplateQuery.refetch();
+      if (result.data?.csv) {
+        const blob = new Blob([result.data.csv], { type: 'text/csv' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `recipe-ingredients-import-template.csv`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+        
+        toast({
+          title: "Template downloaded",
+          description: "Recipe ingredients import template with instructions has been downloaded.",
+        });
+      }
+    } catch (error) {
+      console.error('Template download failed:', error);
+      toast({
+        title: "Download failed",
+        description: "Failed to download template. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
   const handleExportRecipes = async () => {
     const visibleColumns = columns.filter(c => c.visible).map(c => c.id);
     const result = await exportRecipesQuery.refetch();
@@ -206,14 +266,22 @@ export function RecipesTableView({ recipes, onEdit, onDelete, categories }: Reci
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center">
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap">
+          <Button variant="outline" size="sm" onClick={handleDownloadRecipesTemplate}>
+            <FileText className="h-4 w-4 mr-2" />
+            Recipes Template
+          </Button>
+          <Button variant="outline" size="sm" onClick={handleDownloadRecipeIngredientsTemplate}>
+            <FileText className="h-4 w-4 mr-2" />
+            Ingredients Template
+          </Button>
           <Button variant="outline" size="sm" onClick={handleExportRecipes}>
             <Download className="h-4 w-4 mr-2" />
             Export Recipes
           </Button>
           <Button variant="outline" size="sm" onClick={handleExportRecipeIngredients}>
             <Download className="h-4 w-4 mr-2" />
-            Export Recipe Ingredients
+            Export Ingredients
           </Button>
           <Button variant="outline" size="sm" onClick={() => { setImportType("recipes"); setImportModalOpen(true); }}>
             <Upload className="h-4 w-4 mr-2" />
@@ -221,7 +289,7 @@ export function RecipesTableView({ recipes, onEdit, onDelete, categories }: Reci
           </Button>
           <Button variant="outline" size="sm" onClick={() => { setImportType("recipeIngredients"); setImportModalOpen(true); }}>
             <Upload className="h-4 w-4 mr-2" />
-            Import Recipe Ingredients
+            Import Ingredients
           </Button>
         </div>
         <ColumnVisibilityControl

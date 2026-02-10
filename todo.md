@@ -1413,3 +1413,13 @@ All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb
 - [x] Test template downloads (UI buttons working)
 - [x] Test import with template data (existing import functionality compatible)
 - [x] Write comprehensive test suite for templates (19 tests passing)
+
+## CSV Import Functionality Testing (Current Task)
+- [x] Create sample ingredients CSV file with valid data (7 test ingredients)
+- [x] Create sample recipes CSV file with valid data (4 test recipes)
+- [x] Test ingredients CSV parsing and validation
+- [x] Test recipes CSV parsing and validation
+- [x] Test recipe ingredients CSV parsing and validation
+- [x] Test import validation with invalid data (missing required fields)
+- [x] Test error handling for malformed CSV files
+- [x] Write comprehensive validation tests for import functionality (21 tests passing)

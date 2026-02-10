@@ -1,0 +1,8 @@
+name,category,unit,costPerUnit,pieceWeightOz,supplier,shelfLife,minStock
+Salmon Fillet,Seafood,lb,15.99,,,3,5
+Avocado,Produce,pc,1.25,5.5,Fresh Farms,7,20
+Nori Sheets,Dry Goods,pack,4.50,,Ocean Harvest,365,10
+Soy Sauce,Condiments,bottle,3.99,,Kikkoman,730,5
+Wasabi Paste,Condiments,tube,6.75,,,,3
+Cucumber,Produce,pc,0.89,8,Fresh Farms,5,15
+Cream Cheese,Dairy,lb,4.25,,,14,8

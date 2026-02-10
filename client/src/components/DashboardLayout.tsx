@@ -177,7 +177,7 @@ function DashboardLayoutContent({
               </button>
               {!isCollapsed ? (
                 <div className="flex items-center gap-2 min-w-0">
-                  <img src="/logo.png" alt="Chef's Kiss" className="h-24 shrink-0" style={{ maxWidth: '360px' }} />
+                  <img src="https://files.manuscdn.com/user_upload_by_module/session_file/310419663029278934/HYcgubCuDHFKchEf.png" alt="Chef's Kiss" className="h-24 shrink-0" style={{ maxWidth: '360px' }} />
                 </div>
               ) : (
                 <img src="/chef-logo.png" alt="Chef's Kiss" className="h-8 w-8" />

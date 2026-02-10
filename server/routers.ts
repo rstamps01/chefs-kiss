@@ -812,20 +812,33 @@ export const appRouter = router({
         csvContent: z.string(),
       }))
       .mutation(async ({ ctx, input }) => {
+        const restaurant = await getUserRestaurant(ctx.user.id);
+        if (!restaurant) {
+          return {
+            success: false,
+            errors: ['Restaurant not found for user'],
+            created: 0,
+            updated: 0,
+            failed: 0,
+          };
+        }
+
         const parsed = parseIngredientCSV(input.csvContent);
         
         if (!parsed.valid) {
           return {
             success: false,
             errors: parsed.errors,
+            created: 0,
             updated: 0,
             failed: 0,
           };
         }
         
-        // Convert CSV data to update format
+        // Convert CSV data to create/update format
+        // id is optional - if missing or empty, will create new ingredient
         const updateData = parsed.data.map(row => ({
-          id: parseInt(row.id),
+          id: row.id && row.id.trim() !== '' ? parseInt(row.id) : null,
           name: row.name,
           category: row.category || null,
           unit: row.unit,
@@ -836,11 +849,12 @@ export const appRouter = router({
           minStock: row.minStock ? parseFloat(row.minStock) : undefined,
         }));
         
-        const results = await bulkUpdateIngredients(updateData);
+        const results = await bulkUpdateIngredients(restaurant.id, updateData);
         
         return {
           success: results.failed === 0,
           errors: results.errors,
+          created: results.created,
           updated: results.updated,
           failed: results.failed,
         };

@@ -1347,23 +1347,29 @@ export async function getRecipeIngredientsForExport(restaurantId: number) {
 }
 
 /**
- * Bulk update ingredients from CSV import
+ * Bulk update or create ingredients from CSV import
+ * - If id is provided and exists: updates the ingredient
+ * - If id is missing or empty: creates a new ingredient
  */
-export async function bulkUpdateIngredients(ingredientsData: Array<{
-  id: number;
-  name?: string;
-  category?: string | null;
-  unit?: string;
-  costPerUnit?: number;
-  pieceWeightOz?: number;
-  supplier?: string | null;
-  shelfLife?: number;
-  minStock?: number;
-}>) {
+export async function bulkUpdateIngredients(
+  restaurantId: number,
+  ingredientsData: Array<{
+    id?: number | null;
+    name: string;
+    category?: string | null;
+    unit: string;
+    costPerUnit?: number;
+    pieceWeightOz?: number;
+    supplier?: string | null;
+    shelfLife?: number;
+    minStock?: number;
+  }>
+) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
 
   const results = {
+    created: 0,
     updated: 0,
     failed: 0,
     errors: [] as string[],
@@ -1371,26 +1377,51 @@ export async function bulkUpdateIngredients(ingredientsData: Array<{
 
   for (const item of ingredientsData) {
     try {
-      const updateData: any = {};
-      
-      if (item.name !== undefined) updateData.name = item.name;
-      if (item.category !== undefined) updateData.category = item.category;
-      if (item.unit !== undefined) updateData.unit = item.unit;
-      if (item.costPerUnit !== undefined) updateData.costPerUnit = item.costPerUnit.toString();
-      if (item.pieceWeightOz !== undefined) updateData.pieceWeightOz = item.pieceWeightOz.toString();
-      if (item.supplier !== undefined) updateData.supplier = item.supplier;
-      if (item.shelfLife !== undefined) updateData.shelfLife = item.shelfLife;
-      if (item.minStock !== undefined) updateData.minStock = item.minStock.toString();
+      // Determine if this is a create or update operation
+      const isCreate = !item.id || item.id === null;
 
-      await db
-        .update(ingredients)
-        .set(updateData)
-        .where(eq(ingredients.id, item.id));
-      
-      results.updated++;
+      if (isCreate) {
+        // Create new ingredient
+        await db.insert(ingredients).values({
+          restaurantId,
+          name: item.name,
+          category: item.category,
+          unit: item.unit,
+          costPerUnit: item.costPerUnit?.toString(),
+          pieceWeightOz: item.pieceWeightOz?.toString(),
+          supplier: item.supplier,
+          shelfLife: item.shelfLife,
+          minStock: item.minStock?.toString(),
+        });
+        results.created++;
+      } else {
+        // Update existing ingredient (id is guaranteed to be a number here)
+        if (!item.id) {
+          throw new Error('ID is required for update operation');
+        }
+
+        const updateData: any = {};
+        
+        if (item.name !== undefined) updateData.name = item.name;
+        if (item.category !== undefined) updateData.category = item.category;
+        if (item.unit !== undefined) updateData.unit = item.unit;
+        if (item.costPerUnit !== undefined) updateData.costPerUnit = item.costPerUnit.toString();
+        if (item.pieceWeightOz !== undefined) updateData.pieceWeightOz = item.pieceWeightOz.toString();
+        if (item.supplier !== undefined) updateData.supplier = item.supplier;
+        if (item.shelfLife !== undefined) updateData.shelfLife = item.shelfLife;
+        if (item.minStock !== undefined) updateData.minStock = item.minStock.toString();
+
+        await db
+          .update(ingredients)
+          .set(updateData)
+          .where(eq(ingredients.id, item.id));
+        
+        results.updated++;
+      }
     } catch (error) {
       results.failed++;
-      results.errors.push(`Failed to update ingredient ID ${item.id}: ${error instanceof Error ? error.message : String(error)}`);
+      const identifier = item.id ? `ID ${item.id}` : `name "${item.name}"`;
+      results.errors.push(`Failed to ${item.id ? 'update' : 'create'} ingredient ${identifier}: ${error instanceof Error ? error.message : String(error)}`);
     }
   }
 

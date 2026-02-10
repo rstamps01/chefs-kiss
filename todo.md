@@ -1478,3 +1478,12 @@ All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb
 - [x] Test export includes proper metadata rows
 - [x] Test exported file can be re-imported successfully
 - [x] Verify metadata rows are automatically filtered during import
+
+## Bulk Ingredient Creation via CSV Import (COMPLETED)
+- [x] Review current bulkUpdateIngredients function to understand update-only logic
+- [x] Modify bulkUpdateIngredients to support creating new ingredients when id is missing
+- [x] Update import endpoint to handle mixed create/update operations
+- [x] Add validation for new ingredient creation (required fields, uniqueness)
+- [x] Test creating new ingredients via CSV import
+- [x] Test mixed CSV with both new and existing ingredients
+- [x] Update import success message to show created vs updated counts

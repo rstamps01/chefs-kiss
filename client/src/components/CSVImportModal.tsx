@@ -21,6 +21,7 @@ export function CSVImportModal({ open, onClose, type, onSuccess }: CSVImportModa
   const [importing, setImporting] = useState(false);
   const [result, setResult] = useState<{
     success: boolean;
+    created?: number;
     updated: number;
     failed: number;
     errors: string[];
@@ -116,6 +117,7 @@ export function CSVImportModal({ open, onClose, type, onSuccess }: CSVImportModa
     } catch (error) {
       setResult({
         success: false,
+        created: 0,
         updated: 0,
         failed: 0,
         errors: [error instanceof Error ? error.message : "Import failed"],
@@ -211,12 +213,17 @@ export function CSVImportModal({ open, onClose, type, onSuccess }: CSVImportModa
                 {result.success ? (
                   <div>
                     <p className="font-medium">Import successful!</p>
-                    <p className="text-sm">Updated {result.updated} records.</p>
+                    <p className="text-sm">
+                      {result.created ? `Created ${result.created} new, ` : ''}
+                      {result.updated > 0 ? `Updated ${result.updated}` : ''}
+                      {!result.created && !result.updated ? 'No changes' : ''}
+                    </p>
                   </div>
                 ) : (
                   <div>
                     <p className="font-medium">Import failed</p>
                     <p className="text-sm">
+                      {result.created ? `Created: ${result.created}, ` : ''}
                       Updated: {result.updated}, Failed: {result.failed}
                     </p>
                     {result.errors.length > 0 && (

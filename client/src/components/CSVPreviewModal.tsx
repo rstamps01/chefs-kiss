@@ -55,6 +55,7 @@ export function CSVPreviewModal({
 }: CSVPreviewModalProps) {
   const [showColumnMapping, setShowColumnMapping] = useState(false);
   const [isFindingIds, setIsFindingIds] = useState(false);
+  const [updatedRowIndices, setUpdatedRowIndices] = useState<Set<number>>(new Set());
   const { toast } = useToast();
 
   if (!previewData) {
@@ -237,8 +238,13 @@ export function CSVPreviewModal({
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {rows.map((row) => (
-                  <TableRow key={row.rowIndex} className={getRowClassName(row.status)}>
+                {rows.map((row) => {
+                  const isUpdatedByFindIds = updatedRowIndices.has(row.rowIndex);
+                  const baseClassName = getRowClassName(row.status);
+                  const highlightClassName = isUpdatedByFindIds ? 'bg-blue-50 border-l-4 border-l-blue-500' : '';
+                  
+                  return (
+                  <TableRow key={row.rowIndex} className={`${baseClassName} ${highlightClassName}`}>
                     <TableCell className="font-mono text-xs">{row.rowNumber}</TableCell>
                     <TableCell>
                       <div className="flex flex-col gap-1">
@@ -294,7 +300,8 @@ export function CSVPreviewModal({
                       )}
                     </TableCell>
                   </TableRow>
-                ))}
+                  );
+                })}
               </TableBody>
             </Table>
           </ScrollArea>
@@ -330,13 +337,15 @@ export function CSVPreviewModal({
                       const result = await response.json();
                       const nameToIdMap = result.result?.data?.nameToIdMap || {};
                       
-                      // Update rows with found IDs
-                      const updatedRows = rows.map(row => {
+                      // Update rows with found IDs and track which ones were updated
+                      const newUpdatedIndices = new Set<number>();
+                      const updatedRows = rows.map((row, index) => {
                         if (!row.data.id || row.data.id === '') {
                           const normalizedName = row.data.name?.toLowerCase().trim();
                           const foundId = nameToIdMap[normalizedName];
                           
                           if (foundId) {
+                            newUpdatedIndices.add(row.rowIndex);
                             return {
                               ...row,
                               data: { ...row.data, id: foundId.toString() },
@@ -346,6 +355,9 @@ export function CSVPreviewModal({
                         }
                         return row;
                       });
+                      
+                      // Update the set of updated row indices
+                      setUpdatedRowIndices(newUpdatedIndices);
                       
                       // Count how many IDs were found
                       const matchedCount = Object.keys(nameToIdMap).length;

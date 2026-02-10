@@ -1555,3 +1555,9 @@ All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb
 - [x] Add toast notification after Find IDs completes
 - [x] Show match statistics (X out of Y found)
 - [x] Test toast appears with correct counts
+
+## Visual Highlighting for Find IDs Updated Rows (COMPLETED)
+- [x] Track which rows were updated by Find IDs operation
+- [x] Add visual highlighting (background color) to updated rows
+- [x] Ensure highlighting persists until modal closes
+- [x] Test visual feedback is clear and noticeable

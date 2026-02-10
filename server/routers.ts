@@ -3,7 +3,8 @@ import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
 import { getUserRestaurant, getRecipesWithIngredients, getIngredients, getRestaurantLocations, createRecipe, addRecipeIngredients, updateRecipe, updateRecipeIngredients, deleteRecipe, createIngredient, updateIngredient, deleteIngredient, getRecipesUsingIngredient, importSalesData, checkExistingSalesData, getSalesAnalytics, getDailySalesData, getSalesByDayOfWeek, getSalesDateRange, getRecipeCategories, getActiveRecipeCategories, getIngredientCategories, createRecipeCategory, updateRecipeCategory, deleteRecipeCategory, getIngredientUnits, getActiveIngredientUnits, createIngredientUnit, updateIngredientUnit, deleteIngredientUnit, getUnitCategories, getRecipeIngredientsForExport, bulkUpdateIngredients, bulkUpdateRecipes, bulkUpdateRecipeIngredients } from "./db";
-import { ingredientsToCSV, recipesToCSV, recipeIngredientsToCSV, parseIngredientCSV, parseRecipeCSV, parseRecipeIngredientsCSV } from "./csv-helpers";
+import { parseIngredientCSV, parseRecipeCSV, parseRecipeIngredientsCSV, ingredientsToCSV, recipesToCSV, recipeIngredientsToCSV } from './csv-helpers';
+import { previewIngredientCSV, previewRecipeCSV, previewRecipeIngredientsCSV } from './csv-preview-helpers';
 import { generateTemplateWithInstructions } from "./csv-templates";
 import { generateForecast } from "./forecasting";
 import { generatePrepPlan } from "./prep-planning";
@@ -779,6 +780,31 @@ export const appRouter = router({
         const recipeIngredients = await getRecipeIngredientsForExport(restaurant.id);
         const csv = recipeIngredientsToCSV(recipeIngredients);
         return { csv };
+      }),
+    
+    // CSV Preview Endpoints
+    previewIngredientsCSV: protectedProcedure
+      .input(z.object({
+        csvContent: z.string(),
+      }))
+      .query(async ({ input }) => {
+        return previewIngredientCSV(input.csvContent);
+      }),
+    
+    previewRecipesCSV: protectedProcedure
+      .input(z.object({
+        csvContent: z.string(),
+      }))
+      .query(async ({ input }) => {
+        return previewRecipeCSV(input.csvContent);
+      }),
+    
+    previewRecipeIngredientsCSV: protectedProcedure
+      .input(z.object({
+        csvContent: z.string(),
+      }))
+      .query(async ({ input }) => {
+        return previewRecipeIngredientsCSV(input.csvContent);
       }),
     
     importIngredients: protectedProcedure

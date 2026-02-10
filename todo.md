@@ -1423,3 +1423,20 @@ All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb
 - [x] Test import validation with invalid data (missing required fields)
 - [x] Test error handling for malformed CSV files
 - [x] Write comprehensive validation tests for import functionality (21 tests passing)
+
+## CSV Import Preview Modal (Current Sprint)
+- [x] Design preview modal UI layout with table display
+- [x] Design validation status indicator system (success/warning/error)
+- [x] Design row-by-row error highlighting visual style
+- [x] Implement backend validation endpoint for preview (without saving)
+- [x] Create preview modal component with data table
+- [x] Add column mapping display to show CSV columns → database fields
+- [x] Implement validation status badges for each row
+- [x] Add error message tooltips/popovers for invalid rows
+- [x] Add summary statistics (total rows, valid rows, error rows)
+- [x] Integrate preview into ingredients import flow
+- [x] Integrate preview into recipes import flow
+- [x] Integrate preview into recipe ingredients import flow
+- [x] Add "Import Valid Rows" action button (errors block import)
+- [x] Test preview with valid and invalid CSV data
+- [x] Write tests for preview validation logic (18 tests passing)

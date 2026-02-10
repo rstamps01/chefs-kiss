@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Upload, AlertCircle, CheckCircle, X } from "lucide-react";
 import { trpc } from "@/lib/trpc";
+import { CSVPreviewModal } from "@/components/CSVPreviewModal";
 
 interface CSVImportModalProps {
   open: boolean;
@@ -16,6 +17,7 @@ export function CSVImportModal({ open, onClose, type, onSuccess }: CSVImportModa
   const [file, setFile] = useState<File | null>(null);
   const [csvContent, setCSVContent] = useState<string>("");
   const [preview, setPreview] = useState<string[]>([]);
+  const [showPreview, setShowPreview] = useState(false);
   const [importing, setImporting] = useState(false);
   const [result, setResult] = useState<{
     success: boolean;
@@ -28,6 +30,23 @@ export function CSVImportModal({ open, onClose, type, onSuccess }: CSVImportModa
   const importIngredientsMutation = trpc.csv.importIngredients.useMutation();
   const importRecipesMutation = trpc.csv.importRecipes.useMutation();
   const importRecipeIngredientsMutation = trpc.csv.importRecipeIngredients.useMutation();
+  
+  // Preview queries
+  const { data: previewData, refetch: refetchPreview, isLoading: isLoadingPreview } = trpc.csv.previewIngredientsCSV.useQuery(
+    { csvContent },
+    { enabled: false }
+  );
+  const { data: recipePreviewData, refetch: refetchRecipePreview, isLoading: isLoadingRecipePreview } = trpc.csv.previewRecipesCSV.useQuery(
+    { csvContent },
+    { enabled: false }
+  );
+  const { data: recipeIngredientPreviewData, refetch: refetchRecipeIngredientPreview, isLoading: isLoadingRecipeIngredientPreview } = trpc.csv.previewRecipeIngredientsCSV.useQuery(
+    { csvContent },
+    { enabled: false }
+  );
+  
+  const currentPreviewData = type === 'ingredients' ? previewData : type === 'recipes' ? recipePreviewData : recipeIngredientPreviewData;
+  const isLoadingCurrentPreview = type === 'ingredients' ? isLoadingPreview : type === 'recipes' ? isLoadingRecipePreview : isLoadingRecipeIngredientPreview;
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
@@ -48,11 +67,27 @@ export function CSVImportModal({ open, onClose, type, onSuccess }: CSVImportModa
     reader.readAsText(selectedFile);
   };
 
+  const handleShowPreview = async () => {
+    if (!csvContent) return;
+    
+    // Trigger preview query
+    if (type === 'ingredients') {
+      await refetchPreview();
+    } else if (type === 'recipes') {
+      await refetchRecipePreview();
+    } else {
+      await refetchRecipeIngredientPreview();
+    }
+    
+    setShowPreview(true);
+  };
+
   const handleImport = async () => {
     if (!csvContent) return;
 
     setImporting(true);
     setResult(null);
+    setShowPreview(false);
 
     try {
       let response;
@@ -94,8 +129,20 @@ export function CSVImportModal({ open, onClose, type, onSuccess }: CSVImportModa
     setFile(null);
     setCSVContent("");
     setPreview([]);
+    setShowPreview(false);
     setResult(null);
     onClose();
+  };
+  
+  const getPreviewTitle = () => {
+    switch (type) {
+      case 'ingredients':
+        return 'Preview Ingredients Import';
+      case 'recipes':
+        return 'Preview Recipes Import';
+      case 'recipeIngredients':
+        return 'Preview Recipe Ingredients Import';
+    }
   };
 
   const getTitle = () => {
@@ -194,13 +241,23 @@ export function CSVImportModal({ open, onClose, type, onSuccess }: CSVImportModa
               Close
             </Button>
             <Button
-              onClick={handleImport}
-              disabled={!csvContent || importing || (result?.success ?? false)}
+              onClick={handleShowPreview}
+              disabled={!csvContent || importing || (result?.success ?? false) || isLoadingCurrentPreview}
             >
-              {importing ? "Importing..." : "Import"}
+              {isLoadingCurrentPreview ? "Loading Preview..." : "Preview & Import"}
             </Button>
           </div>
         </div>
+        
+        {/* Preview Modal */}
+        <CSVPreviewModal
+          open={showPreview}
+          onOpenChange={setShowPreview}
+          previewData={currentPreviewData || null}
+          onConfirmImport={handleImport}
+          title={getPreviewTitle()}
+          isImporting={importing}
+        />
       </DialogContent>
     </Dialog>
   );

@@ -107,9 +107,12 @@ export function parseCSV(csvContent: string): any[] {
     
     // Filter out rows that are metadata (REQUIRED, OPTIONAL, STRING, etc.)
     const metadataKeywords = [
-      'REQUIRED', 'OPTIONAL', 'STRING', 'INTEGER', 'DECIMAL', 
+      'REQUIRED', 'OPTIONAL', 'STRING', 'INTEGER', 'DECIMAL', 'READ-ONLY',
       'Text, max', 'Must be unique', 'Positive number', 'Positive integer',
-      'Use existing', 'Only needed if', 'Minimum stock level'
+      'Use existing', 'Only needed if', 'Minimum stock level',
+      'Whole number (must match', 'Text (for reference only', 'Number with up to',
+      'Export recipes first', 'Export ingredients first', 'Amount of ingredient',
+      'Unit as used in the recipe', 'Helps identify'
     ];
     const filteredRecords = records.filter((record: any) => {
       // Check if any field contains metadata keywords
@@ -159,7 +162,147 @@ export function filterColumns(obj: any, columns: string[]): any {
 }
 
 /**
- * Convert ingredients data to CSV format
+ * Column metadata for ingredients
+ */
+interface IngredientColumnMetadata {
+  name: string;
+  required: string;
+  type: string;
+  format: string;
+  validation: string;
+}
+
+const INGREDIENT_COLUMN_METADATA: Record<string, IngredientColumnMetadata> = {
+  id: {
+    name: 'id',
+    required: 'OPTIONAL',
+    type: 'INTEGER',
+    format: 'Whole number (leave empty to create new ingredient)',
+    validation: 'If provided, must match existing ingredient ID to update'
+  },
+  name: {
+    name: 'name',
+    required: 'REQUIRED',
+    type: 'STRING',
+    format: 'Text, max 255 characters',
+    validation: 'Must be unique within your restaurant'
+  },
+  category: {
+    name: 'category',
+    required: 'OPTIONAL',
+    type: 'STRING',
+    format: 'Text, max 100 characters',
+    validation: 'Use existing categories or create new ones'
+  },
+  unit: {
+    name: 'unit',
+    required: 'REQUIRED',
+    type: 'STRING',
+    format: 'Unit name (lb, oz, kg, g, gal, qt, pt, cup, tbsp, tsp, ml, L, each, pc)',
+    validation: 'Must match existing unit names exactly'
+  },
+  costPerUnit: {
+    name: 'costPerUnit',
+    required: 'OPTIONAL',
+    type: 'DECIMAL',
+    format: 'Number with up to 4 decimal places (e.g., 5.50 or 0.2500)',
+    validation: 'Positive number, represents cost per single unit'
+  },
+  pieceWeightOz: {
+    name: 'pieceWeightOz',
+    required: 'OPTIONAL',
+    type: 'DECIMAL',
+    format: 'Number with up to 4 decimal places (weight in oz per piece)',
+    validation: 'Only needed if unit is "pc" or "each" for weight conversions'
+  },
+  supplier: {
+    name: 'supplier',
+    required: 'OPTIONAL',
+    type: 'STRING',
+    format: 'Text, max 255 characters',
+    validation: ''
+  },
+  shelfLife: {
+    name: 'shelfLife',
+    required: 'OPTIONAL',
+    type: 'INTEGER',
+    format: 'Whole number (days)',
+    validation: 'Positive integer representing days'
+  },
+  minStock: {
+    name: 'minStock',
+    required: 'OPTIONAL',
+    type: 'DECIMAL',
+    format: 'Number with up to 2 decimal places',
+    validation: 'Minimum stock level in the unit specified'
+  }
+};
+
+/**
+ * Generate metadata rows for ingredient CSV export
+ */
+function generateIngredientMetadataRows(columns: string[]): string[] {
+  const lines: string[] = [];
+  
+  // Add instructions header
+  lines.push('# INGREDIENTS DATA EXPORT');
+  lines.push('# This file can be edited and re-imported');
+  lines.push('# Lines starting with # are comments and will be ignored during import');
+  lines.push('#');
+  lines.push('# INSTRUCTIONS:');
+  lines.push('# 1. Rows 1-22 contain instructions and metadata - these will be automatically filtered during import');
+  lines.push('# 2. Row 23 contains column headers');
+  lines.push('# 3. Starting from row 24, you can edit ingredient data');
+  lines.push('# 4. To UPDATE existing ingredients: Keep the id column value');
+  lines.push('# 5. To CREATE new ingredients: Leave the id column empty or delete it');
+  lines.push('# 6. Save as CSV format when done');
+  lines.push('#');
+  lines.push('# IMPORTANT NOTES:');
+  lines.push('# - Name and unit are REQUIRED for all ingredients');
+  lines.push('# - Unit must match existing unit names exactly (case-sensitive)');
+  lines.push('# - CostPerUnit should be the cost for ONE unit (e.g., cost per 1 lb, not per case)');
+  lines.push('# - PieceWeightOz is only needed for "pc" or "each" units to enable weight conversions');
+  lines.push('# - Leave optional fields empty if not applicable');
+  lines.push('#');
+  lines.push('# COMMON UNITS: lb, oz, kg, g, gal, qt, pt, cup, fl oz, tbsp, tsp, ml, L, each, pc');
+  lines.push('#');
+  lines.push('');
+  
+  // Row 1: Column names
+  lines.push(columns.map(col => escapeCSVField(col)).join(','));
+  
+  // Row 2: Required/Optional
+  lines.push(columns.map(col => {
+    const meta = INGREDIENT_COLUMN_METADATA[col];
+    return escapeCSVField(meta?.required || 'OPTIONAL');
+  }).join(','));
+  
+  // Row 3: Data types
+  lines.push(columns.map(col => {
+    const meta = INGREDIENT_COLUMN_METADATA[col];
+    return escapeCSVField(meta?.type || 'STRING');
+  }).join(','));
+  
+  // Row 4: Format/validation
+  lines.push(columns.map(col => {
+    const meta = INGREDIENT_COLUMN_METADATA[col];
+    return escapeCSVField(meta?.format || '');
+  }).join(','));
+  
+  // Row 5: Validation rules
+  lines.push(columns.map(col => {
+    const meta = INGREDIENT_COLUMN_METADATA[col];
+    return escapeCSVField(meta?.validation || '');
+  }).join(','));
+  
+  // Row 6: Empty separator
+  lines.push('');
+  
+  return lines;
+}
+
+/**
+ * Convert ingredients data to CSV format with metadata rows
  */
 export function ingredientsToCSV(ingredients: any[], visibleColumns?: string[]): string {
   // Define all possible columns in logical order
@@ -178,14 +321,184 @@ export function ingredientsToCSV(ingredients: any[], visibleColumns?: string[]):
   // Use visible columns if provided, otherwise use all
   const columns = visibleColumns || allColumns;
   
+  // Generate metadata rows
+  const metadataRows = generateIngredientMetadataRows(columns);
+  
   // Filter ingredients to only include visible columns
   const filteredData = ingredients.map(ing => filterColumns(ing, columns));
   
-  return arrayToCSV(filteredData, columns);
+  // Build data rows
+  const dataRows = filteredData.map(row => {
+    return columns.map(col => escapeCSVField(row[col])).join(',');
+  });
+  
+  // Combine metadata and data
+  return [...metadataRows, ...dataRows].join('\n');
 }
 
 /**
- * Convert recipes data to CSV format
+ * Column metadata for recipes
+ */
+interface RecipeColumnMetadata {
+  name: string;
+  required: string;
+  type: string;
+  format: string;
+  validation: string;
+}
+
+const RECIPE_COLUMN_METADATA: Record<string, RecipeColumnMetadata> = {
+  id: {
+    name: 'id',
+    required: 'OPTIONAL',
+    type: 'INTEGER',
+    format: 'Whole number (leave empty to create new recipe)',
+    validation: 'If provided, must match existing recipe ID to update'
+  },
+  name: {
+    name: 'name',
+    required: 'REQUIRED',
+    type: 'STRING',
+    format: 'Text, max 255 characters',
+    validation: 'Must be unique within your restaurant'
+  },
+  category: {
+    name: 'category',
+    required: 'OPTIONAL',
+    type: 'STRING',
+    format: 'Text, max 100 characters',
+    validation: 'Use existing categories or create new ones'
+  },
+  description: {
+    name: 'description',
+    required: 'OPTIONAL',
+    type: 'STRING',
+    format: 'Text, any length',
+    validation: ''
+  },
+  servings: {
+    name: 'servings',
+    required: 'OPTIONAL',
+    type: 'INTEGER',
+    format: 'Whole number',
+    validation: 'Number of servings this recipe makes'
+  },
+  prepTime: {
+    name: 'prepTime',
+    required: 'OPTIONAL',
+    type: 'INTEGER',
+    format: 'Whole number (minutes)',
+    validation: 'Preparation time in minutes'
+  },
+  cookTime: {
+    name: 'cookTime',
+    required: 'OPTIONAL',
+    type: 'INTEGER',
+    format: 'Whole number (minutes)',
+    validation: 'Cooking time in minutes'
+  },
+  sellingPrice: {
+    name: 'sellingPrice',
+    required: 'OPTIONAL',
+    type: 'DECIMAL',
+    format: 'Number with up to 2 decimal places',
+    validation: 'Menu price for this recipe'
+  },
+  ingredientsCount: {
+    name: 'ingredientsCount',
+    required: 'READ-ONLY',
+    type: 'INTEGER',
+    format: 'Whole number (calculated automatically)',
+    validation: 'Number of ingredients in recipe (for reference only)'
+  },
+  totalCost: {
+    name: 'totalCost',
+    required: 'READ-ONLY',
+    type: 'DECIMAL',
+    format: 'Number with up to 2 decimal places (calculated automatically)',
+    validation: 'Total ingredient cost (calculated from recipe ingredients)'
+  },
+  foodCostPercent: {
+    name: 'foodCostPercent',
+    required: 'READ-ONLY',
+    type: 'DECIMAL',
+    format: 'Number with up to 2 decimal places (calculated automatically)',
+    validation: 'Food cost as percentage of selling price'
+  },
+  marginPercent: {
+    name: 'marginPercent',
+    required: 'READ-ONLY',
+    type: 'DECIMAL',
+    format: 'Number with up to 2 decimal places (calculated automatically)',
+    validation: 'Profit margin as percentage'
+  }
+};
+
+/**
+ * Generate metadata rows for recipe CSV export
+ */
+function generateRecipeMetadataRows(columns: string[]): string[] {
+  const lines: string[] = [];
+  
+  // Add instructions header
+  lines.push('# RECIPES DATA EXPORT');
+  lines.push('# This file can be edited and re-imported');
+  lines.push('# Lines starting with # are comments and will be ignored during import');
+  lines.push('#');
+  lines.push('# INSTRUCTIONS:');
+  lines.push('# 1. Rows 1-22 contain instructions and metadata - these will be automatically filtered during import');
+  lines.push('# 2. Row 23 contains column headers');
+  lines.push('# 3. Starting from row 24, you can edit recipe data');
+  lines.push('# 4. To UPDATE existing recipes: Keep the id column value');
+  lines.push('# 5. To CREATE new recipes: Leave the id column empty or delete it');
+  lines.push('# 6. Save as CSV format when done');
+  lines.push('#');
+  lines.push('# IMPORTANT NOTES:');
+  lines.push('# - Name is REQUIRED for all recipes');
+  lines.push('# - Financial fields (totalCost, foodCostPercent, marginPercent) are READ-ONLY and calculated automatically');
+  lines.push('# - To modify recipe ingredients, use "Export Recipe Ingredients" button instead');
+  lines.push('# - SellingPrice is recommended for profitability analysis');
+  lines.push('# - Times are in minutes');
+  lines.push('#');
+  lines.push('# After importing, use "Export Recipe Ingredients" to manage recipe ingredient relationships');
+  lines.push('#');
+  lines.push('');
+  
+  // Row 1: Column names
+  lines.push(columns.map(col => escapeCSVField(col)).join(','));
+  
+  // Row 2: Required/Optional
+  lines.push(columns.map(col => {
+    const meta = RECIPE_COLUMN_METADATA[col];
+    return escapeCSVField(meta?.required || 'OPTIONAL');
+  }).join(','));
+  
+  // Row 3: Data types
+  lines.push(columns.map(col => {
+    const meta = RECIPE_COLUMN_METADATA[col];
+    return escapeCSVField(meta?.type || 'STRING');
+  }).join(','));
+  
+  // Row 4: Format/validation
+  lines.push(columns.map(col => {
+    const meta = RECIPE_COLUMN_METADATA[col];
+    return escapeCSVField(meta?.format || '');
+  }).join(','));
+  
+  // Row 5: Validation rules
+  lines.push(columns.map(col => {
+    const meta = RECIPE_COLUMN_METADATA[col];
+    return escapeCSVField(meta?.validation || '');
+  }).join(','));
+  
+  // Row 6: Empty separator
+  lines.push('');
+  
+  return lines;
+}
+
+/**
+ * Convert recipes data to CSV format with metadata rows
  */
 export function recipesToCSV(recipes: any[], visibleColumns?: string[]): string {
   // Define all possible columns in logical order
@@ -231,6 +544,9 @@ export function recipesToCSV(recipes: any[], visibleColumns?: string[]): string 
     }
   }
   
+  // Generate metadata rows
+  const metadataRows = generateRecipeMetadataRows(columns);
+  
   // Transform recipes to flatten complex fields
   const transformedRecipes = recipes.map(recipe => ({
     id: recipe.id,
@@ -250,11 +566,135 @@ export function recipesToCSV(recipes: any[], visibleColumns?: string[]): string 
   // Filter to only include visible columns
   const filteredData = transformedRecipes.map(recipe => filterColumns(recipe, columns));
   
-  return arrayToCSV(filteredData, columns);
+  // Build data rows
+  const dataRows = filteredData.map(row => {
+    return columns.map(col => escapeCSVField(row[col])).join(',');
+  });
+  
+  // Combine metadata and data
+  return [...metadataRows, ...dataRows].join('\n');
 }
 
 /**
- * Convert recipe ingredients data to CSV format (for bulk editing)
+ * Column metadata for recipe ingredients
+ */
+interface RecipeIngredientColumnMetadata {
+  name: string;
+  required: string;
+  type: string;
+  format: string;
+  validation: string;
+}
+
+const RECIPE_INGREDIENT_COLUMN_METADATA: Record<string, RecipeIngredientColumnMetadata> = {
+  recipeId: {
+    name: 'recipeId',
+    required: 'REQUIRED',
+    type: 'INTEGER',
+    format: 'Whole number (must match existing recipe ID)',
+    validation: 'Export recipes first to get recipe IDs'
+  },
+  recipeName: {
+    name: 'recipeName',
+    required: 'OPTIONAL',
+    type: 'STRING',
+    format: 'Text (for reference only, not used in import)',
+    validation: 'Helps identify the recipe, but recipeId is used for matching'
+  },
+  ingredientId: {
+    name: 'ingredientId',
+    required: 'REQUIRED',
+    type: 'INTEGER',
+    format: 'Whole number (must match existing ingredient ID)',
+    validation: 'Export ingredients first to get ingredient IDs'
+  },
+  ingredientName: {
+    name: 'ingredientName',
+    required: 'OPTIONAL',
+    type: 'STRING',
+    format: 'Text (for reference only, not used in import)',
+    validation: 'Helps identify the ingredient, but ingredientId is used for matching'
+  },
+  quantity: {
+    name: 'quantity',
+    required: 'REQUIRED',
+    type: 'DECIMAL',
+    format: 'Number with up to 4 decimal places',
+    validation: 'Amount of ingredient used in recipe'
+  },
+  unit: {
+    name: 'unit',
+    required: 'REQUIRED',
+    type: 'STRING',
+    format: 'Unit name (lb, oz, kg, g, cup, tbsp, tsp, each, pc, etc.)',
+    validation: 'Unit as used in the recipe (can differ from ingredient storage unit)'
+  }
+};
+
+/**
+ * Generate metadata rows for recipe ingredients CSV export
+ */
+function generateRecipeIngredientMetadataRows(columns: string[]): string[] {
+  const lines: string[] = [];
+  
+  // Add instructions header
+  lines.push('# RECIPE INGREDIENTS DATA EXPORT');
+  lines.push('# This file can be edited and re-imported for bulk ingredient updates');
+  lines.push('# Lines starting with # are comments and will be ignored during import');
+  lines.push('#');
+  lines.push('# INSTRUCTIONS:');
+  lines.push('# 1. Rows 1-22 contain instructions and metadata - these will be automatically filtered during import');
+  lines.push('# 2. Row 23 contains column headers');
+  lines.push('# 3. Starting from row 24, you can edit recipe ingredient data');
+  lines.push('# 4. You can modify quantity and unit values for bulk updates');
+  lines.push('# 5. RecipeName and IngredientName are for reference only (not used in import)');
+  lines.push('# 6. Save as CSV format when done');
+  lines.push('#');
+  lines.push('# IMPORTANT NOTES:');
+  lines.push('# - RecipeId, IngredientId, Quantity, and Unit are REQUIRED');
+  lines.push('# - RecipeId and IngredientId must match existing records');
+  lines.push('# - Unit is how the ingredient is measured IN THE RECIPE (can differ from storage unit)');
+  lines.push('# - System will automatically convert units when calculating costs');
+  lines.push('#');
+  lines.push('# COMMON USE CASE: Bulk unit conversion (e.g., change all "cup" to "oz" for specific ingredient)');
+  lines.push('#');
+  lines.push('');
+  
+  // Row 1: Column names
+  lines.push(columns.map(col => escapeCSVField(col)).join(','));
+  
+  // Row 2: Required/Optional
+  lines.push(columns.map(col => {
+    const meta = RECIPE_INGREDIENT_COLUMN_METADATA[col];
+    return escapeCSVField(meta?.required || 'OPTIONAL');
+  }).join(','));
+  
+  // Row 3: Data types
+  lines.push(columns.map(col => {
+    const meta = RECIPE_INGREDIENT_COLUMN_METADATA[col];
+    return escapeCSVField(meta?.type || 'STRING');
+  }).join(','));
+  
+  // Row 4: Format/validation
+  lines.push(columns.map(col => {
+    const meta = RECIPE_INGREDIENT_COLUMN_METADATA[col];
+    return escapeCSVField(meta?.format || '');
+  }).join(','));
+  
+  // Row 5: Validation rules
+  lines.push(columns.map(col => {
+    const meta = RECIPE_INGREDIENT_COLUMN_METADATA[col];
+    return escapeCSVField(meta?.validation || '');
+  }).join(','));
+  
+  // Row 6: Empty separator
+  lines.push('');
+  
+  return lines;
+}
+
+/**
+ * Convert recipe ingredients data to CSV format with metadata rows (for bulk editing)
  */
 export function recipeIngredientsToCSV(recipeIngredients: any[]): string {
   const columns = [
@@ -266,7 +706,16 @@ export function recipeIngredientsToCSV(recipeIngredients: any[]): string {
     "unit",
   ];
   
-  return arrayToCSV(recipeIngredients, columns);
+  // Generate metadata rows
+  const metadataRows = generateRecipeIngredientMetadataRows(columns);
+  
+  // Build data rows
+  const dataRows = recipeIngredients.map(row => {
+    return columns.map(col => escapeCSVField(row[col])).join(',');
+  });
+  
+  // Combine metadata and data
+  return [...metadataRows, ...dataRows].join('\n');
 }
 
 /**

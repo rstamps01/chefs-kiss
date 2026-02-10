@@ -1469,3 +1469,12 @@ All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb
 - [x] Fix CSV preview validation to make id column optional
 - [x] Test re-importing exported data without id column (4 tests passing)
 - [x] Verify import works correctly without id column present
+
+## CSV Export Enhancement: Include Metadata Rows (COMPLETED)
+- [x] Review template CSV structure to understand metadata format
+- [x] Modify ingredientsToCSV to prepend metadata rows
+- [x] Modify recipesToCSV to prepend metadata rows
+- [x] Modify recipeIngredientsToCSV to prepend metadata rows
+- [x] Test export includes proper metadata rows
+- [x] Test exported file can be re-imported successfully
+- [x] Verify metadata rows are automatically filtered during import

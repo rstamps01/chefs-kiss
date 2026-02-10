@@ -1532,3 +1532,12 @@ All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb
 - [x] Integrate saveImportHistory into import endpoints
 - [x] Test full import history workflow
 - [x] Test rollback functionality with various scenarios
+
+## Bulk Edit via CSV (COMPLETED)
+- [x] Verify export includes all necessary fields with IDs for editing
+- [x] Add "Edit in Excel" button/workflow hint in UI
+- [x] Enhance preview modal to show conflict resolution options
+- [x] Add visual indicators for records that will be updated vs created
+- [x] Test full workflow: export → edit → import with conflicts
+- [x] Add user guidance/tooltips for bulk edit workflow
+- [x] Document bulk edit best practices

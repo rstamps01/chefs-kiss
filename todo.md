@@ -1598,3 +1598,11 @@ All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb
 - [x] Connect error handling between modal and wizard
 - [x] Test error recovery flow (retry/skip)
 - [x] Test progress persistence across page refresh
+
+## Fix CSV Preview Endpoint Error (COMPLETED)
+- [x] Investigate why preview endpoint returns HTML instead of JSON
+- [x] Check CSV preview endpoint for server-side errors
+- [x] Add error handling to database queries in preview function
+- [x] Test with provided ingredients CSV file
+- [x] Fix the endpoint error
+- [x] Verify CSV preview loads correctly

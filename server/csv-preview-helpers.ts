@@ -142,22 +142,27 @@ export async function previewIngredientCSV(csvContent: string, restaurantId?: nu
       
       // Check for duplicate names (only for create operations)
       if (operation === 'create' && restaurantId && row.name && row.name.trim() !== '') {
-        const db = await getDb();
-        if (db) {
-          const existing = await db
-            .select()
-            .from(ingredients)
-            .where(
-              and(
-                eq(ingredients.restaurantId, restaurantId),
-                eq(ingredients.name, row.name.trim())
+        try {
+          const db = await getDb();
+          if (db) {
+            const existing = await db
+              .select()
+              .from(ingredients)
+              .where(
+                and(
+                  eq(ingredients.restaurantId, restaurantId),
+                  eq(ingredients.name, row.name.trim())
+                )
               )
-            )
-            .limit(1);
-          
-          if (existing.length > 0) {
-            rowWarnings.push(`Database duplicate: "${row.name}" already exists (ID: ${existing[0].id}). This will create a duplicate ingredient.`);
+              .limit(1);
+            
+            if (existing.length > 0) {
+              rowWarnings.push(`Database duplicate: "${row.name}" already exists (ID: ${existing[0].id}). This will create a duplicate ingredient.`);
+            }
           }
+        } catch (error) {
+          console.error('Error checking for duplicate ingredient:', error);
+          // Continue without duplicate check if database query fails
         }
       }
       

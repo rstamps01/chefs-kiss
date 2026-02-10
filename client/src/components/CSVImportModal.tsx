@@ -10,7 +10,7 @@ interface CSVImportModalProps {
   open: boolean;
   onClose: () => void;
   type: "ingredients" | "recipes" | "recipeIngredients";
-  onSuccess: () => void;
+  onSuccess: (created: number, updated: number) => void;
 }
 
 export function CSVImportModal({ open, onClose, type, onSuccess }: CSVImportModalProps) {
@@ -113,7 +113,7 @@ export function CSVImportModal({ open, onClose, type, onSuccess }: CSVImportModa
         } else {
           utils.recipes.list.invalidate(); // Recipe ingredients affect recipes
         }
-        onSuccess();
+        onSuccess((response as any).created || 0, response.updated);
       }
     } catch (error) {
       setResult({

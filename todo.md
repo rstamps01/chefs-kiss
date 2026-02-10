@@ -1579,3 +1579,10 @@ All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb
 - [x] Add completion summary with statistics
 - [x] Add route and navigation link to wizard
 - [x] Test full wizard workflow end-to-end
+
+## Fix DataMigrationWizard Errors (COMPLETED)
+- [x] Fix CSVImportModal missing onClose callback in DataMigrationWizard
+- [x] Investigate API JSON parsing error (was caused by TypeScript compilation errors)
+- [x] Fix TypeScript type errors in import-history.ts and routers.ts
+- [x] Fix CSVImportModal onSuccess callback signature
+- [x] Test wizard workflow after fixes

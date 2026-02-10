@@ -889,7 +889,7 @@ export const appRouter = router({
         if (results.failed === 0 && (results.created > 0 || results.updated > 0)) {
           await saveImportHistory({
             restaurantId: restaurant.id,
-            userId: ctx.user.id,
+            userId: ctx.user.openId,
             importType: 'ingredients',
             recordsCreated: results.created,
             recordsUpdated: results.updated,
@@ -1024,7 +1024,7 @@ export const appRouter = router({
         return await rollbackImport({
           importHistoryId: input.importHistoryId,
           restaurantId: restaurant.id,
-          userId: ctx.user.id,
+          userId: ctx.user.openId,
         });
       }),
   }),

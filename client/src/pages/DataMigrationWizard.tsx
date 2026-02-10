@@ -293,9 +293,9 @@ export function DataMigrationWizard() {
       {showImportModal && (
         <CSVImportModal
           open={showImportModal}
-          onOpenChange={setShowImportModal}
-          importType={importType}
-          onImportSuccess={handleImportSuccess}
+          onClose={() => setShowImportModal(false)}
+          type={importType}
+          onSuccess={handleImportSuccess}
         />
       )}
     </div>

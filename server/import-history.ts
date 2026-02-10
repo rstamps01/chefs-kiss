@@ -15,7 +15,7 @@ export type ImportType = 'ingredients' | 'recipes' | 'recipeIngredients';
  */
 export async function saveImportHistory(params: {
   restaurantId: number;
-  userId: number;
+  userId: string;
   importType: ImportType;
   recordsCreated: number;
   recordsUpdated: number;
@@ -34,7 +34,7 @@ export async function saveImportHistory(params: {
 
   const [result] = await db.insert(importHistory).values({
     restaurantId: params.restaurantId,
-    userId: params.userId,
+    userId: String(params.userId),
     importType: params.importType,
     recordsCreated: params.recordsCreated,
     recordsUpdated: params.recordsUpdated,
@@ -117,7 +117,7 @@ export async function getImportHistoryById(id: number, restaurantId: number) {
 export async function rollbackImport(params: {
   importHistoryId: number;
   restaurantId: number;
-  userId: number;
+  userId: string;
 }) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");

@@ -1,0 +1,1 @@
+ALTER TABLE `import_history` MODIFY COLUMN `rolledBackBy` varchar(255);

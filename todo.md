@@ -1520,3 +1520,15 @@ All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb
 - [x] Distinguish between database duplicates and CSV duplicates in warnings
 - [x] Test within-CSV duplicate detection with various scenarios
 - [x] Test mixed database and CSV duplicate detection
+
+## Import History Page Implementation (Current Task)
+- [x] Create tRPC endpoints for getImportHistory, getImportHistoryById, rollbackImport
+- [x] Add import history route to App.tsx
+- [x] Create ImportHistory page component with table layout
+- [x] Add filters: date range picker, import type dropdown, status dropdown
+- [x] Add pagination controls (previous/next, page size selector)
+- [x] Create RollbackDialog component with confirmation
+- [x] Show rollback preview (what will be deleted/restored)
+- [x] Integrate saveImportHistory into import endpoints
+- [x] Test full import history workflow
+- [x] Test rollback functionality with various scenarios

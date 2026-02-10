@@ -10,6 +10,7 @@ import { generateForecast } from "./forecasting";
 import { generatePrepPlan } from "./prep-planning";
 import { generateMultiDayPrepPlan } from "./multi-day-prep-planning";
 import { z } from "zod";
+import { getImportHistory, getImportHistoryById, rollbackImport, saveImportHistory, getSnapshotBeforeUpdate } from './import-history';
 
 export const appRouter = router({
     // if you need to use socket.io, read and register route in server/_core/index.ts, all api should start with '/api/' so that the gateway can route correctly
@@ -853,7 +854,26 @@ export const appRouter = router({
           minStock: row.minStock ? parseFloat(row.minStock) : undefined,
         }));
         
+        // Get snapshot of records that will be updated (for rollback)
+        const idsToUpdate = updateData
+          .filter(item => item.id !== null)
+          .map(item => item.id as number);
+        const snapshot = await getSnapshotBeforeUpdate('ingredients', restaurant.id, idsToUpdate);
+        
         const results = await bulkUpdateIngredients(restaurant.id, updateData);
+        
+        // Save import history if successful
+        if (results.failed === 0 && (results.created > 0 || results.updated > 0)) {
+          await saveImportHistory({
+            restaurantId: restaurant.id,
+            userId: ctx.user.id,
+            importType: 'ingredients',
+            recordsCreated: results.created,
+            recordsUpdated: results.updated,
+            createdIds: results.createdIds,
+            updatedData: snapshot,
+          });
+        }
         
         return {
           success: results.failed === 0,
@@ -934,6 +954,55 @@ export const appRouter = router({
           updated: results.updated,
           failed: results.failed,
         };
+      }),
+  }),
+
+  // Import history tracking and rollback
+  importHistory: router({
+    list: protectedProcedure
+      .input(z.object({
+        limit: z.number().optional(),
+        offset: z.number().optional(),
+        importType: z.enum(['ingredients', 'recipes', 'recipeIngredients']).optional(),
+      }))
+      .query(async ({ ctx, input }) => {
+        const restaurant = await getUserRestaurant(ctx.user.id);
+        if (!restaurant) {
+          throw new Error('Restaurant not found');
+        }
+
+        return await getImportHistory({
+          restaurantId: restaurant.id,
+          limit: input.limit,
+          offset: input.offset,
+          importType: input.importType,
+        });
+      }),
+
+    getById: protectedProcedure
+      .input(z.object({ id: z.number() }))
+      .query(async ({ ctx, input }) => {
+        const restaurant = await getUserRestaurant(ctx.user.id);
+        if (!restaurant) {
+          throw new Error('Restaurant not found');
+        }
+
+        return await getImportHistoryById(input.id, restaurant.id);
+      }),
+
+    rollback: protectedProcedure
+      .input(z.object({ importHistoryId: z.number() }))
+      .mutation(async ({ ctx, input }) => {
+        const restaurant = await getUserRestaurant(ctx.user.id);
+        if (!restaurant) {
+          throw new Error('Restaurant not found');
+        }
+
+        return await rollbackImport({
+          importHistoryId: input.importHistoryId,
+          restaurantId: restaurant.id,
+          userId: ctx.user.id,
+        });
       }),
   }),
 });

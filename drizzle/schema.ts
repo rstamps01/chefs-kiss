@@ -397,7 +397,7 @@ export const ingredientConversions = mysqlTable("ingredientConversions", {
 export const importHistory = mysqlTable("import_history", {
   id: int("id").autoincrement().primaryKey(),
   restaurantId: int("restaurantId").notNull(), // references restaurants.id
-  userId: int("userId").notNull(), // references users.id (who performed the import)
+  userId: varchar("userId", { length: 255 }).notNull(), // references users.openId (who performed the import)
   
   // Import metadata
   importType: mysqlEnum("importType", ["ingredients", "recipes", "recipeIngredients"]).notNull(),
@@ -422,7 +422,7 @@ export const importHistory = mysqlTable("import_history", {
   // Status tracking
   status: mysqlEnum("status", ["completed", "rolled_back"]).default("completed").notNull(),
   rolledBackAt: timestamp("rolledBackAt"),
-  rolledBackBy: int("rolledBackBy"), // references users.id
+  rolledBackBy: varchar("rolledBackBy", { length: 255 }), // references users.openId
   
   // Optional metadata
   fileName: varchar("fileName", { length: 255 }),

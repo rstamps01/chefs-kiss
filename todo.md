@@ -1440,3 +1440,15 @@ All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb
 - [x] Add "Import Valid Rows" action button (errors block import)
 - [x] Test preview with valid and invalid CSV data
 - [x] Write tests for preview validation logic (18 tests passing)
+
+## Bug Fix: Recipes Page tRPC Error & CSV Import Format Issues (Current Task)
+- [x] Check server logs for error details
+- [x] Identify which tRPC endpoint is failing on /recipes page
+- [x] Analyze ingredient CSV files for format issues
+- [x] Fix CSV parsing to handle metadata rows (REQUIRED, OPTIONAL, description rows)
+- [x] Fix CSV parsing to handle BOM characters
+- [x] Make 'id' column optional in CSV import (for creating new ingredients)
+- [x] Add metadata keyword filtering to skip instruction rows
+- [x] Test CSV import with provided files (6 tests passing)
+- [ ] Test recipes page loads correctly after fix
+- [ ] Verify all tRPC queries on recipes page work properly

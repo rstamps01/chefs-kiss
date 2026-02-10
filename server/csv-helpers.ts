@@ -55,14 +55,74 @@ function escapeCSVField(value: any): string {
  */
 export function parseCSV(csvContent: string): any[] {
   try {
-    const records = parse(csvContent, {
+    // Remove BOM if present
+    let cleanedContent = csvContent.replace(/^\uFEFF/, '');
+    
+    // Split into lines and find the actual header row
+    const lines = cleanedContent.split('\n');
+    let headerIndex = -1;
+    
+    // Look for the header row - it should contain common column names
+    // and not start with # or contain only metadata markers
+    const commonHeaders = ['id', 'name', 'category', 'unit', 'recipeId', 'ingredientId', 'quantity'];
+    
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i].trim();
+      
+      // Skip comment lines, empty lines, and metadata rows
+      if (!line || line.startsWith('#') || line.startsWith('//')) {
+        continue;
+      }
+      
+      // Check if this line contains actual column headers
+      const lowerLine = line.toLowerCase();
+      if (commonHeaders.some(header => lowerLine.includes(header))) {
+        headerIndex = i;
+        break;
+      }
+    }
+    
+    // If no header found, assume first non-empty, non-comment line is header
+    if (headerIndex === -1) {
+      for (let i = 0; i < lines.length; i++) {
+        const line = lines[i].trim();
+        if (line && !line.startsWith('#') && !line.startsWith('//')) {
+          headerIndex = i;
+          break;
+        }
+      }
+    }
+    
+    // Reconstruct CSV starting from header row
+    const cleanedLines = lines.slice(headerIndex);
+    cleanedContent = cleanedLines.join('\n');
+    
+    const records = parse(cleanedContent, {
       columns: true,
       skip_empty_lines: true,
       trim: true,
       relax_quotes: true,
       relax_column_count: true,
     });
-    return records;
+    
+    // Filter out rows that are metadata (REQUIRED, OPTIONAL, STRING, etc.)
+    const metadataKeywords = [
+      'REQUIRED', 'OPTIONAL', 'STRING', 'INTEGER', 'DECIMAL', 
+      'Text, max', 'Must be unique', 'Positive number', 'Positive integer',
+      'Use existing', 'Only needed if', 'Minimum stock level'
+    ];
+    const filteredRecords = records.filter((record: any) => {
+      // Check if any field contains metadata keywords
+      const values = Object.values(record).map(v => String(v || ''));
+      const hasMetadata = values.some(v => metadataKeywords.some(keyword => v.includes(keyword)));
+      
+      // Also filter out completely empty rows
+      const allEmpty = values.every(v => !v || v.trim() === '');
+      
+      return !hasMetadata && !allEmpty;
+    });
+    
+    return filteredRecords;
   } catch (error) {
     throw new Error(`CSV parsing failed: ${error instanceof Error ? error.message : String(error)}`);
   }
@@ -222,8 +282,8 @@ export function parseIngredientCSV(csvContent: string): {
   try {
     const data = parseCSV(csvContent);
     
-    // Validate required columns
-    const requiredColumns = ["id", "name", "unit"];
+    // Validate required columns (id is optional - if missing, will create new ingredients)
+    const requiredColumns = ["name", "unit"];
     const validation = validateCSVColumns(data, requiredColumns);
     
     if (!validation.valid) {
@@ -236,8 +296,9 @@ export function parseIngredientCSV(csvContent: string): {
       const row = data[i];
       const rowNum = i + 2; // +2 because CSV is 1-indexed and has header row
       
-      if (!row.id || isNaN(parseInt(row.id))) {
-        errors.push(`Row ${rowNum}: Invalid or missing id`);
+      // id is optional - if present, must be valid integer
+      if (row.id && isNaN(parseInt(row.id))) {
+        errors.push(`Row ${rowNum}: Invalid id (must be a number)`);
       }
       
       if (!row.name || row.name.trim() === "") {
@@ -303,8 +364,9 @@ export function parseRecipeCSV(csvContent: string): {
       const row = data[i];
       const rowNum = i + 2;
       
-      if (!row.id || isNaN(parseInt(row.id))) {
-        errors.push(`Row ${rowNum}: Invalid or missing id`);
+      // id is optional - if present, must be valid integer
+      if (row.id && isNaN(parseInt(row.id))) {
+        errors.push(`Row ${rowNum}: Invalid id (must be a number)`);
       }
       
       if (!row.name || row.name.trim() === "") {

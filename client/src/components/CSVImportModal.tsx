@@ -19,6 +19,7 @@ export function CSVImportModal({ open, onClose, type, onSuccess }: CSVImportModa
   const [preview, setPreview] = useState<string[]>([]);
   const [showPreview, setShowPreview] = useState(false);
   const [importing, setImporting] = useState(false);
+  const [updatedPreviewData, setUpdatedPreviewData] = useState<any>(null);
   const [result, setResult] = useState<{
     success: boolean;
     created?: number;
@@ -260,10 +261,21 @@ export function CSVImportModal({ open, onClose, type, onSuccess }: CSVImportModa
         <CSVPreviewModal
           open={showPreview}
           onOpenChange={setShowPreview}
-          previewData={currentPreviewData || null}
+          previewData={updatedPreviewData || currentPreviewData || null}
           onConfirmImport={handleImport}
           title={getPreviewTitle()}
           isImporting={importing}
+          importType={type}
+          onFindIds={(updatedRows) => {
+            // Update preview data with new rows
+            const currentData = currentPreviewData;
+            if (currentData) {
+              setUpdatedPreviewData({
+                ...currentData,
+                rows: updatedRows,
+              });
+            }
+          }}
         />
       </DialogContent>
     </Dialog>

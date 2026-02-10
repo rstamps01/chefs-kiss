@@ -11,6 +11,7 @@ import { generatePrepPlan } from "./prep-planning";
 import { generateMultiDayPrepPlan } from "./multi-day-prep-planning";
 import { z } from "zod";
 import { getImportHistory, getImportHistoryById, rollbackImport, saveImportHistory, getSnapshotBeforeUpdate } from './import-history';
+import { lookupIngredientIdsByNames, lookupRecipeIdsByNames } from './id-lookup-helpers';
 
 export const appRouter = router({
     // if you need to use socket.io, read and register route in server/_core/index.ts, all api should start with '/api/' so that the gateway can route correctly
@@ -812,6 +813,28 @@ export const appRouter = router({
         return previewRecipeIngredientsCSV(input.csvContent);
       }),
     
+    // ID lookup for auto-fill
+    lookupIngredientIds: protectedProcedure
+      .input(z.object({
+        names: z.array(z.string()),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        const restaurant = await getUserRestaurant(ctx.user.id);
+        if (!restaurant) {
+          return { nameToIdMap: {} };
+        }
+
+        const idMap = await lookupIngredientIdsByNames(restaurant.id, input.names);
+        
+        // Convert Map to plain object for JSON serialization
+        const nameToIdMap: Record<string, number> = {};
+        idMap.forEach((id, name) => {
+          nameToIdMap[name] = id;
+        });
+
+        return { nameToIdMap };
+      }),
+
     importIngredients: protectedProcedure
       .input(z.object({
         csvContent: z.string(),

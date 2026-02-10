@@ -1541,3 +1541,12 @@ All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb
 - [x] Test full workflow: export → edit → import with conflicts
 - [x] Add user guidance/tooltips for bulk edit workflow
 - [x] Document bulk edit best practices
+
+## Auto-ID Lookup for CSV Imports (Current Task)
+- [x] Create backend endpoint to lookup IDs by ingredient names
+- [x] Add "Find IDs" button to CSV preview modal
+- [x] Implement client-side logic to call lookup and update preview data
+- [x] Update operation badges after ID lookup (create → update)
+- [x] Handle partial matches (some found, some not)
+- [x] Add loading state during ID lookup
+- [x] Test auto-ID lookup with various scenarios

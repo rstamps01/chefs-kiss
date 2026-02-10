@@ -38,6 +38,8 @@ interface CSVPreviewModalProps {
   onConfirmImport: () => void;
   title: string;
   isImporting?: boolean;
+  importType?: 'ingredients' | 'recipes' | 'recipeIngredients';
+  onFindIds?: (updatedRows: RowValidation[]) => void;
 }
 
 export function CSVPreviewModal({
@@ -47,8 +49,11 @@ export function CSVPreviewModal({
   onConfirmImport,
   title,
   isImporting = false,
+  importType,
+  onFindIds,
 }: CSVPreviewModalProps) {
   const [showColumnMapping, setShowColumnMapping] = useState(false);
+  const [isFindingIds, setIsFindingIds] = useState(false);
 
   if (!previewData) {
     return null;
@@ -294,15 +299,77 @@ export function CSVPreviewModal({
         </div>
 
         <DialogFooter>
-          <Button variant="outline" onClick={() => onOpenChange(false)} disabled={isImporting}>
-            Cancel
-          </Button>
-          <Button
-            onClick={onConfirmImport}
-            disabled={errorRows > 0 || isImporting}
-          >
-            {isImporting ? 'Importing...' : `Import ${validRows + warningRows} Valid Rows`}
-          </Button>
+          <div className="flex justify-between w-full">
+            <div>
+              {importType === 'ingredients' && onFindIds && (
+                <Button
+                  variant="outline"
+                  onClick={async () => {
+                    setIsFindingIds(true);
+                    // Extract names from rows that don't have IDs
+                    const names = rows
+                      .filter(row => !row.data.id || row.data.id === '')
+                      .map(row => row.data.name)
+                      .filter(Boolean);
+                    
+                    if (names.length === 0) {
+                      setIsFindingIds(false);
+                      return;
+                    }
+
+                    try {
+                      // Call the lookup endpoint
+                      const response = await fetch('/api/trpc/csv.lookupIngredientIds', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ names }),
+                      });
+                      
+                      const result = await response.json();
+                      const nameToIdMap = result.result?.data?.nameToIdMap || {};
+                      
+                      // Update rows with found IDs
+                      const updatedRows = rows.map(row => {
+                        if (!row.data.id || row.data.id === '') {
+                          const normalizedName = row.data.name?.toLowerCase().trim();
+                          const foundId = nameToIdMap[normalizedName];
+                          
+                          if (foundId) {
+                            return {
+                              ...row,
+                              data: { ...row.data, id: foundId.toString() },
+                              operation: 'update' as const,
+                            };
+                          }
+                        }
+                        return row;
+                      });
+                      
+                      onFindIds(updatedRows);
+                    } catch (error) {
+                      console.error('Failed to lookup IDs:', error);
+                    } finally {
+                      setIsFindingIds(false);
+                    }
+                  }}
+                  disabled={isImporting || isFindingIds}
+                >
+                  {isFindingIds ? 'Finding IDs...' : 'Find IDs'}
+                </Button>
+              )}
+            </div>
+            <div className="flex gap-2">
+              <Button variant="outline" onClick={() => onOpenChange(false)} disabled={isImporting}>
+                Cancel
+              </Button>
+              <Button
+                onClick={onConfirmImport}
+                disabled={errorRows > 0 || isImporting}
+              >
+                {isImporting ? 'Importing...' : `Import ${validRows + warningRows} Valid Rows`}
+              </Button>
+            </div>
+          </div>
         </DialogFooter>
       </DialogContent>
     </Dialog>

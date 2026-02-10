@@ -787,8 +787,12 @@ export const appRouter = router({
       .input(z.object({
         csvContent: z.string(),
       }))
-      .query(async ({ input }) => {
-        return previewIngredientCSV(input.csvContent);
+      .query(async ({ ctx, input }) => {
+        const restaurant = await getUserRestaurant(ctx.user.id);
+        if (!restaurant) {
+          throw new Error('Restaurant not found for user');
+        }
+        return previewIngredientCSV(input.csvContent, restaurant.id);
       }),
     
     previewRecipesCSV: protectedProcedure

@@ -1487,3 +1487,12 @@ All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb
 - [x] Test creating new ingredients via CSV import
 - [x] Test mixed CSV with both new and existing ingredients
 - [x] Update import success message to show created vs updated counts
+
+## Duplicate Name Detection & Preview Operation Indicators (COMPLETED)
+- [x] Add database query to check for existing ingredient names
+- [x] Modify parseIngredientCSV to detect duplicates and return warnings
+- [x] Update preview endpoint to include operation type (create/update) for each row
+- [x] Enhance CSVPreviewModal to display operation badges (create=green, update=blue)
+- [x] Add duplicate warning indicators in preview modal
+- [x] Test duplicate detection with various scenarios
+- [x] Test preview modal with mixed create/update operations

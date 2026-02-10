@@ -6,6 +6,9 @@
  */
 
 import { parseCSV, validateCSVColumns } from './csv-helpers';
+import { getDb } from './db';
+import { ingredients } from '../drizzle/schema';
+import { eq, and } from 'drizzle-orm';
 
 export type RowValidationStatus = 'valid' | 'warning' | 'error';
 
@@ -13,6 +16,7 @@ export interface RowValidation {
   rowIndex: number;
   rowNumber: number; // Display number (1-indexed, includes header)
   status: RowValidationStatus;
+  operation?: 'create' | 'update'; // Operation type based on id presence
   errors: string[];
   warnings: string[];
   data: any;
@@ -31,8 +35,10 @@ export interface CSVPreviewResult {
 
 /**
  * Preview ingredient CSV with row-by-row validation
+ * @param csvContent - The CSV content to preview
+ * @param restaurantId - The restaurant ID for duplicate name detection
  */
-export function previewIngredientCSV(csvContent: string): CSVPreviewResult {
+export async function previewIngredientCSV(csvContent: string, restaurantId?: number): Promise<CSVPreviewResult> {
   const globalErrors: string[] = [];
   const rows: RowValidation[] = [];
   
@@ -118,6 +124,31 @@ export function previewIngredientCSV(csvContent: string): CSVPreviewResult {
         rowWarnings.push('No supplier information');
       }
       
+      // Determine operation type (create or update)
+      const hasId = row.id && row.id.trim() !== '';
+      const operation: 'create' | 'update' = hasId ? 'update' : 'create';
+      
+      // Check for duplicate names (only for create operations)
+      if (operation === 'create' && restaurantId && row.name && row.name.trim() !== '') {
+        const db = await getDb();
+        if (db) {
+          const existing = await db
+            .select()
+            .from(ingredients)
+            .where(
+              and(
+                eq(ingredients.restaurantId, restaurantId),
+                eq(ingredients.name, row.name.trim())
+              )
+            )
+            .limit(1);
+          
+          if (existing.length > 0) {
+            rowWarnings.push(`Duplicate name: "${row.name}" already exists (ID: ${existing[0].id}). This will create a duplicate ingredient.`);
+          }
+        }
+      }
+      
       // Determine status
       let status: RowValidationStatus = 'valid';
       if (rowErrors.length > 0) {
@@ -130,6 +161,7 @@ export function previewIngredientCSV(csvContent: string): CSVPreviewResult {
         rowIndex: i,
         rowNumber: rowNum,
         status,
+        operation,
         errors: rowErrors,
         warnings: rowWarnings,
         data: row,
@@ -255,6 +287,10 @@ export function previewRecipeCSV(csvContent: string): CSVPreviewResult {
         rowWarnings.push('No category assigned');
       }
       
+      // Determine operation type (create or update)
+      const hasId = row.id && row.id.trim() !== '';
+      const operation: 'create' | 'update' = hasId ? 'update' : 'create';
+      
       // Determine status
       let status: RowValidationStatus = 'valid';
       if (rowErrors.length > 0) {
@@ -267,6 +303,7 @@ export function previewRecipeCSV(csvContent: string): CSVPreviewResult {
         rowIndex: i,
         rowNumber: rowNum,
         status,
+        operation,
         errors: rowErrors,
         warnings: rowWarnings,
         data: row,
@@ -376,6 +413,10 @@ export function previewRecipeIngredientsCSV(csvContent: string): CSVPreviewResul
         rowWarnings.push('No ingredient name (reference only, not required)');
       }
       
+      // Determine operation type (create or update)
+      const hasId = row.id && row.id.trim() !== '';
+      const operation: 'create' | 'update' = hasId ? 'update' : 'create';
+      
       // Determine status
       let status: RowValidationStatus = 'valid';
       if (rowErrors.length > 0) {
@@ -388,6 +429,7 @@ export function previewRecipeIngredientsCSV(csvContent: string): CSVPreviewResul
         rowIndex: i,
         rowNumber: rowNum,
         status,
+        operation,
         errors: rowErrors,
         warnings: rowWarnings,
         data: row,

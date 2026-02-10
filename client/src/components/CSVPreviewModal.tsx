@@ -14,6 +14,7 @@ interface RowValidation {
   rowIndex: number;
   rowNumber: number;
   status: RowValidationStatus;
+  operation?: 'create' | 'update';
   errors: string[];
   warnings: string[];
   data: any;
@@ -80,6 +81,17 @@ export function CSVPreviewModal({
     }
   };
 
+  const getOperationBadge = (operation?: 'create' | 'update') => {
+    if (!operation) return null;
+    
+    switch (operation) {
+      case 'create':
+        return <Badge variant="outline" className="bg-green-100 text-green-800 border-green-300">Create</Badge>;
+      case 'update':
+        return <Badge variant="outline" className="bg-blue-100 text-blue-800 border-blue-300">Update</Badge>;
+    }
+  };
+
   const getRowClassName = (status: RowValidationStatus) => {
     switch (status) {
       case 'valid':
@@ -103,7 +115,7 @@ export function CSVPreviewModal({
 
         <div className="flex-1 flex flex-col gap-4 min-h-0">
           {/* Summary Statistics */}
-          <div className="grid grid-cols-4 gap-3">
+          <div className="grid grid-cols-6 gap-3">
             <div className="flex items-center gap-2 p-3 rounded-lg border bg-card">
               <Info className="h-5 w-5 text-muted-foreground" />
               <div>
@@ -130,6 +142,20 @@ export function CSVPreviewModal({
               <div>
                 <div className="text-2xl font-semibold text-red-700">{errorRows}</div>
                 <div className="text-xs text-muted-foreground">Errors</div>
+              </div>
+            </div>
+            <div className="flex items-center gap-2 p-3 rounded-lg border bg-green-100/50">
+              <CheckCircle2 className="h-5 w-5 text-green-700" />
+              <div>
+                <div className="text-2xl font-semibold text-green-800">{rows.filter(r => r.operation === 'create').length}</div>
+                <div className="text-xs text-muted-foreground">Will Create</div>
+              </div>
+            </div>
+            <div className="flex items-center gap-2 p-3 rounded-lg border bg-blue-100/50">
+              <Info className="h-5 w-5 text-blue-700" />
+              <div>
+                <div className="text-2xl font-semibold text-blue-800">{rows.filter(r => r.operation === 'update').length}</div>
+                <div className="text-xs text-muted-foreground">Will Update</div>
               </div>
             </div>
           </div>
@@ -208,9 +234,16 @@ export function CSVPreviewModal({
                   <TableRow key={row.rowIndex} className={getRowClassName(row.status)}>
                     <TableCell className="font-mono text-xs">{row.rowNumber}</TableCell>
                     <TableCell>
-                      <div className="flex items-center gap-2">
-                        {getStatusIcon(row.status)}
-                        {getStatusBadge(row.status)}
+                      <div className="flex flex-col gap-1">
+                        <div className="flex items-center gap-2">
+                          {getStatusIcon(row.status)}
+                          {getStatusBadge(row.status)}
+                        </div>
+                        {row.operation && (
+                          <div className="flex items-center gap-1">
+                            {getOperationBadge(row.operation)}
+                          </div>
+                        )}
                       </div>
                     </TableCell>
                     {columns.map(col => (

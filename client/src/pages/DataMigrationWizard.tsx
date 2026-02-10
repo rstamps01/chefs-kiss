@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
@@ -13,28 +13,74 @@ interface StepStatus {
   ingredients: {
     completed: boolean;
     recordsImported: number;
+    error?: string;
   };
   recipes: {
     completed: boolean;
     recordsImported: number;
+    error?: string;
   };
   recipeIngredients: {
     completed: boolean;
     recordsImported: number;
+    error?: string;
   };
 }
+
+const WIZARD_STORAGE_KEY = 'dataMigrationWizardState';
 
 export function DataMigrationWizard() {
   const [, setLocation] = useLocation();
   const [currentStep, setCurrentStep] = useState<WizardStep>('ingredients');
-  const [stepStatus, setStepStatus] = useState<StepStatus>({
-    ingredients: { completed: false, recordsImported: 0 },
-    recipes: { completed: false, recordsImported: 0 },
-    recipeIngredients: { completed: false, recordsImported: 0 },
+  const [stepStatus, setStepStatus] = useState<StepStatus>(() => {
+    // Load from localStorage on mount
+    const saved = localStorage.getItem(WIZARD_STORAGE_KEY);
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        return parsed.stepStatus;
+      } catch (e) {
+        console.error('Failed to parse wizard state:', e);
+      }
+    }
+    return {
+      ingredients: { completed: false, recordsImported: 0 },
+      recipes: { completed: false, recordsImported: 0 },
+      recipeIngredients: { completed: false, recordsImported: 0 },
+    };
   });
   
   const [showImportModal, setShowImportModal] = useState(false);
   const [importType, setImportType] = useState<'ingredients' | 'recipes' | 'recipeIngredients'>('ingredients');
+  const [importError, setImportError] = useState<string | null>(null);
+
+  // Load currentStep from localStorage
+  useEffect(() => {
+    const saved = localStorage.getItem(WIZARD_STORAGE_KEY);
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (parsed.currentStep && parsed.currentStep !== 'complete') {
+          setCurrentStep(parsed.currentStep);
+        }
+      } catch (e) {
+        console.error('Failed to parse wizard state:', e);
+      }
+    }
+  }, []);
+
+  // Save to localStorage whenever state changes
+  useEffect(() => {
+    const state = { currentStep, stepStatus };
+    localStorage.setItem(WIZARD_STORAGE_KEY, JSON.stringify(state));
+  }, [currentStep, stepStatus]);
+
+  // Clear localStorage on completion
+  useEffect(() => {
+    if (currentStep === 'complete') {
+      localStorage.removeItem(WIZARD_STORAGE_KEY);
+    }
+  }, [currentStep]);
 
   const steps: Array<{ id: WizardStep; title: string; description: string }> = [
     {
@@ -64,7 +110,53 @@ export function DataMigrationWizard() {
 
   const handleImportClick = (type: 'ingredients' | 'recipes' | 'recipeIngredients') => {
     setImportType(type);
+    setImportError(null);
     setShowImportModal(true);
+  };
+
+  const handleImportError = (error: string) => {
+    setStepStatus(prev => ({
+      ...prev,
+      [importType]: {
+        ...prev[importType as keyof StepStatus],
+        error,
+      },
+    }));
+    setImportError(error);
+    setShowImportModal(false);
+  };
+
+  const handleRetry = () => {
+    // Clear error and reopen import modal
+    setStepStatus(prev => ({
+      ...prev,
+      [currentStep as keyof StepStatus]: {
+        ...prev[currentStep as keyof StepStatus],
+        error: undefined,
+      },
+    }));
+    setImportError(null);
+    handleImportClick(currentStep as 'ingredients' | 'recipes' | 'recipeIngredients');
+  };
+
+  const handleSkip = () => {
+    // Mark as skipped (not completed) and move to next step
+    setStepStatus(prev => ({
+      ...prev,
+      [currentStep as keyof StepStatus]: {
+        ...prev[currentStep as keyof StepStatus],
+        error: undefined,
+      },
+    }));
+    setImportError(null);
+    
+    if (currentStep === 'ingredients') {
+      setCurrentStep('recipes');
+    } else if (currentStep === 'recipes') {
+      setCurrentStep('recipeIngredients');
+    } else if (currentStep === 'recipeIngredients') {
+      setCurrentStep('complete');
+    }
   };
 
   const handleImportSuccess = (created: number, updated: number) => {
@@ -75,9 +167,11 @@ export function DataMigrationWizard() {
       [importType]: {
         completed: true,
         recordsImported: totalRecords,
+        error: undefined,
       },
     }));
 
+    setImportError(null);
     setShowImportModal(false);
 
     // Auto-advance to next step
@@ -108,13 +202,7 @@ export function DataMigrationWizard() {
     }
   };
 
-  const handleSkip = () => {
-    if (currentStep === 'ingredients') {
-      setCurrentStep('recipes');
-    } else if (currentStep === 'recipes') {
-      setCurrentStep('recipeIngredients');
-    }
-  };
+
 
   const getStepIcon = (stepId: WizardStep) => {
     if (stepId === 'complete') return null;
@@ -200,6 +288,24 @@ export function DataMigrationWizard() {
               </Alert>
             )}
 
+            {/* Error State */}
+            {stepStatus[currentStep as keyof Omit<StepStatus, 'complete'>]?.error && (
+              <Alert variant="destructive" className="mb-4">
+                <AlertDescription>
+                  <div className="font-semibold mb-2">Import Failed</div>
+                  <div className="text-sm mb-3">{stepStatus[currentStep as keyof Omit<StepStatus, 'complete'>].error}</div>
+                  <div className="flex gap-2">
+                    <Button onClick={handleRetry} size="sm" variant="outline">
+                      Retry Import
+                    </Button>
+                    <Button onClick={handleSkip} size="sm" variant="ghost">
+                      Skip This Step
+                    </Button>
+                  </div>
+                </AlertDescription>
+              </Alert>
+            )}
+
             {stepStatus[currentStep as keyof Omit<StepStatus, 'complete'>]?.completed ? (
               <div className="flex items-center gap-3 p-4 bg-green-50 rounded-lg border border-green-200">
                 <CheckCircle2 className="h-6 w-6 text-green-600" />
@@ -210,7 +316,7 @@ export function DataMigrationWizard() {
                   </div>
                 </div>
               </div>
-            ) : (
+            ) : !stepStatus[currentStep as keyof Omit<StepStatus, 'complete'>]?.error ? (
               <Button
                 onClick={() => handleImportClick(currentStep as 'ingredients' | 'recipes' | 'recipeIngredients')}
                 className="w-full"
@@ -219,7 +325,7 @@ export function DataMigrationWizard() {
                 <Upload className="mr-2 h-5 w-5" />
                 Import {currentStep === 'ingredients' ? 'Ingredients' : currentStep === 'recipes' ? 'Recipes' : 'Recipe Ingredients'}
               </Button>
-            )}
+            ) : null}
 
             <div className="flex justify-between pt-4">
               <Button
@@ -296,6 +402,7 @@ export function DataMigrationWizard() {
           onClose={() => setShowImportModal(false)}
           type={importType}
           onSuccess={handleImportSuccess}
+          onError={handleImportError}
         />
       )}
     </div>

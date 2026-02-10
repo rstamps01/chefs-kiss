@@ -11,9 +11,10 @@ interface CSVImportModalProps {
   onClose: () => void;
   type: "ingredients" | "recipes" | "recipeIngredients";
   onSuccess: (created: number, updated: number) => void;
+  onError?: (error: string) => void;
 }
 
-export function CSVImportModal({ open, onClose, type, onSuccess }: CSVImportModalProps) {
+export function CSVImportModal({ open, onClose, type, onSuccess, onError }: CSVImportModalProps) {
   const [file, setFile] = useState<File | null>(null);
   const [csvContent, setCSVContent] = useState<string>("");
   const [preview, setPreview] = useState<string[]>([]);
@@ -114,15 +115,25 @@ export function CSVImportModal({ open, onClose, type, onSuccess }: CSVImportModa
           utils.recipes.list.invalidate(); // Recipe ingredients affect recipes
         }
         onSuccess((response as any).created || 0, response.updated);
+      } else {
+        // Import failed
+        const errorMessage = response.errors.length > 0 ? response.errors.join(', ') : 'Import failed';
+        if (onError) {
+          onError(errorMessage);
+        }
       }
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Import failed";
       setResult({
         success: false,
         created: 0,
         updated: 0,
         failed: 0,
-        errors: [error instanceof Error ? error.message : "Import failed"],
+        errors: [errorMessage],
       });
+      if (onError) {
+        onError(errorMessage);
+      }
     } finally {
       setImporting(false);
     }

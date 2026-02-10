@@ -1586,3 +1586,15 @@ All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb
 - [x] Fix TypeScript type errors in import-history.ts and routers.ts
 - [x] Fix CSVImportModal onSuccess callback signature
 - [x] Test wizard workflow after fixes
+
+## Wizard Error Recovery & Progress Persistence (COMPLETED)
+- [x] Add error state tracking for each wizard step
+- [x] Show retry button when import fails
+- [x] Show skip button with warning when import fails
+- [x] Implement localStorage persistence for wizard state
+- [x] Load wizard state on component mount
+- [x] Clear localStorage on wizard completion
+- [x] Add onError callback to CSVImportModal
+- [x] Connect error handling between modal and wizard
+- [x] Test error recovery flow (retry/skip)
+- [x] Test progress persistence across page refresh

@@ -1496,3 +1496,27 @@ All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb
 - [x] Add duplicate warning indicators in preview modal
 - [x] Test duplicate detection with various scenarios
 - [x] Test preview modal with mixed create/update operations
+
+## Import History Tracking with Rollback (Partial - Backend Complete)
+- [x] Design database schema for import_history table
+- [x] Add importType, timestamp, userId, recordsCreated, recordsUpdated, snapshot fields
+- [x] Create database migration for import_history table
+- [x] Implement saveImportHistory function
+- [x] Implement getImportHistory function with pagination
+- [x] Implement rollbackImport function to restore previous state
+- [x] Implement getSnapshotBeforeUpdate helper function
+- [x] Modify bulkUpdateIngredients to track created/updated IDs
+- [ ] Modify import endpoints to save history after successful import
+- [ ] Create ImportHistory page component
+- [ ] Add import history list with filters (date range, type, user)
+- [ ] Add rollback confirmation dialog with preview
+- [ ] Test import history tracking across all import types
+- [ ] Test rollback functionality with various scenarios
+
+## Within-CSV Duplicate Detection (COMPLETED)
+- [x] Add duplicate detection logic to check for duplicates within the CSV file
+- [x] Detect duplicate ingredient names in the same CSV upload
+- [x] Add warnings for within-CSV duplicates in preview modal
+- [x] Distinguish between database duplicates and CSV duplicates in warnings
+- [x] Test within-CSV duplicate detection with various scenarios
+- [x] Test mixed database and CSV duplicate detection

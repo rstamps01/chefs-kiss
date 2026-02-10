@@ -1,4 +1,4 @@
-import { int, mysqlEnum, mysqlTable, text, timestamp, varchar, decimal, date, boolean, index, unique } from "drizzle-orm/mysql-core";
+import { int, mysqlEnum, mysqlTable, text, timestamp, varchar, decimal, date, boolean, index, unique, json } from "drizzle-orm/mysql-core";
 
 /**
  * Chef's Kiss Database Schema
@@ -388,6 +388,52 @@ export const ingredientConversions = mysqlTable("ingredientConversions", {
   uniqueConversionPerIngredient: unique("unique_conversion_per_ingredient").on(table.restaurantId, table.ingredientId, table.fromUnit, table.toUnit),
 }));
 
+/**
+ * Import History Table
+ * 
+ * Tracks all CSV imports with metadata for audit trail and rollback capability.
+ * Stores snapshots of data before import to enable rollback functionality.
+ */
+export const importHistory = mysqlTable("import_history", {
+  id: int("id").autoincrement().primaryKey(),
+  restaurantId: int("restaurantId").notNull(), // references restaurants.id
+  userId: int("userId").notNull(), // references users.id (who performed the import)
+  
+  // Import metadata
+  importType: mysqlEnum("importType", ["ingredients", "recipes", "recipeIngredients"]).notNull(),
+  timestamp: timestamp("timestamp").defaultNow().notNull(),
+  
+  // Import statistics
+  recordsCreated: int("recordsCreated").default(0).notNull(),
+  recordsUpdated: int("recordsUpdated").default(0).notNull(),
+  totalRecords: int("totalRecords").default(0).notNull(),
+  
+  // Rollback data (JSON snapshot of affected records before import)
+  // For creates: stores the IDs that were created (to delete on rollback)
+  // For updates: stores the previous values (to restore on rollback)
+  snapshotData: json("snapshotData").$type<{
+    created?: number[]; // IDs of created records
+    updated?: Array<{ // Previous values of updated records
+      id: number;
+      data: Record<string, any>;
+    }>;
+  }>(),
+  
+  // Status tracking
+  status: mysqlEnum("status", ["completed", "rolled_back"]).default("completed").notNull(),
+  rolledBackAt: timestamp("rolledBackAt"),
+  rolledBackBy: int("rolledBackBy"), // references users.id
+  
+  // Optional metadata
+  fileName: varchar("fileName", { length: 255 }),
+  notes: text("notes"),
+}, (table) => ({
+  restaurantIdx: index("restaurant_idx").on(table.restaurantId),
+  userIdx: index("user_idx").on(table.userId),
+  timestampIdx: index("timestamp_idx").on(table.timestamp),
+  statusIdx: index("status_idx").on(table.status),
+}));
+
 // ============================================================================
 // TYPE EXPORTS
 // ============================================================================
@@ -433,3 +479,6 @@ export type InsertRecipeCategory = typeof recipeCategories.$inferInsert;
 
 export type IngredientUnit = typeof ingredientUnits.$inferSelect;
 export type InsertIngredientUnit = typeof ingredientUnits.$inferInsert;
+
+export type ImportHistory = typeof importHistory.$inferSelect;
+export type InsertImportHistory = typeof importHistory.$inferInsert;

@@ -1373,6 +1373,8 @@ export async function bulkUpdateIngredients(
     updated: 0,
     failed: 0,
     errors: [] as string[],
+    createdIds: [] as number[],
+    updatedIds: [] as number[],
   };
 
   for (const item of ingredientsData) {
@@ -1382,7 +1384,7 @@ export async function bulkUpdateIngredients(
 
       if (isCreate) {
         // Create new ingredient
-        await db.insert(ingredients).values({
+        const [result] = await db.insert(ingredients).values({
           restaurantId,
           name: item.name,
           category: item.category,
@@ -1394,6 +1396,7 @@ export async function bulkUpdateIngredients(
           minStock: item.minStock?.toString(),
         });
         results.created++;
+        results.createdIds.push(Number(result.insertId));
       } else {
         // Update existing ingredient (id is guaranteed to be a number here)
         if (!item.id) {
@@ -1417,6 +1420,7 @@ export async function bulkUpdateIngredients(
           .where(eq(ingredients.id, item.id));
         
         results.updated++;
+        results.updatedIds.push(item.id);
       }
     } catch (error) {
       results.failed++;

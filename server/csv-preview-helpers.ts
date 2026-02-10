@@ -58,6 +58,18 @@ export async function previewIngredientCSV(csvContent: string, restaurantId?: nu
       { csvColumn: 'minStock', dbField: 'minStock', required: false },
     ];
     
+    // Build a map of ingredient names to detect within-CSV duplicates
+    const nameOccurrences = new Map<string, number[]>(); // name -> array of row indices
+    data.forEach((row, index) => {
+      if (row.name && row.name.trim() !== '') {
+        const normalizedName = row.name.trim().toLowerCase();
+        if (!nameOccurrences.has(normalizedName)) {
+          nameOccurrences.set(normalizedName, []);
+        }
+        nameOccurrences.get(normalizedName)!.push(index);
+      }
+    });
+    
     // Validate required columns
     const requiredColumns = columnMapping.filter(c => c.required).map(c => c.csvColumn);
     const validation = validateCSVColumns(data, requiredColumns);
@@ -144,8 +156,22 @@ export async function previewIngredientCSV(csvContent: string, restaurantId?: nu
             .limit(1);
           
           if (existing.length > 0) {
-            rowWarnings.push(`Duplicate name: "${row.name}" already exists (ID: ${existing[0].id}). This will create a duplicate ingredient.`);
+            rowWarnings.push(`Database duplicate: "${row.name}" already exists (ID: ${existing[0].id}). This will create a duplicate ingredient.`);
           }
+        }
+      }
+      
+      // Check for within-CSV duplicates
+      if (row.name && row.name.trim() !== '') {
+        const normalizedName = row.name.trim().toLowerCase();
+        const occurrences = nameOccurrences.get(normalizedName) || [];
+        if (occurrences.length > 1) {
+          // This name appears multiple times in the CSV
+          const otherRows = occurrences
+            .filter(idx => idx !== i)
+            .map(idx => idx + 2) // +2 for 1-indexed and header row
+            .join(', ');
+          rowWarnings.push(`CSV duplicate: "${row.name}" appears multiple times in this file (rows: ${rowNum}, ${otherRows}). This will create ${occurrences.length} ingredients with the same name.`);
         }
       }
       

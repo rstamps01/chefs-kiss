@@ -45,7 +45,7 @@ describe('Duplicate Name Detection', () => {
     const firstRow = result.rows[0];
     expect(firstRow.operation).toBe('create');
     expect(firstRow.warnings.length).toBeGreaterThan(0);
-    expect(firstRow.warnings.some(w => w.includes('Duplicate name'))).toBe(true);
+    expect(firstRow.warnings.some(w => w.includes('Database duplicate'))).toBe(true);
     expect(firstRow.warnings.some(w => w.includes('Existing Test Ingredient'))).toBe(true);
     
     // Second row should not have duplicate warning

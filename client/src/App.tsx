@@ -16,7 +16,8 @@ import RecipeIngredientsView from "./pages/RecipeIngredientsView";
 import AddRecipeForm from "./pages/AddRecipeForm";
 import DataImport from "./pages/DataImport";
 import ConversionTesting from "./pages/ConversionTesting";
-import { ImportHistory } from "./pages/ImportHistory";
+import { ImportHistory } from './pages/ImportHistory';
+import { DataMigrationWizard } from './pages/DataMigrationWizard';
 
 function Router() {
   return (
@@ -72,6 +73,11 @@ function Router() {
       <Route path="/import-history">
         <DashboardLayout>
           <ImportHistory />
+        </DashboardLayout>
+      </Route>
+      <Route path="/data-migration">
+        <DashboardLayout>
+          <DataMigrationWizard />
         </DashboardLayout>
       </Route>
       <Route path="/404" component={NotFound} />

@@ -1561,3 +1561,21 @@ All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb
 - [x] Add visual highlighting (background color) to updated rows
 - [x] Ensure highlighting persists until modal closes
 - [x] Test visual feedback is clear and noticeable
+
+## Preview Modal Color Legend (COMPLETED)
+- [x] Add color legend component to preview modal header
+- [x] Explain blue highlighting means "Updated by Find IDs"
+- [x] Show legend only when Find IDs has been used
+- [x] Test legend visibility and clarity
+
+## Data Migration Wizard (COMPLETED)
+- [x] Create DataMigrationWizard page component
+- [x] Design 3-step wizard UI with progress indicator
+- [x] Implement Step 1: Import Ingredients with validation
+- [x] Implement Step 2: Import Recipes with validation
+- [x] Implement Step 3: Link Recipe Ingredients with validation
+- [x] Add progress tracking between steps
+- [x] Add navigation (Next/Previous/Skip) buttons
+- [x] Add completion summary with statistics
+- [x] Add route and navigation link to wizard
+- [x] Test full wizard workflow end-to-end

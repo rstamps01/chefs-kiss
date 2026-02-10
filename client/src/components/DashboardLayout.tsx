@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/sidebar";
 import { getLoginUrl } from "@/const";
 import { useIsMobile } from "@/hooks/useMobile";
-import { BarChart3, TrendingUp, ChefHat, FileText, Settings as SettingsIcon, LogOut, PanelLeft, Home, Upload, FlaskConical, History } from "lucide-react";
+import { BarChart3, TrendingUp, ChefHat, FileText, Settings as SettingsIcon, LogOut, PanelLeft, Home, Upload, FlaskConical, History, Workflow } from "lucide-react";
 import { CSSProperties, useEffect, useRef, useState } from "react";
 import { useLocation } from "wouter";
 import { DashboardLayoutSkeleton } from './DashboardLayoutSkeleton';
@@ -31,6 +31,7 @@ const menuItems = [
   { icon: Home, label: "Overview", path: "/dashboard" },
   { icon: BarChart3, label: "Analytics", path: "/analytics" },
   { icon: Upload, label: "Data Import", path: "/data-import" },
+  { icon: Workflow, label: "Data Migration Wizard", path: "/data-migration" },
   { icon: History, label: "Import History", path: "/import-history" },
   { icon: TrendingUp, label: "Forecasting", path: "/forecasting" },
   { icon: ChefHat, label: "Prep Planning", path: "/prep-planning" },

@@ -168,6 +168,16 @@ export function CSVPreviewModal({
             </div>
           </div>
 
+          {/* Color Legend - Show when Find IDs has been used */}
+          {updatedRowIndices.size > 0 && (
+            <Alert className="bg-blue-50 border-blue-200">
+              <Info className="h-4 w-4 text-blue-600" />
+              <AlertDescription className="text-sm text-blue-900">
+                <span className="font-semibold">Blue highlighted rows</span> indicate ingredients that had their IDs automatically populated by the "Find IDs" feature, converting them from creates to updates.
+              </AlertDescription>
+            </Alert>
+          )}
+
           {/* Global Errors */}
           {globalErrors.length > 0 && (
             <Alert variant="destructive">

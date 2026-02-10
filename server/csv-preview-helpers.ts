@@ -41,7 +41,7 @@ export function previewIngredientCSV(csvContent: string): CSVPreviewResult {
     
     // Define column mapping
     const columnMapping = [
-      { csvColumn: 'id', dbField: 'id', required: true },
+      { csvColumn: 'id', dbField: 'id', required: false },
       { csvColumn: 'name', dbField: 'name', required: true },
       { csvColumn: 'category', dbField: 'category', required: false },
       { csvColumn: 'unit', dbField: 'unit', required: true },
@@ -78,8 +78,9 @@ export function previewIngredientCSV(csvContent: string): CSVPreviewResult {
       const rowWarnings: string[] = [];
       
       // Required field validations
-      if (!row.id || isNaN(parseInt(row.id))) {
-        rowErrors.push('Invalid or missing ID');
+      // id is optional - if provided, must be valid integer
+      if (row.id && isNaN(parseInt(row.id))) {
+        rowErrors.push('ID must be a valid number');
       }
       
       if (!row.name || row.name.trim() === "") {
@@ -214,8 +215,9 @@ export function previewRecipeCSV(csvContent: string): CSVPreviewResult {
       const rowWarnings: string[] = [];
       
       // Required field validations
-      if (!row.id || isNaN(parseInt(row.id))) {
-        rowErrors.push('Invalid or missing ID');
+      // id is optional - if provided, must be valid integer
+      if (row.id && isNaN(parseInt(row.id))) {
+        rowErrors.push('ID must be a valid number');
       }
       
       if (!row.name || row.name.trim() === "") {

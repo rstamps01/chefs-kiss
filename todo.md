@@ -1452,3 +1452,20 @@ All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb
 - [x] Test CSV import with provided files (6 tests passing)
 - [ ] Test recipes page loads correctly after fix
 - [ ] Verify all tRPC queries on recipes page work properly
+
+## CSV Import File Format Review (Current Task)
+- [x] Review ingredients-import-template.csv for formatting issues
+- [x] Review test-ingredients-01.csv for formatting issues
+- [x] Check for character encoding problems (BOM detected in test file)
+- [x] Verify column headers match expected format
+- [x] Check for data type mismatches
+- [x] Document any issues found (UTF-8 encoding issue with ñ character)
+- [x] Provide recommendations for fixing issues
+
+## Bug Fix: Missing 'id' Column in Ingredient CSV Export (Current Task)
+- [x] Review exported ingredients CSV to confirm id column is missing
+- [x] Review template CSV to see if id column is included
+- [x] Identified issue: preview validation requires id column but exports don't include it
+- [x] Fix CSV preview validation to make id column optional
+- [x] Test re-importing exported data without id column (4 tests passing)
+- [x] Verify import works correctly without id column present

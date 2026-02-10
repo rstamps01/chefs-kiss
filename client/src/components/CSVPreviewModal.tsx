@@ -7,6 +7,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { CheckCircle2, AlertCircle, AlertTriangle, XCircle, Info } from "lucide-react";
 import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 type RowValidationStatus = 'valid' | 'warning' | 'error';
 
@@ -54,6 +55,7 @@ export function CSVPreviewModal({
 }: CSVPreviewModalProps) {
   const [showColumnMapping, setShowColumnMapping] = useState(false);
   const [isFindingIds, setIsFindingIds] = useState(false);
+  const { toast } = useToast();
 
   if (!previewData) {
     return null;
@@ -343,6 +345,17 @@ export function CSVPreviewModal({
                           }
                         }
                         return row;
+                      });
+                      
+                      // Count how many IDs were found
+                      const matchedCount = Object.keys(nameToIdMap).length;
+                      const totalSearched = names.length;
+                      
+                      // Show toast with match statistics
+                      toast({
+                        title: "ID Lookup Complete",
+                        description: `Found IDs for ${matchedCount} out of ${totalSearched} ingredients`,
+                        variant: matchedCount > 0 ? "default" : "destructive",
                       });
                       
                       onFindIds(updatedRows);

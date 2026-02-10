@@ -1550,3 +1550,8 @@ All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb
 - [x] Handle partial matches (some found, some not)
 - [x] Add loading state during ID lookup
 - [x] Test auto-ID lookup with various scenarios
+
+## Find IDs Toast Notification (COMPLETED)
+- [x] Add toast notification after Find IDs completes
+- [x] Show match statistics (X out of Y found)
+- [x] Test toast appears with correct counts

@@ -928,9 +928,20 @@ export const appRouter = router({
           };
         }
         
-        // Convert CSV data to update format
+        const restaurant = await getUserRestaurant(ctx.user.id);
+        if (!restaurant) {
+          return {
+            success: false,
+            errors: ['Restaurant not found for user'],
+            created: 0,
+            updated: 0,
+            failed: 0,
+          };
+        }
+        
+        // Convert CSV data to upsert format
         const updateData = parsed.data.map(row => ({
-          id: parseInt(row.id),
+          id: row.id && row.id.trim() !== '' ? parseInt(row.id) : null,
           name: row.name,
           category: row.category || null,
           description: row.description || null,
@@ -938,6 +949,7 @@ export const appRouter = router({
           prepTime: row.prepTime ? parseInt(row.prepTime) : undefined,
           cookTime: row.cookTime ? parseInt(row.cookTime) : undefined,
           sellingPrice: row.sellingPrice ? parseFloat(row.sellingPrice) : undefined,
+          restaurantId: restaurant.id,
         }));
         
         const results = await bulkUpdateRecipes(updateData);
@@ -945,6 +957,7 @@ export const appRouter = router({
         return {
           success: results.failed === 0,
           errors: results.errors,
+          created: results.created,
           updated: results.updated,
           failed: results.failed,
         };

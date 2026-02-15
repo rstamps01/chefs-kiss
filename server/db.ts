@@ -1379,8 +1379,27 @@ export async function bulkUpdateIngredients(
 
   for (const item of ingredientsData) {
     try {
+      let targetId = item.id;
+      
+      // If no ID provided, check if ingredient with same name exists
+      if (!targetId || targetId === null) {
+        const existing = await db
+          .select({ id: ingredients.id })
+          .from(ingredients)
+          .where(and(
+            eq(ingredients.restaurantId, restaurantId),
+            eq(ingredients.name, item.name)
+          ))
+          .limit(1);
+        
+        if (existing.length > 0) {
+          // Found existing ingredient with same name - update it
+          targetId = existing[0].id;
+        }
+      }
+      
       // Determine if this is a create or update operation
-      const isCreate = !item.id || item.id === null;
+      const isCreate = !targetId || targetId === null;
 
       if (isCreate) {
         // Create new ingredient
@@ -1398,8 +1417,8 @@ export async function bulkUpdateIngredients(
         results.created++;
         results.createdIds.push(Number(result.insertId));
       } else {
-        // Update existing ingredient (id is guaranteed to be a number here)
-        if (!item.id) {
+        // Update existing ingredient (targetId is guaranteed to be a number here)
+        if (!targetId) {
           throw new Error('ID is required for update operation');
         }
 
@@ -1417,10 +1436,10 @@ export async function bulkUpdateIngredients(
         await db
           .update(ingredients)
           .set(updateData)
-          .where(eq(ingredients.id, item.id));
+          .where(eq(ingredients.id, targetId));
         
         results.updated++;
-        results.updatedIds.push(item.id);
+        results.updatedIds.push(targetId);
       }
     } catch (error) {
       results.failed++;
@@ -1433,48 +1452,99 @@ export async function bulkUpdateIngredients(
 }
 
 /**
- * Bulk update recipes from CSV import
+ * Bulk update or create recipes from CSV import
+ * - If id is provided and exists: updates the recipe
+ * - If id is missing or empty: checks for existing recipe by name, updates if found, creates if not
  */
 export async function bulkUpdateRecipes(recipesData: Array<{
-  id: number;
-  name?: string;
+  id?: number | null;
+  name: string;
   category?: string | null;
   description?: string | null;
   servings?: number;
   prepTime?: number;
   cookTime?: number;
   sellingPrice?: number;
+  restaurantId: number;
 }>) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
 
   const results = {
+    created: 0,
     updated: 0,
     failed: 0,
     errors: [] as string[],
+    createdIds: [] as number[],
+    updatedIds: [] as number[],
   };
 
   for (const item of recipesData) {
     try {
-      const updateData: any = {};
+      let targetId = item.id;
       
-      if (item.name !== undefined) updateData.name = item.name;
-      if (item.category !== undefined) updateData.category = item.category;
-      if (item.description !== undefined) updateData.description = item.description;
-      if (item.servings !== undefined) updateData.servings = item.servings;
-      if (item.prepTime !== undefined) updateData.prepTime = item.prepTime;
-      if (item.cookTime !== undefined) updateData.cookTime = item.cookTime;
-      if (item.sellingPrice !== undefined) updateData.sellingPrice = item.sellingPrice.toString();
+      // If no ID provided, check if recipe with same name exists
+      if (!targetId || targetId === null) {
+        const existing = await db
+          .select({ id: recipes.id })
+          .from(recipes)
+          .where(and(
+            eq(recipes.restaurantId, item.restaurantId),
+            eq(recipes.name, item.name)
+          ))
+          .limit(1);
+        
+        if (existing.length > 0) {
+          // Found existing recipe with same name - update it
+          targetId = existing[0].id;
+        }
+      }
+      
+      // Determine if this is a create or update operation
+      const isCreate = !targetId || targetId === null;
 
-      await db
-        .update(recipes)
-        .set(updateData)
-        .where(eq(recipes.id, item.id));
-      
-      results.updated++;
+      if (isCreate) {
+        // Create new recipe
+        const [result] = await db.insert(recipes).values({
+          restaurantId: item.restaurantId,
+          name: item.name,
+          category: item.category,
+          description: item.description,
+          servings: item.servings,
+          prepTime: item.prepTime,
+          cookTime: item.cookTime,
+          sellingPrice: item.sellingPrice?.toString(),
+        });
+        results.created++;
+        results.createdIds.push(Number(result.insertId));
+      } else {
+        // Update existing recipe (targetId is guaranteed to be a number here)
+        if (!targetId) {
+          throw new Error('ID is required for update operation');
+        }
+        
+        const updateData: any = {};
+        
+        if (item.name !== undefined) updateData.name = item.name;
+        if (item.category !== undefined) updateData.category = item.category;
+        if (item.description !== undefined) updateData.description = item.description;
+        if (item.servings !== undefined) updateData.servings = item.servings;
+        if (item.prepTime !== undefined) updateData.prepTime = item.prepTime;
+        if (item.cookTime !== undefined) updateData.cookTime = item.cookTime;
+        if (item.sellingPrice !== undefined) updateData.sellingPrice = item.sellingPrice.toString();
+
+        await db
+          .update(recipes)
+          .set(updateData)
+          .where(eq(recipes.id, targetId));
+        
+        results.updated++;
+        results.updatedIds.push(targetId);
+      }
     } catch (error) {
       results.failed++;
-      results.errors.push(`Failed to update recipe ID ${item.id}: ${error instanceof Error ? error.message : String(error)}`);
+      const identifier = item.id ? `ID ${item.id}` : `name "${item.name}"`;
+      results.errors.push(`Failed to ${item.id ? 'update' : 'create'} recipe ${identifier}: ${error instanceof Error ? error.message : String(error)}`);
     }
   }
 

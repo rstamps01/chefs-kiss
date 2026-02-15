@@ -1639,3 +1639,11 @@ All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb
 - [x] Investigate Dialog component CSS that's restricting modal width
 - [x] Override shadcn/ui Dialog default max-width constraints
 - [x] Test to ensure modal displays at full browser width
+
+## CSV Import Upsert Logic (Current Sprint)
+- [x] Analyze current ingredient import logic to understand duplicate creation issue
+- [x] Implement upsert logic: match by name, update if exists, insert if new
+- [x] Ensure each ingredient/recipe has unique ID (already exists in schema)
+- [ ] Update preview to show "Will Update" vs "Will Create" status
+- [x] Test with CSV containing existing ingredient names to verify updates work
+- [x] Apply same upsert logic to recipe and recipe ingredient imports

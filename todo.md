@@ -1624,3 +1624,8 @@ All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb
 - [x] Add proper scrolling to table body so users can access all rows
 - [x] Ensure action buttons (Find IDs, Cancel, Import) remain accessible at bottom
 - [x] Test with 115-row ingredient CSV to verify scrolling works correctly
+
+## CSV Preview Modal Width Enhancement (Current Sprint)
+- [x] Increase modal width to show all table columns without cutoff
+- [x] Add horizontal scrolling to table for wide content
+- [x] Test with ingredient CSV to verify all columns visible

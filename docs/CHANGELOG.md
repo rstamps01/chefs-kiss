@@ -40,6 +40,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Modal width increased from 95vw to 98vw, then to full-screen (100vw × 100vh)
 - Table scrolling improved with fixed headers and action buttons
 - Import logic now matches by name when no ID provided, enabling bulk updates
+- **Project Structure Reorganization**: Cleaned up root directory by moving files to organized folders:
+  - Created `/docs` directory for all documentation (including `/docs/archive` for historical docs)
+  - Created `/scripts/archive` for old migration and seed scripts
+  - Created `/tests/archive` for old test files and CSV test data
+  - Added `PROJECT_STRUCTURE.md` documentation explaining folder organization
+  - Updated `README.md` with reference to project structure documentation
 
 ## [Previous Versions]
 

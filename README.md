@@ -61,6 +61,10 @@ Chef's Kiss is a comprehensive restaurant resource planning tool designed specif
 
 ## 📁 Project Structure
 
+> **📖 For complete project structure documentation, see [docs/PROJECT_STRUCTURE.md](docs/PROJECT_STRUCTURE.md)**
+
+This is a high-level overview of the main directories:
+
 ```
 restaurant-resource-planner/
 ├── branding/                    # Official branding package

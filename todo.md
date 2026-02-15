@@ -1698,3 +1698,15 @@ All tasks from this session have been marked as [x] completed above. Key achieve
 - [ ] Add "Will Update" vs "Will Create" status indicators in CSV preview
 - [ ] Create "Export All" button for complete data backup (ZIP with all CSVs)
 - [ ] Add import history tracking (timestamp, user, rows created/updated)
+
+
+## Root Directory Reorganization (Current Sprint)
+- [x] Analyze current root directory structure and identify files to archive
+- [x] Create organized folder structure (docs/, scripts/archive/, tests/archive/)
+- [x] Move documentation files to docs/ directory
+- [x] Move old scripts to scripts/archive/ directory
+- [x] Move test files to tests/archive/ directory
+- [x] Create PROJECT_STRUCTURE.md documentation
+- [x] Update README.md with reference to PROJECT_STRUCTURE.md
+- [x] Update CHANGELOG.md with reorganization details
+- [ ] Commit changes to GitHub

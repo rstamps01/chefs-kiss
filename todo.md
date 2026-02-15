@@ -1733,4 +1733,20 @@ All tasks from this session have been marked as [x] completed above. Key achieve
 - [x] Document production infrastructure requirements for 1, 5, 10, 25, 50, 100 tenants
 - [x] Identify PoC to production migration costs
 - [x] Create itemized cost breakdown by component
-- [ ] Commit documentation to GitHub
+- [x] Commit documentation to GitHub
+
+
+## Yield Management & Waste Tracking System (Future Enhancement)
+- [ ] Review INVENTORY_INGREDIENT_YIELD_SYSTEM.md documentation
+- [ ] Review YIELD_WASTE_IMPLEMENTATION_GUIDE.md
+- [ ] Design database schema for yield conversions and waste log
+- [ ] Implement yield percentage tracking in ingredient records
+- [ ] Create yield test workflow and data entry interface
+- [ ] Implement waste logging system (mobile-optimized)
+- [ ] Build waste analytics dashboard
+- [ ] Update recipe costing to use EP costs instead of AP costs
+- [ ] Create yield library with standard percentages
+- [ ] Implement by-product tracking and value recovery
+- [ ] Add waste reduction targets and alerts
+- [ ] Create training materials for staff
+- [ ] Commit changes to GitHub

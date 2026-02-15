@@ -70,6 +70,43 @@ export async function previewIngredientCSV(csvContent: string, restaurantId?: nu
       }
     });
     
+    // Batch query for database duplicates (only for create operations)
+    const existingIngredients = new Map<string, number>(); // name -> id
+    if (restaurantId) {
+      try {
+        const db = await getDb();
+        if (db) {
+          // Get all ingredient names from create operations
+          const createNames = data
+            .filter(row => !row.id || row.id.trim() === '')
+            .map(row => row.name?.trim())
+            .filter(name => name && name !== '');
+          
+          if (createNames.length > 0) {
+            // Batch query for all names at once
+            const { inArray } = await import('drizzle-orm');
+            const existing = await db
+              .select()
+              .from(ingredients)
+              .where(
+                and(
+                  eq(ingredients.restaurantId, restaurantId),
+                  inArray(ingredients.name, createNames)
+                )
+              );
+            
+            // Build lookup map
+            existing.forEach(ing => {
+              existingIngredients.set(ing.name, ing.id);
+            });
+          }
+        }
+      } catch (error) {
+        console.error('Error batch checking for duplicate ingredients:', error);
+        // Continue without duplicate check if database query fails
+      }
+    }
+    
     // Validate required columns
     const requiredColumns = columnMapping.filter(c => c.required).map(c => c.csvColumn);
     const validation = validateCSVColumns(data, requiredColumns);
@@ -141,28 +178,10 @@ export async function previewIngredientCSV(csvContent: string, restaurantId?: nu
       const operation: 'create' | 'update' = hasId ? 'update' : 'create';
       
       // Check for duplicate names (only for create operations)
-      if (operation === 'create' && restaurantId && row.name && row.name.trim() !== '') {
-        try {
-          const db = await getDb();
-          if (db) {
-            const existing = await db
-              .select()
-              .from(ingredients)
-              .where(
-                and(
-                  eq(ingredients.restaurantId, restaurantId),
-                  eq(ingredients.name, row.name.trim())
-                )
-              )
-              .limit(1);
-            
-            if (existing.length > 0) {
-              rowWarnings.push(`Database duplicate: "${row.name}" already exists (ID: ${existing[0].id}). This will create a duplicate ingredient.`);
-            }
-          }
-        } catch (error) {
-          console.error('Error checking for duplicate ingredient:', error);
-          // Continue without duplicate check if database query fails
+      if (operation === 'create' && row.name && row.name.trim() !== '') {
+        const existingId = existingIngredients.get(row.name.trim());
+        if (existingId) {
+          rowWarnings.push(`Database duplicate: "${row.name}" already exists (ID: ${existingId}). This will create a duplicate ingredient.`);
         }
       }
       

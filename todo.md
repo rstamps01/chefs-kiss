@@ -1606,3 +1606,10 @@ All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb
 - [x] Test with provided ingredients CSV file
 - [x] Fix the endpoint error
 - [x] Verify CSV preview loads correctly
+
+## CSV Preview Optimization (Current Sprint)
+- [x] Fix CSV preview endpoint timeout on large files (115+ rows)
+- [x] Optimize duplicate detection with batch query instead of individual queries per row
+- [x] Filter out UI-only "actions" column from CSV exports
+- [x] Add error handling to CSV import preview modal
+- [x] Test with real exported ingredient CSV file (53KB, 115 rows)

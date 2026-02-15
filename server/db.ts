@@ -53,9 +53,20 @@ export async function upsertUser(user: InsertUser): Promise<void> {
       values.lastSignedIn = user.lastSignedIn;
       updateSet.lastSignedIn = user.lastSignedIn;
     }
+    // Check if user already exists to preserve developer role
+    const existingUser = await db
+      .select({ role: users.role })
+      .from(users)
+      .where(eq(users.openId, user.openId))
+      .limit(1);
+
     if (user.role !== undefined) {
       values.role = user.role;
       updateSet.role = user.role;
+    } else if (existingUser.length > 0 && existingUser[0].role === 'developer') {
+      // Preserve developer role - don't overwrite it during OAuth sync
+      values.role = 'developer';
+      // Don't add to updateSet - keep existing role
     } else if (user.openId === ENV.ownerOpenId) {
       values.role = 'admin';
       updateSet.role = 'admin';

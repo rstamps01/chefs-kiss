@@ -1798,4 +1798,11 @@ All tasks from this session have been marked as [x] completed above. Key achieve
 - [x] Restrict UI access to developer/support roles only
 - [x] Test bulk delete with various scenarios
 - [ ] Document bulk delete feature in admin guide
-- [ ] Save checkpoint and commit to GitHub
+- [x] Save checkpoint and commit to GitHub
+
+
+## OAuth Role Persistence Bug Fix - Current Sprint
+- [x] Investigate upsertUser function in db.ts
+- [x] Update upsertUser to preserve developer role during OAuth sync
+- [x] Test developer role persistence across page refreshes
+- [ ] Save checkpoint and deliver fix

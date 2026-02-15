@@ -1618,3 +1618,9 @@ All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb
 - [x] Debug runtime error in batch query optimization causing HTML error response
 - [x] Fix the error in csv-preview-helpers.ts batch query code
 - [x] Test with actual CSV file to verify fix
+
+## CSV Preview Modal Layout Fix (Current Sprint)
+- [x] Increase modal width to prevent text overlap and make all columns readable
+- [x] Add proper scrolling to table body so users can access all rows
+- [x] Ensure action buttons (Find IDs, Cancel, Import) remain accessible at bottom
+- [x] Test with 115-row ingredient CSV to verify scrolling works correctly

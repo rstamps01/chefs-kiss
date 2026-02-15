@@ -113,7 +113,7 @@ export function CSVPreviewModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-6xl max-h-[90vh] flex flex-col">
+      <DialogContent className="max-w-[95vw] max-h-[90vh] flex flex-col">
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>
@@ -230,7 +230,7 @@ export function CSVPreviewModal({
           )}
 
           {/* Data Preview Table */}
-          <ScrollArea className="flex-1 border rounded-lg">
+          <ScrollArea className="border rounded-lg h-[300px]">
             <Table>
               <TableHeader>
                 <TableRow>

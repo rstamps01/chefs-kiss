@@ -18,6 +18,7 @@ import DataImport from "./pages/DataImport";
 import ConversionTesting from "./pages/ConversionTesting";
 import { ImportHistory } from './pages/ImportHistory';
 import { DataMigrationWizard } from './pages/DataMigrationWizard';
+import { BulkDelete } from './pages/BulkDelete';
 
 function Router() {
   return (
@@ -78,6 +79,11 @@ function Router() {
       <Route path="/data-migration">
         <DashboardLayout>
           <DataMigrationWizard />
+        </DashboardLayout>
+      </Route>
+      <Route path="/bulk-delete">
+        <DashboardLayout>
+          <BulkDelete />
         </DashboardLayout>
       </Route>
       <Route path="/404" component={NotFound} />

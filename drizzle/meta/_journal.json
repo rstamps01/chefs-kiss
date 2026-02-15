@@ -71,6 +71,13 @@
       "when": 1770721742657,
       "tag": "0009_nice_vance_astro",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "5",
+      "when": 1771196650603,
+      "tag": "0010_charming_rockslide",
+      "breakpoints": true
     }
   ]
 }

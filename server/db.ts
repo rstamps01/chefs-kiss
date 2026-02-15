@@ -1,6 +1,6 @@
 import { eq, and, sql, desc, isNotNull } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users, recipes, ingredients, recipeIngredients, restaurants, locations, recipeCategories, ingredientUnits, unitCategories, ingredientConversions, unitConversions } from "../drizzle/schema";
+import { InsertUser, users, recipes, ingredients, recipeIngredients, restaurants, locations, recipeCategories, ingredientUnits, unitCategories, ingredientConversions, unitConversions, importHistory } from "../drizzle/schema";
 import { ENV } from './_core/env';
 import { convertUnit } from "./unitConversion";
 
@@ -1590,6 +1590,209 @@ export async function bulkUpdateRecipeIngredients(recipeIngredientsData: Array<{
       results.failed++;
       results.errors.push(`Failed to update recipe ${item.recipeId} ingredient ${item.ingredientId}: ${error instanceof Error ? error.message : String(error)}`);
     }
+  }
+
+  return results;
+}
+
+// ============================================================================
+// BULK DELETE OPERATIONS (DEVELOPER/SUPPORT ONLY)
+// ============================================================================
+
+/**
+ * Bulk delete ingredients with audit logging
+ * WARNING: This is a destructive operation. Use with caution.
+ * 
+ * @param restaurantId - Restaurant ID for validation
+ * @param ingredientIds - Array of ingredient IDs to delete
+ * @param userId - User performing the operation (for audit log)
+ * @returns Object with success count, failed count, and errors
+ */
+export async function bulkDeleteIngredients(
+  restaurantId: number,
+  ingredientIds: number[],
+  userId: string
+) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  const results = {
+    deleted: 0,
+    failed: 0,
+    errors: [] as string[],
+    skipped: [] as Array<{ id: number; reason: string }>,
+  };
+
+  // Validate all ingredients belong to the restaurant
+  const ingredientsToDelete = await db
+    .select()
+    .from(ingredients)
+    .where(
+      and(
+        eq(ingredients.restaurantId, restaurantId),
+        sql`${ingredients.id} IN (${sql.join(ingredientIds.map(id => sql`${id}`), sql`, `)})`
+      )
+    );
+
+  if (ingredientsToDelete.length !== ingredientIds.length) {
+    const foundIds = ingredientsToDelete.map(i => i.id);
+    const notFound = ingredientIds.filter(id => !foundIds.includes(id));
+    notFound.forEach(id => {
+      results.skipped.push({ id, reason: "Not found or does not belong to restaurant" });
+    });
+  }
+
+  // Process each ingredient
+  for (const ingredient of ingredientsToDelete) {
+    try {
+      // Check if ingredient is used in any recipes
+      const usageCheck = await db
+        .select()
+        .from(recipeIngredients)
+        .where(eq(recipeIngredients.ingredientId, ingredient.id))
+        .limit(1);
+
+      if (usageCheck.length > 0) {
+        results.skipped.push({
+          id: ingredient.id,
+          reason: `Used in recipes - delete recipe ingredients first`,
+        });
+        continue;
+      }
+
+      // Delete ingredient conversions first
+      await db
+        .delete(ingredientConversions)
+        .where(eq(ingredientConversions.ingredientId, ingredient.id));
+
+      // Delete ingredient
+      await db
+        .delete(ingredients)
+        .where(eq(ingredients.id, ingredient.id));
+
+      results.deleted++;
+    } catch (error) {
+      results.failed++;
+      results.errors.push(
+        `Failed to delete ingredient ${ingredient.id} (${ingredient.name}): ${
+          error instanceof Error ? error.message : String(error)
+        }`
+      );
+    }
+  }
+
+  // Log the bulk delete operation
+  if (results.deleted > 0) {
+    await db.insert(importHistory).values({
+      restaurantId,
+      userId,
+      importType: 'ingredients' as const,
+      timestamp: new Date(),
+      recordsCreated: 0,
+      recordsUpdated: 0,
+      totalRecords: results.deleted,
+      snapshotData: {
+        created: [],
+        updated: [],
+      },
+      status: 'completed' as const,
+      fileName: null,
+      notes: `Bulk delete: ${results.deleted} ingredients deleted by ${userId}`,
+    });
+  }
+
+  return results;
+}
+
+/**
+ * Bulk delete recipes with cascade delete of recipe ingredients
+ * WARNING: This is a destructive operation. Use with caution.
+ * 
+ * @param restaurantId - Restaurant ID for validation
+ * @param recipeIds - Array of recipe IDs to delete
+ * @param userId - User performing the operation (for audit log)
+ * @returns Object with success count, failed count, and errors
+ */
+export async function bulkDeleteRecipes(
+  restaurantId: number,
+  recipeIds: number[],
+  userId: string
+) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  const results = {
+    deleted: 0,
+    failed: 0,
+    errors: [] as string[],
+    skipped: [] as Array<{ id: number; reason: string }>,
+    recipeIngredientsDeleted: 0,
+  };
+
+  // Validate all recipes belong to the restaurant
+  const recipesToDelete = await db
+    .select()
+    .from(recipes)
+    .where(
+      and(
+        eq(recipes.restaurantId, restaurantId),
+        sql`${recipes.id} IN (${sql.join(recipeIds.map(id => sql`${id}`), sql`, `)})`
+      )
+    );
+
+  if (recipesToDelete.length !== recipeIds.length) {
+    const foundIds = recipesToDelete.map(r => r.id);
+    const notFound = recipeIds.filter(id => !foundIds.includes(id));
+    notFound.forEach(id => {
+      results.skipped.push({ id, reason: "Not found or does not belong to restaurant" });
+    });
+  }
+
+  // Process each recipe
+  for (const recipe of recipesToDelete) {
+    try {
+      // Delete recipe ingredients first (cascade delete)
+      const deleteResult = await db
+        .delete(recipeIngredients)
+        .where(eq(recipeIngredients.recipeId, recipe.id));
+
+      // Track how many recipe ingredients were deleted
+      results.recipeIngredientsDeleted += deleteResult[0]?.affectedRows || 0;
+
+      // Delete recipe
+      await db
+        .delete(recipes)
+        .where(eq(recipes.id, recipe.id));
+
+      results.deleted++;
+    } catch (error) {
+      results.failed++;
+      results.errors.push(
+        `Failed to delete recipe ${recipe.id} (${recipe.name}): ${
+          error instanceof Error ? error.message : String(error)
+        }`
+      );
+    }
+  }
+
+  // Log the bulk delete operation
+  if (results.deleted > 0) {
+    await db.insert(importHistory).values({
+      restaurantId,
+      userId,
+      importType: 'recipes' as const,
+      timestamp: new Date(),
+      recordsCreated: 0,
+      recordsUpdated: 0,
+      totalRecords: results.deleted,
+      snapshotData: {
+        created: [],
+        updated: [],
+      },
+      status: 'completed' as const,
+      fileName: null,
+      notes: `Bulk delete: ${results.deleted} recipes and ${results.recipeIngredientsDeleted} recipe ingredients deleted by ${userId}`,
+    });
   }
 
   return results;

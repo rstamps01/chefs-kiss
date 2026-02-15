@@ -1,8 +1,8 @@
 import { COOKIE_NAME } from "@shared/const";
 import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
-import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
-import { getUserRestaurant, getRecipesWithIngredients, getIngredients, getRestaurantLocations, createRecipe, addRecipeIngredients, updateRecipe, updateRecipeIngredients, deleteRecipe, createIngredient, updateIngredient, deleteIngredient, getRecipesUsingIngredient, importSalesData, checkExistingSalesData, getSalesAnalytics, getDailySalesData, getSalesByDayOfWeek, getSalesDateRange, getRecipeCategories, getActiveRecipeCategories, getIngredientCategories, createRecipeCategory, updateRecipeCategory, deleteRecipeCategory, getIngredientUnits, getActiveIngredientUnits, createIngredientUnit, updateIngredientUnit, deleteIngredientUnit, getUnitCategories, getRecipeIngredientsForExport, bulkUpdateIngredients, bulkUpdateRecipes, bulkUpdateRecipeIngredients } from "./db";
+import { publicProcedure, protectedProcedure, developerProcedure, router } from "./_core/trpc";
+import { getUserRestaurant, getRecipesWithIngredients, getIngredients, getRestaurantLocations, createRecipe, addRecipeIngredients, updateRecipe, updateRecipeIngredients, deleteRecipe, createIngredient, updateIngredient, deleteIngredient, getRecipesUsingIngredient, importSalesData, checkExistingSalesData, getSalesAnalytics, getDailySalesData, getSalesByDayOfWeek, getSalesDateRange, getRecipeCategories, getActiveRecipeCategories, getIngredientCategories, createRecipeCategory, updateRecipeCategory, deleteRecipeCategory, getIngredientUnits, getActiveIngredientUnits, createIngredientUnit, updateIngredientUnit, deleteIngredientUnit, getUnitCategories, getRecipeIngredientsForExport, bulkUpdateIngredients, bulkUpdateRecipes, bulkUpdateRecipeIngredients, bulkDeleteIngredients, bulkDeleteRecipes } from "./db";
 import { parseIngredientCSV, parseRecipeCSV, parseRecipeIngredientsCSV, ingredientsToCSV, recipesToCSV, recipeIngredientsToCSV } from './csv-helpers';
 import { previewIngredientCSV, previewRecipeCSV, previewRecipeIngredientsCSV } from './csv-preview-helpers';
 import { generateTemplateWithInstructions } from "./csv-templates";
@@ -1044,6 +1044,43 @@ export const appRouter = router({
           restaurantId: restaurant.id,
           userId: ctx.user.openId,
         });
+      }),
+  }),
+
+  // Developer/Support operations (restricted access)
+  developer: router({
+    bulkDeleteIngredients: developerProcedure
+      .input(z.object({
+        ingredientIds: z.array(z.number().int().positive()),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        const restaurant = await getUserRestaurant(ctx.user.id);
+        if (!restaurant) {
+          throw new Error("Restaurant not found for user");
+        }
+
+        return await bulkDeleteIngredients(
+          restaurant.id,
+          input.ingredientIds,
+          ctx.user.openId
+        );
+      }),
+
+    bulkDeleteRecipes: developerProcedure
+      .input(z.object({
+        recipeIds: z.array(z.number().int().positive()),
+      }))
+      .mutation(async ({ ctx, input }) => {
+        const restaurant = await getUserRestaurant(ctx.user.id);
+        if (!restaurant) {
+          throw new Error("Restaurant not found for user");
+        }
+
+        return await bulkDeleteRecipes(
+          restaurant.id,
+          input.recipeIds,
+          ctx.user.openId
+        );
       }),
   }),
 });

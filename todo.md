@@ -1763,4 +1763,39 @@ All tasks from this session have been marked as [x] completed above. Key achieve
 - [ ] Create historical cost analysis for recipe costing
 - [ ] Implement seasonal price pattern recognition
 - [ ] Build supplier performance scorecards
-- [ ] Commit documentation to GitHub
+- [x] Commit documentation to GitHub
+
+
+## Inventory-to-Ingredient Correlation & Recipe Cards (Current Sprint)
+- [ ] Review current ingredient and inventory data structures
+- [ ] Design inventory-ingredient linking system (many-to-many relationship)
+- [ ] Add source_inventory_id field to ingredients table
+- [ ] Create ingredient_inventory_sources junction table for multiple sources
+- [ ] Implement backend query to fetch ingredients with inventory sources
+- [ ] Add tRPC endpoint for linking ingredients to inventory items
+- [ ] Build ingredient edit modal with inventory source selector
+- [ ] Create enhanced recipe card component with detailed ingredient info
+- [ ] Display inventory source and current price for each recipe ingredient
+- [ ] Calculate total recipe cost from linked inventory prices
+- [ ] Show yield-adjusted costs (EP costs) on recipe cards
+- [ ] Add visual indicators for ingredients missing inventory links
+- [ ] Implement bulk ingredient-inventory linking tool
+- [ ] Test inventory-ingredient correlation with existing data
+- [ ] Save checkpoint and commit to GitHub
+
+
+## Bulk Delete Feature (Dev/Support Only) - Current Sprint
+- [x] Design role-based access control for bulk delete operations
+- [x] Add "developer" role to user roles enum
+- [x] Create backend tRPC procedures for bulk delete (ingredients, recipes)
+- [x] Implement transaction-based bulk delete with rollback on error
+- [x] Add audit logging for bulk delete operations
+- [x] Create admin UI page for bulk delete operations
+- [x] Add multi-select checkboxes to ingredients and recipes lists
+- [x] Implement "Select All" and "Clear Selection" functionality
+- [x] Add confirmation dialog with count of items to be deleted
+- [x] Show warning about cascading deletes (recipe ingredients, etc.)
+- [x] Restrict UI access to developer/support roles only
+- [x] Test bulk delete with various scenarios
+- [ ] Document bulk delete feature in admin guide
+- [ ] Save checkpoint and commit to GitHub

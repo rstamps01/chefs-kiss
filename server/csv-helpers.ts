@@ -110,19 +110,28 @@ export function parseCSV(csvContent: string): any[] {
       'REQUIRED', 'OPTIONAL', 'STRING', 'INTEGER', 'DECIMAL', 'READ-ONLY',
       'Text, max', 'Must be unique', 'Positive number', 'Positive integer',
       'Use existing', 'Only needed if', 'Minimum stock level',
-      'Whole number (must match', 'Text (for reference only', 'Number with up to',
+      'Whole number (must match', 'Whole number (leave empty', 'Whole number (days)',
+      'Text (for reference only', 'Number with up to',
       'Export recipes first', 'Export ingredients first', 'Amount of ingredient',
-      'Unit as used in the recipe', 'Helps identify'
+      'Unit as used in the recipe', 'Helps identify', 'Unit name (lb'
     ];
     const filteredRecords = records.filter((record: any) => {
-      // Check if any field contains metadata keywords
-      const values = Object.values(record).map(v => String(v || ''));
+      // Check if any field contains or equals metadata keywords
+      const values = Object.values(record).map(v => String(v || '').trim());
+      
+      // Filter out rows where any value is exactly a metadata keyword
+      const hasExactMetadata = values.some(v => 
+        v === 'REQUIRED' || v === 'OPTIONAL' || v === 'STRING' || 
+        v === 'INTEGER' || v === 'DECIMAL' || v === 'READ-ONLY'
+      );
+      
+      // Filter out rows where any value contains metadata keywords
       const hasMetadata = values.some(v => metadataKeywords.some(keyword => v.includes(keyword)));
       
       // Also filter out completely empty rows
       const allEmpty = values.every(v => !v || v.trim() === '');
       
-      return !hasMetadata && !allEmpty;
+      return !hasExactMetadata && !hasMetadata && !allEmpty;
     });
     
     return filteredRecords;

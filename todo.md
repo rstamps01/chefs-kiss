@@ -1812,3 +1812,35 @@ All tasks from this session have been marked as [x] completed above. Key achieve
 - [x] Identify nested <p> tags in BulkDelete.tsx
 - [x] Replace nested <p> with <div> or <span>
 - [x] Test and verify fix
+
+
+## Data Import Not Appearing Issue - Current Sprint
+- [x] Check database for imported ingredients and recipes
+- [x] Investigate restaurant ID assignment in import logic
+- [x] Identify root cause of data not appearing (metadata rows not filtered)
+- [x] Fix CSV parsing to filter metadata rows properly
+- [ ] Test import and verify data appears correctly
+- [ ] Save checkpoint and deliver fix
+
+
+## Fix Duplicate ID Column in Export - Current Sprint
+- [x] Find ingredient export function
+- [x] Remove duplicate ID column from export (removed hardcoded 'id' from visibleColumns array)
+- [ ] Test export to verify single ID column
+- [ ] Apply same fix to recipe export if needed
+
+
+## CSV Import Update vs Create Issue - Current Sprint
+- [x] Investigate why imports show ~62 updated but +0 created (IDs don't exist in DB)
+- [x] Fix bulkUpdateIngredients to verify ID exists before updating
+- [ ] Test import with IDs that don't exist in database
+- [ ] Verify data appears after import
+- [ ] Save checkpoint and deliver fix
+
+
+## Fix Recipe Import (Same Issue as Ingredients) - Current Sprint
+- [x] Apply same ID verification fix to bulkUpdateRecipes
+- [ ] Apply same fix to bulkUpdateRecipeIngredients (if needed)
+- [ ] Test recipe and recipe-ingredient imports
+- [ ] Verify all data appears correctly
+- [ ] Save checkpoint and deliver fix

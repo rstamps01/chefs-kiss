@@ -1392,8 +1392,28 @@ export async function bulkUpdateIngredients(
   for (const item of ingredientsData) {
     try {
       let targetId = item.id;
+      let idExistsInDb = false;
       
-      // If no ID provided, check if ingredient with same name exists
+      // If ID is provided, verify it exists in the database
+      if (targetId && targetId !== null) {
+        const existing = await db
+          .select({ id: ingredients.id })
+          .from(ingredients)
+          .where(and(
+            eq(ingredients.restaurantId, restaurantId),
+            eq(ingredients.id, targetId)
+          ))
+          .limit(1);
+        
+        idExistsInDb = existing.length > 0;
+        
+        // If ID doesn't exist, treat as create (ignore the provided ID)
+        if (!idExistsInDb) {
+          targetId = null;
+        }
+      }
+      
+      // If no ID provided or ID doesn't exist, check if ingredient with same name exists
       if (!targetId || targetId === null) {
         const existing = await db
           .select({ id: ingredients.id })
@@ -1494,8 +1514,28 @@ export async function bulkUpdateRecipes(recipesData: Array<{
   for (const item of recipesData) {
     try {
       let targetId = item.id;
+      let idExistsInDb = false;
       
-      // If no ID provided, check if recipe with same name exists
+      // If ID is provided, verify it exists in the database
+      if (targetId && targetId !== null) {
+        const existing = await db
+          .select({ id: recipes.id })
+          .from(recipes)
+          .where(and(
+            eq(recipes.restaurantId, item.restaurantId),
+            eq(recipes.id, targetId)
+          ))
+          .limit(1);
+        
+        idExistsInDb = existing.length > 0;
+        
+        // If ID doesn't exist, treat as create (ignore the provided ID)
+        if (!idExistsInDb) {
+          targetId = null;
+        }
+      }
+      
+      // If no ID provided or ID doesn't exist, check if recipe with same name exists
       if (!targetId || targetId === null) {
         const existing = await db
           .select({ id: recipes.id })

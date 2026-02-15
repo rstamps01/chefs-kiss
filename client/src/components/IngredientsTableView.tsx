@@ -56,7 +56,7 @@ export function IngredientsTableView({
 
   const utils = trpc.useUtils();
   const exportQuery = trpc.csv.exportIngredients.useQuery(
-    { visibleColumns: ['id', ...columns.filter(c => c.visible).map(c => c.id)] },
+    { visibleColumns: columns.filter(c => c.visible).map(c => c.id) },
     { enabled: false }
   );
   const templateQuery = trpc.csv.downloadIngredientsTemplate.useQuery(

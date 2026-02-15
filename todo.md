@@ -1655,5 +1655,6 @@ All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb
 
 ## Ingredients Export ID Column (Current Sprint)
 - [x] Update ingredients CSV export to include ID column
+- [x] Fix frontend to include ID in visible columns for export
 - [x] Test export to verify ID is included in CSV file
 - [x] Verify consistency with recipe ingredients export format

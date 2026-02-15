@@ -8,7 +8,7 @@
 import { parseCSV, validateCSVColumns } from './csv-helpers';
 import { getDb } from './db';
 import { ingredients } from '../drizzle/schema';
-import { eq, and } from 'drizzle-orm';
+import { eq, and, inArray } from 'drizzle-orm';
 
 export type RowValidationStatus = 'valid' | 'warning' | 'error';
 
@@ -84,7 +84,6 @@ export async function previewIngredientCSV(csvContent: string, restaurantId?: nu
           
           if (createNames.length > 0) {
             // Batch query for all names at once
-            const { inArray } = await import('drizzle-orm');
             const existing = await db
               .select()
               .from(ingredients)

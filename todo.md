@@ -1613,3 +1613,8 @@ All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb
 - [x] Filter out UI-only "actions" column from CSV exports
 - [x] Add error handling to CSV import preview modal
 - [x] Test with real exported ingredient CSV file (53KB, 115 rows)
+
+## CSV Preview Runtime Error Fix (Current Sprint)
+- [x] Debug runtime error in batch query optimization causing HTML error response
+- [x] Fix the error in csv-preview-helpers.ts batch query code
+- [x] Test with actual CSV file to verify fix

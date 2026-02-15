@@ -34,19 +34,10 @@ export function CSVImportModal({ open, onClose, type, onSuccess, onError }: CSVI
   const importRecipesMutation = trpc.csv.importRecipes.useMutation();
   const importRecipeIngredientsMutation = trpc.csv.importRecipeIngredients.useMutation();
   
-  // Preview queries
-  const { data: previewData, refetch: refetchPreview, isLoading: isLoadingPreview } = trpc.csv.previewIngredientsCSV.useQuery(
-    { csvContent },
-    { enabled: false }
-  );
-  const { data: recipePreviewData, refetch: refetchRecipePreview, isLoading: isLoadingRecipePreview } = trpc.csv.previewRecipesCSV.useQuery(
-    { csvContent },
-    { enabled: false }
-  );
-  const { data: recipeIngredientPreviewData, refetch: refetchRecipeIngredientPreview, isLoading: isLoadingRecipeIngredientPreview } = trpc.csv.previewRecipeIngredientsCSV.useQuery(
-    { csvContent },
-    { enabled: false }
-  );
+  // Preview mutations (using POST to avoid URL length limits)
+  const { data: previewData, mutateAsync: previewIngredients, isPending: isLoadingPreview } = trpc.csv.previewIngredientsCSV.useMutation();
+  const { data: recipePreviewData, mutateAsync: previewRecipes, isPending: isLoadingRecipePreview } = trpc.csv.previewRecipesCSV.useMutation();
+  const { data: recipeIngredientPreviewData, mutateAsync: previewRecipeIngredients, isPending: isLoadingRecipeIngredientPreview } = trpc.csv.previewRecipeIngredientsCSV.useMutation();
   
   const currentPreviewData = type === 'ingredients' ? previewData : type === 'recipes' ? recipePreviewData : recipeIngredientPreviewData;
   const isLoadingCurrentPreview = type === 'ingredients' ? isLoadingPreview : type === 'recipes' ? isLoadingRecipePreview : isLoadingRecipeIngredientPreview;
@@ -74,13 +65,13 @@ export function CSVImportModal({ open, onClose, type, onSuccess, onError }: CSVI
     if (!csvContent) return;
     
     try {
-      // Trigger preview query
+      // Trigger preview mutation
       if (type === 'ingredients') {
-        await refetchPreview();
+        await previewIngredients({ csvContent });
       } else if (type === 'recipes') {
-        await refetchRecipePreview();
+        await previewRecipes({ csvContent });
       } else {
-        await refetchRecipeIngredientPreview();
+        await previewRecipeIngredients({ csvContent });
       }
       
       setShowPreview(true);

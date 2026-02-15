@@ -789,7 +789,7 @@ export const appRouter = router({
       .input(z.object({
         csvContent: z.string(),
       }))
-      .query(async ({ ctx, input }) => {
+      .mutation(async ({ ctx, input }) => {
         try {
           const restaurant = await getUserRestaurant(ctx.user.id);
           if (!restaurant) {
@@ -806,7 +806,7 @@ export const appRouter = router({
       .input(z.object({
         csvContent: z.string(),
       }))
-      .query(async ({ input }) => {
+      .mutation(async ({ input }) => {
         return previewRecipeCSV(input.csvContent);
       }),
     
@@ -814,7 +814,7 @@ export const appRouter = router({
       .input(z.object({
         csvContent: z.string(),
       }))
-      .query(async ({ input }) => {
+      .mutation(async ({ input }) => {
         return previewRecipeIngredientsCSV(input.csvContent);
       }),
     

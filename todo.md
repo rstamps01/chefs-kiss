@@ -1634,3 +1634,8 @@ All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb
 - [x] Convert modal to full-screen (100vw x 100vh) layout
 - [x] Increase table height to utilize full screen space
 - [x] Test with ingredient CSV to verify improved visibility
+
+## CSV Preview Modal Width CSS Override Fix (Current Sprint)
+- [x] Investigate Dialog component CSS that's restricting modal width
+- [x] Override shadcn/ui Dialog default max-width constraints
+- [x] Test to ensure modal displays at full browser width

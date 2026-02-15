@@ -113,7 +113,7 @@ export function CSVPreviewModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-screen h-screen max-w-none max-h-none flex flex-col p-6">
+      <DialogContent className="!w-screen !h-screen !max-w-none !max-h-none flex flex-col p-6 !m-0 !translate-x-0 !translate-y-0 !top-0 !left-0 !rounded-none">
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>

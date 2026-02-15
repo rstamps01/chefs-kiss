@@ -319,7 +319,10 @@ export function ingredientsToCSV(ingredients: any[], visibleColumns?: string[]):
   ];
   
   // Use visible columns if provided, otherwise use all
-  const columns = visibleColumns || allColumns;
+  // Filter out UI-only columns like "actions"
+  const columns = visibleColumns 
+    ? visibleColumns.filter(col => allColumns.includes(col))
+    : allColumns;
   
   // Generate metadata rows
   const metadataRows = generateIngredientMetadataRows(columns);

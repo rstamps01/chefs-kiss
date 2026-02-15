@@ -73,16 +73,30 @@ export function CSVImportModal({ open, onClose, type, onSuccess, onError }: CSVI
   const handleShowPreview = async () => {
     if (!csvContent) return;
     
-    // Trigger preview query
-    if (type === 'ingredients') {
-      await refetchPreview();
-    } else if (type === 'recipes') {
-      await refetchRecipePreview();
-    } else {
-      await refetchRecipeIngredientPreview();
+    try {
+      // Trigger preview query
+      if (type === 'ingredients') {
+        await refetchPreview();
+      } else if (type === 'recipes') {
+        await refetchRecipePreview();
+      } else {
+        await refetchRecipeIngredientPreview();
+      }
+      
+      setShowPreview(true);
+    } catch (error) {
+      console.error('Error loading preview:', error);
+      // Show error to user
+      setResult({
+        success: false,
+        updated: 0,
+        failed: 0,
+        errors: [error instanceof Error ? error.message : 'Failed to load preview']
+      });
+      if (onError) {
+        onError(error instanceof Error ? error.message : 'Failed to load preview');
+      }
     }
-    
-    setShowPreview(true);
   };
 
   const handleImport = async () => {

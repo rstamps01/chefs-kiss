@@ -790,11 +790,16 @@ export const appRouter = router({
         csvContent: z.string(),
       }))
       .query(async ({ ctx, input }) => {
-        const restaurant = await getUserRestaurant(ctx.user.id);
-        if (!restaurant) {
-          throw new Error('Restaurant not found for user');
+        try {
+          const restaurant = await getUserRestaurant(ctx.user.id);
+          if (!restaurant) {
+            throw new Error('Restaurant not found for user');
+          }
+          return await previewIngredientCSV(input.csvContent, restaurant.id);
+        } catch (error) {
+          console.error('Error in previewIngredientsCSV:', error);
+          throw new Error(`Failed to preview CSV: ${error instanceof Error ? error.message : String(error)}`);
         }
-        return previewIngredientCSV(input.csvContent, restaurant.id);
       }),
     
     previewRecipesCSV: protectedProcedure

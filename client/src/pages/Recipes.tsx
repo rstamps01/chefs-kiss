@@ -487,6 +487,9 @@ export default function Recipes() {
                             <div className="flex-1">
                               <div className="flex items-center gap-2 mb-1">
                                 <CardTitle className="text-lg">{recipe.name}</CardTitle>
+                                <Badge variant="outline" className="text-xs font-mono bg-muted">
+                                  ID: {recipe.id}
+                                </Badge>
                                 {recipe.category && (() => {
                                   const categoryType = getCategoryType(recipe.category);
                                   return (

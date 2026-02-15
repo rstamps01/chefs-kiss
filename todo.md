@@ -1663,3 +1663,8 @@ All recipes using Sushi Rice now calculate correctly with accurate cup→oz→lb
 - [x] Add Ingredient ID to tile view in Recipe Management Ingredients tab
 - [x] Add Ingredient ID to list view in Recipe Management Ingredients tab
 - [x] Test both views to verify ID is displayed correctly
+
+## Recipe Management Recipes ID Display (Current Sprint)
+- [x] Add Recipe ID to tile view in Recipe Management Recipes tab
+- [x] Add Recipe ID to list view in Recipe Management Recipes tab
+- [x] Test both views to verify ID is displayed correctly

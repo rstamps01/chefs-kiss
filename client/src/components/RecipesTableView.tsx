@@ -33,7 +33,7 @@ type RecipesTableViewProps = {
 };
 
 const DEFAULT_RECIPE_COLUMNS = [
-  { id: "id", label: "Recipe ID", visible: false },
+  { id: "id", label: "ID", visible: true },
   { id: "name", label: "Name", visible: true },
   { id: "category", label: "Category", visible: true },
   { id: "description", label: "Description", visible: true },

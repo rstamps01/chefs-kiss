@@ -1805,4 +1805,10 @@ All tasks from this session have been marked as [x] completed above. Key achieve
 - [x] Investigate upsertUser function in db.ts
 - [x] Update upsertUser to preserve developer role during OAuth sync
 - [x] Test developer role persistence across page refreshes
-- [ ] Save checkpoint and deliver fix
+- [x] Save checkpoint and deliver fix
+
+
+## Fix Nested Paragraph Error in BulkDelete - Current Sprint
+- [x] Identify nested <p> tags in BulkDelete.tsx
+- [x] Replace nested <p> with <div> or <span>
+- [x] Test and verify fix

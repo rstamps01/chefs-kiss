@@ -298,16 +298,18 @@ export function BulkDelete() {
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Confirm Bulk Delete</AlertDialogTitle>
-            <AlertDialogDescription className="space-y-2">
-              <p>
-                You are about to delete <strong>{selectedIngredients.size} ingredient(s)</strong>.
-              </p>
-              <p className="text-destructive font-medium">
-                This action cannot be undone. Ingredients used in recipes will be skipped.
-              </p>
-              <p>
-                Are you sure you want to proceed?
-              </p>
+            <AlertDialogDescription>
+              <div className="space-y-2">
+                <div>
+                  You are about to delete <strong>{selectedIngredients.size} ingredient(s)</strong>.
+                </div>
+                <div className="text-destructive font-medium">
+                  This action cannot be undone. Ingredients used in recipes will be skipped.
+                </div>
+                <div>
+                  Are you sure you want to proceed?
+                </div>
+              </div>
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -327,16 +329,18 @@ export function BulkDelete() {
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Confirm Bulk Delete</AlertDialogTitle>
-            <AlertDialogDescription className="space-y-2">
-              <p>
-                You are about to delete <strong>{selectedRecipes.size} recipe(s)</strong>.
-              </p>
-              <p className="text-destructive font-medium">
-                This action cannot be undone. All recipe ingredients will also be deleted.
-              </p>
-              <p>
-                Are you sure you want to proceed?
-              </p>
+            <AlertDialogDescription>
+              <div className="space-y-2">
+                <div>
+                  You are about to delete <strong>{selectedRecipes.size} recipe(s)</strong>.
+                </div>
+                <div className="text-destructive font-medium">
+                  This action cannot be undone. All recipe ingredients will also be deleted.
+                </div>
+                <div>
+                  Are you sure you want to proceed?
+                </div>
+              </div>
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

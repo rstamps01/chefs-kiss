@@ -19,6 +19,7 @@ interface IngredientsTableViewProps {
 }
 
 const DEFAULT_INGREDIENT_COLUMNS = [
+  { id: "id", label: "ID", visible: true },
   { id: "name", label: "Name", visible: true },
   { id: "category", label: "Category", visible: true },
   { id: "unit", label: "Unit Type", visible: true },
@@ -232,6 +233,9 @@ export function IngredientsTableView({
       <Table>
         <TableHeader>
           <TableRow>
+            {isColumnVisible("id") && (
+              <TableHead className="w-20">ID</TableHead>
+            )}
             {isColumnVisible("name") && (
               <TableHead className="cursor-pointer hover:bg-muted/50" onClick={() => handleSort("name")}>
                 Name <SortIcon field="name" />
@@ -277,6 +281,11 @@ export function IngredientsTableView({
 
             return (
               <TableRow key={ingredient.id}>
+                {isColumnVisible("id") && (
+                <TableCell className="font-mono text-sm text-muted-foreground">
+                  {ingredient.id}
+                </TableCell>
+                )}
                 {isColumnVisible("name") && (
                 <TableCell>
                   {isEditing ? (

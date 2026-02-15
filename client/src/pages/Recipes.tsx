@@ -720,8 +720,13 @@ export default function Recipes() {
                   <Card key={ingredient.id} className="hover:shadow-md transition-shadow">
                     <CardHeader>
                       <div className="flex items-start justify-between">
-                        <div>
-                          <CardTitle className="text-lg">{ingredient.name}</CardTitle>
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-1">
+                            <CardTitle className="text-lg">{ingredient.name}</CardTitle>
+                            <Badge variant="outline" className="text-xs font-mono bg-muted">
+                              ID: {ingredient.id}
+                            </Badge>
+                          </div>
                           <CardDescription>{ingredient.category || "Uncategorized"}</CardDescription>
                         </div>
                         {ingredient.costPerUnit && (

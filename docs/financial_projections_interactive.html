@@ -1,0 +1,311 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Chef's Kiss Financial Projections</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #1a1a1a;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        .summary-section {
+            margin-top: 40px;
+        }
+        .summary-section h2 {
+            color: #1976D2;
+            border-bottom: 2px solid #1976D2;
+            padding-bottom: 10px;
+        }
+        .summary-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 13px;
+        }
+        .summary-table th {
+            background-color: #1976D2;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: bold;
+        }
+        .summary-table td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        .summary-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .summary-table tr:hover {
+            background-color: #f0f0f0;
+        }
+        .key-insights {
+            background-color: #E3F2FD;
+            border-left: 4px solid #1976D2;
+            padding: 20px;
+            margin: 30px 0;
+        }
+        .key-insights h3 {
+            margin-top: 0;
+            color: #1976D2;
+        }
+        .key-insights ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        .key-insights li {
+            margin: 8px 0;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Chef's Kiss Multi-Tenant SaaS Financial Projections</h1>
+        <p class="subtitle">Hybrid Architecture on Microsoft Azure | Interactive Break-Even Analysis & Margin Forecasts</p>
+        
+        <div class="key-insights">
+            <h3>📊 Key Financial Insights</h3>
+            <ul>
+                <li><strong>Break-Even Point:</strong> 25-30 tenants (base case: $1,000 ARPA)</li>
+                <li><strong>Target Profitability:</strong> 50+ tenants with 35%+ gross margins</li>
+                <li><strong>Scale Economics:</strong> 100+ tenants with 50%+ gross margins</li>
+                <li><strong>Cost Per Tenant:</strong> $606/month at 50 tenants, $461/month at 100 tenants</li>
+                <li><strong>Critical Inflection Points:</strong> 20 tenants (economies of scale), 50 tenants (unit economics), 100 tenants (margin stabilization)</li>
+            </ul>
+        </div>
+        
+        <div>                        <script type="text/javascript">window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-3.1.1.min.js" integrity="sha256-HUEFyfiTnZJxCxur99FjbKYTvKSzwDaD3/x5TqHpFu4=" crossorigin="anonymous"></script>                <div id="953ff5db-aa88-453c-a8b8-73944367aea2" class="plotly-graph-div" style="height:900px; width:100%;"></div>            <script type="text/javascript">                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("953ff5db-aa88-453c-a8b8-73944367aea2")) {                    Plotly.newPlot(                        "953ff5db-aa88-453c-a8b8-73944367aea2",                        [{"hovertemplate":"\u003cb\u003eRevenue\u003c\u002fb\u003e\u003cbr\u003eTenants: %{x}\u003cbr\u003eAmount: $%{y:,.0f}\u003cextra\u003e\u003c\u002fextra\u003e","line":{"color":"#2E7D32","width":3},"name":"Revenue","x":{"dtype":"i2","bdata":"AQACAAMABAAFAAYABwAIAAkACgALAAwADQAOAA8AEAARABIAEwAUABUAFgAXABgAGQAaABsAHAAdAB4AHwAgACEAIgAjACQAJQAmACcAKAApACoAKwAsAC0ALgAvADAAMQAyADMANAA1ADYANwA4ADkAOgA7ADwAPQA+AD8AQABBAEIAQwBEAEUARgBHAEgASQBKAEsATABNAE4ATwBQAFEAUgBTAFQAVQBWAFcAWABZAFoAWwBcAF0AXgBfAGAAYQBiAGMAZABlAGYAZwBoAGkAagBrAGwAbQBuAG8AcABxAHIAcwB0AHUAdgB3AHgAeQB6AHsAfAB9AH4AfwCAAIEAggCDAIQAhQCGAIcAiACJAIoAiwCMAI0AjgCPAJAAkQCSAJMAlACVAJYA"},"y":{"dtype":"i4","bdata":"6AMAANAHAAC4CwAAoA8AAIgTAABwFwAAWBsAAEAfAAAoIwAAECcAAPgqAADgLgAAyDIAALA2AACYOgAAgD4AAGhCAABQRgAAOEoAACBOAAAIUgAA8FUAANhZAADAXQAAqGEAAJBlAAB4aQAAYG0AAEhxAAAwdQAAGHkAAAB9AADogAAA0IQAALiIAACgjAAAiJAAAHCUAABYmAAAQJwAACigAAAQpAAA+KcAAOCrAADIrwAAsLMAAJi3AACAuwAAaL8AAFDDAAA4xwAAIMsAAAjPAADw0gAA2NYAAMDaAACo3gAAkOIAAHjmAABg6gAASO4AADDyAAAY9gAAAPoAAOj9AADQAQEAuAUBAKAJAQCIDQEAcBEBAFgVAQBAGQEAKB0BABAhAQD4JAEA4CgBAMgsAQCwMAEAmDQBAIA4AQBoPAEAUEABADhEAQAgSAEACEwBAPBPAQDYUwEAwFcBAKhbAQCQXwEAeGMBAGBnAQBIawEAMG8BABhzAQAAdwEA6HoBANB+AQC4ggEAoIYBAIiKAQBwjgEAWJIBAECWAQAomgEAEJ4BAPihAQDgpQEAyKkBALCtAQCYsQEAgLUBAGi5AQBQvQEAOMEBACDFAQAIyQEA8MwBANjQAQDA1AEAqNgBAJDcAQB44AEAYOQBAEjoAQAw7AEAGPABAAD0AQDo9wEA0PsBALj\u002fAQCgAwIAiAcCAHALAgBYDwIAQBMCACgXAgAQGwIA+B4CAOAiAgDIJgIAsCoCAJguAgCAMgIAaDYCAFA6AgA4PgIAIEICAAhGAgDwSQIA"},"type":"scatter","xaxis":"x","yaxis":"y"},{"hovertemplate":"\u003cb\u003eTotal Cost\u003c\u002fb\u003e\u003cbr\u003eTenants: %{x}\u003cbr\u003eAmount: $%{y:,.0f}\u003cextra\u003e\u003c\u002fextra\u003e","line":{"color":"#C62828","width":3},"name":"Total Cost","x":{"dtype":"i2","bdata":"AQACAAMABAAFAAYABwAIAAkACgALAAwADQAOAA8AEAARABIAEwAUABUAFgAXABgAGQAaABsAHAAdAB4AHwAgACEAIgAjACQAJQAmACcAKAApACoAKwAsAC0ALgAvADAAMQAyADMANAA1ADYANwA4ADkAOgA7ADwAPQA+AD8AQABBAEIAQwBEAEUARgBHAEgASQBKAEsATABNAE4ATwBQAFEAUgBTAFQAVQBWAFcAWABZAFoAWwBcAF0AXgBfAGAAYQBiAGMAZABlAGYAZwBoAGkAagBrAGwAbQBuAG8AcABxAHIAcwB0AHUAdgB3AHgAeQB6AHsAfAB9AH4AfwCAAIEAggCDAIQAhQCGAIcAiACJAIoAiwCMAI0AjgCPAJAAkQCSAJMAlACVAJYA"},"y":{"dtype":"f8","bdata":"AAAAAECo0kAAAAAAQKjSQAAAAABAqNJAJUmSJAm50kBJkiRJ0snSQG7btm2b2tJAkiRJkmTr0kC3bdu2LfzSQNu2bdv2DNNAAAAAAMAd00CamZmZOS\u002fTQDMzMzOzQNNAzczMzCxS00BmZmZmpmPTQAAAAAAgddNAmpmZmZmG00AzMzMzE5jTQM3MzMyMqdNAZmZmZga700AAAAAAgMzTQLy7u7s7XNRAd3d3d\u002ffr1EAzMzMzs3vVQO\u002fu7u5uC9ZAq6qqqiqb1kBmZmZm5irXQCIiIiKiutdA3t3d3V1K2ECamZmZGdrYQFVVVVXVadlAEREREZH52UDMzMzMTInaQIiIiIgIGdtARERERMSo20AAAAAAgDjcQHd3d3c3UNxA7+7u7u5n3EBmZmZmpn\u002fcQN7d3d1dl9xAVVVVVRWv3EDNzMzMzMbcQERERESE3txAvLu7uzv23EAzMzMz8w3dQKuqqqqqJd1AIiIiImI93UCamZmZGVXdQBERERHRbN1AiIiIiIiE3UAAAAAAQJzdQAAAAABAAN5AAAAAAEBk3kAAAAAAQMjeQAAAAABALN9AAAAAAECQ30AAAAAAQPTfQAAAAAAgLOBAAAAAACBe4EAAAAAAIJDgQAAAAAAgwuBAAAAAACD04EAAAAAAICbhQAAAAAAgWOFAAAAAACCK4UAAAAAAILzhQAAAAAAg7uFAAAAAACAg4kAAAAAAIFLiQAAAAAAghOJAAAAAACC24kAAAAAAIOjiQAAAAAAgGuNAAAAAACBM40AAAAAAIH7jQAAAAAAgsONAzczMzCzN40CamZmZOerjQGZmZmZGB+RAMzMzM1Mk5EAAAAAAYEHkQM3MzMxsXuRAmpmZmXl75EBmZmZmhpjkQDMzMzOTteRAAAAAAKDS5EDNzMzMrO\u002fkQJqZmZm5DOVAZmZmZsYp5UAzMzMz00blQAAAAADgY+VAzczMzOyA5UCamZmZ+Z3lQGZmZmYGu+VAMzMzMxPY5UAAAAAAIPXlQM3MzMwsEuZAmpmZmTkv5kBmZmZmRkzmQDMzMzNTaeZAAAAAAGCG5kAAAAAAYJrmQAAAAABgruZAAAAAAGDC5kAAAAAAYNbmQAAAAABg6uZAAAAAAGD+5kAAAAAAYBLnQAAAAABgJudAAAAAAGA650AAAAAAYE7nQAAAAABgYudAAAAAAGB250AAAAAAYIrnQAAAAABgnudAAAAAAGCy50AAAAAAYMbnQAAAAABg2udAAAAAAGDu50AAAAAAYALoQAAAAABgFuhAAAAAAGAq6EAAAAAAYD7oQAAAAABgUuhAAAAAAGBm6EAAAAAAYHroQAAAAABgjuhAAAAAAGCi6EAAAAAAYLboQAAAAABgyuhAAAAAAGDe6EAAAAAAYPLoQAAAAABgBulAAAAAAGAa6UAAAAAAYC7pQAAAAABgQulAAAAAAGBW6UAAAAAAYGrpQAAAAABgfulAAAAAAGCS6UAAAAAAYKbpQAAAAABguulAAAAAAGDO6UAAAAAAYOLpQAAAAABg9ulAAAAAAGAK6kAAAAAAYB7qQAAAAABgMupAAAAAAGBG6kAAAAAAYFrqQAAAAABgbupA"},"type":"scatter","xaxis":"x","yaxis":"y"},{"hovertemplate":"\u003cb\u003eBreak-Even Point\u003c\u002fb\u003e\u003cbr\u003eTenants: 21\u003cbr\u003eRevenue: $21,000\u003cextra\u003e\u003c\u002fextra\u003e","line":{"color":"#FF6F00","dash":"dash","width":2},"name":"Break-Even (21 tenants)","x":[21.0,21.0],"y":[0,21000],"type":"scatter","xaxis":"x","yaxis":"y"},{"hovertemplate":"\u003cb\u003eConservative\u003c\u002fb\u003e\u003cbr\u003eTenants: %{x}\u003cbr\u003eProfit: $%{y:,.0f}\u003cextra\u003e\u003c\u002fextra\u003e","line":{"color":"#F57C00","width":2},"name":"Conservative ($800 ARPA)","x":{"dtype":"i2","bdata":"AQACAAMABAAFAAYABwAIAAkACgALAAwADQAOAA8AEAARABIAEwAUABUAFgAXABgAGQAaABsAHAAdAB4AHwAgACEAIgAjACQAJQAmACcAKAApACoAKwAsAC0ALgAvADAAMQAyADMANAA1ADYANwA4ADkAOgA7ADwAPQA+AD8AQABBAEIAQwBEAEUARgBHAEgASQBKAEsATABNAE4ATwBQAFEAUgBTAFQAVQBWAFcAWABZAFoAWwBcAF0AXgBfAGAAYQBiAGMAZABlAGYAZwBoAGkAagBrAGwAbQBuAG8AcABxAHIAcwB0AHUAdgB3AHgAeQB6AHsAfAB9AH4AfwCAAIEAggCDAIQAhQCGAIcAiACJAIoAiwCMAI0AjgCPAJAAkQCSAJMAlACVAJYA"},"y":{"dtype":"f8","bdata":"AAAAAEDg0cAAAAAAQBjRwAAAAABAUNDASpIkSRIyz8CSJEmSpMPNwNy2bds2VczAJEmSJMnmysBu27ZtW3jJwLZt27btCcjAAAAAAICbxsA0MzMzcy7FwGZmZmZmwcPAmpmZmVlUwsDMzMzMTOfAwAAAAACA9L7AaGZmZmYavMDMzMzMTEC5wDQzMzMzZrbAmJmZmRmMs8AAAAAAALKwwODd3d3doa\u002fAuLu7u7vfrcCYmZmZmR2swHh3d3d3W6rAWFVVVVWZqMAwMzMzM9emwBARERERFaXA8O7u7u5So8DQzMzMzJChwFBVVVVVnZ\u002fAEBEREREZnMDAzMzMzJSYwICIiIiIEJXAQERERESMkcAAAAAAABCMwIC7u7u7G2jAICIiIiICgECgmZmZmQWTQCAiIiIiCp5AWFVVVVWHpECYmZmZmQmqQODd3d3di69AEBERERGHskA0MzMzM0i1QFRVVVVVCbhAeHd3d3fKukCYmZmZmYu9QN7d3d1dJsBA8O7u7u6GwUAAAAAAgOfCQAAAAACAr8NAAAAAAIB3xEAAAAAAgD\u002fFQAAAAACAB8ZAAAAAAIDPxkAAAAAAgJfHQAAAAACAX8hAAAAAAIAnyUAAAAAAgO\u002fJQAAAAACAt8pAAAAAAIB\u002fy0AAAAAAgEfMQAAAAACAD81AAAAAAIDXzUAAAAAAgJ\u002fOQAAAAACAZ89AAAAAAMAX0EAAAAAAwHvQQAAAAADA39BAAAAAAMBD0UAAAAAAwKfRQAAAAADAC9JAAAAAAMBv0kAAAAAAwNPSQAAAAADAN9NAZmZmZqbF00DMzMzMjFPUQDQzMzNz4dRAmpmZmVlv1UAAAAAAQP3VQGZmZmYmi9ZAzMzMzAwZ10A0MzMz86bXQJqZmZnZNNhAAAAAAMDC2EBmZmZmplDZQMzMzMyM3tlANDMzM3Ns2kCamZmZWfraQAAAAABAiNtAZmZmZiYW3EDMzMzMDKTcQDQzMzPzMd1AmpmZmdm\u002f3UAAAAAAwE3eQGZmZmam295AzMzMzIxp30A0MzMzc\u002fffQM3MzMysQuBAAAAAAKCJ4EAAAAAAoNngQAAAAACgKeFAAAAAAKB54UAAAAAAoMnhQAAAAACgGeJAAAAAAKBp4kAAAAAAoLniQAAAAACgCeNAAAAAAKBZ40AAAAAAoKnjQAAAAACg+eNAAAAAAKBJ5EAAAAAAoJnkQAAAAACg6eRAAAAAAKA55UAAAAAAoInlQAAAAACg2eVAAAAAAKAp5kAAAAAAoHnmQAAAAACgyeZAAAAAAKAZ50AAAAAAoGnnQAAAAACguedAAAAAAKAJ6EAAAAAAoFnoQAAAAACgqehAAAAAAKD56EAAAAAAoEnpQAAAAACgmelAAAAAAKDp6UAAAAAAoDnqQAAAAACgiepAAAAAAKDZ6kAAAAAAoCnrQAAAAACgeetAAAAAAKDJ60AAAAAAoBnsQAAAAACgaexAAAAAAKC57EAAAAAAoAntQAAAAACgWe1AAAAAAKCp7UAAAAAAoPntQAAAAACgSe5AAAAAAKCZ7kAAAAAAoOnuQAAAAACgOe9AAAAAAKCJ70AAAAAAoNnvQAAAAADQFPBA"},"type":"scatter","xaxis":"x2","yaxis":"y2"},{"hovertemplate":"\u003cb\u003eBase Case\u003c\u002fb\u003e\u003cbr\u003eTenants: %{x}\u003cbr\u003eProfit: $%{y:,.0f}\u003cextra\u003e\u003c\u002fextra\u003e","line":{"color":"#1976D2","width":3},"name":"Base Case ($1,000 ARPA)","x":{"dtype":"i2","bdata":"AQACAAMABAAFAAYABwAIAAkACgALAAwADQAOAA8AEAARABIAEwAUABUAFgAXABgAGQAaABsAHAAdAB4AHwAgACEAIgAjACQAJQAmACcAKAApACoAKwAsAC0ALgAvADAAMQAyADMANAA1ADYANwA4ADkAOgA7ADwAPQA+AD8AQABBAEIAQwBEAEUARgBHAEgASQBKAEsATABNAE4ATwBQAFEAUgBTAFQAVQBWAFcAWABZAFoAWwBcAF0AXgBfAGAAYQBiAGMAZABlAGYAZwBoAGkAagBrAGwAbQBuAG8AcABxAHIAcwB0AHUAdgB3AHgAeQB6AHsAfAB9AH4AfwCAAIEAggCDAIQAhQCGAIcAiACJAIoAiwCMAI0AjgCPAJAAkQCSAJMAlACVAJYA"},"y":{"dtype":"f8","bdata":"AAAAAECu0cAAAAAAQLTQwAAAAACAdM\u002fASpIkSRKizcCSJEmSpM\u002fLwNy2bds2\u002fcnAJEmSJMkqyMBu27ZtW1jGwLZt27bthcTAAAAAAICzwsA0MzMzc+LAwMzMzMzMIr7ANDMzM7OAusCYmZmZmd62wAAAAACAPLPA0MzMzMw0r8CYmZmZmfCnwGhmZmZmrKDAYGZmZmbQksAAAAAAACBxwAAiIiIi4mJAIBEREREBgkCgmZmZmUmPQBARERERSZZAUFVVVVXtnEDQzMzMzMihQPDu7u7uGqVAEBERERFtqEAwMzMzM7+rQFhVVVVVEa9AvLu7u7sxsUDQzMzMzNqyQODd3d3dg7RA8O7u7u4stkAAAAAAANa3QCQiIiIiX7tARERERETovkA0MzMzszjBQERERERE\u002fcJAVlVVVdXBxEBmZmZmZobGQHh3d3f3SshAiIiIiIgPykCamZmZGdTLQKqqqqqqmM1AvLu7uztdz0BmZmZm5pDQQO\u002fu7u4uc9FAeHd3d3dV0kAAAAAAwDfTQAAAAADAzdNAAAAAAMBj1EAAAAAAwPnUQAAAAADAj9VAAAAAAMAl1kAAAAAAwLvWQAAAAADAUddAAAAAAMDn10AAAAAAwH3YQAAAAADAE9lAAAAAAMCp2UAAAAAAwD\u002faQAAAAADA1dpAAAAAAMBr20AAAAAAwAHcQAAAAADAl9xAAAAAAMAt3UAAAAAAwMPdQAAAAADAWd5AAAAAAMDv3kAAAAAAwIXfQAAAAADgDeBAAAAAAOBY4EAAAAAA4KPgQAAAAADg7uBAMzMzM9NO4UBmZmZmxq7hQJqZmZm5DuJAzczMzKxu4kAAAAAAoM7iQDMzMzOTLuNAZmZmZoaO40CamZmZee7jQM3MzMxsTuRAAAAAAGCu5EAzMzMzUw7lQGZmZmZGbuVAmpmZmTnO5UDNzMzMLC7mQAAAAAAgjuZAMzMzMxPu5kBmZmZmBk7nQJqZmZn5redAzczMzOwN6EAAAAAA4G3oQDMzMzPTzehAZmZmZsYt6UCamZmZuY3pQM3MzMys7elAAAAAAKBN6kAAAAAAoLbqQAAAAACgH+tAAAAAAKCI60AAAAAAoPHrQAAAAACgWuxAAAAAAKDD7EAAAAAAoCztQAAAAACgle1AAAAAAKD+7UAAAAAAoGfuQAAAAACg0O5AAAAAAKA570AAAAAAoKLvQAAAAADQBfBAAAAAAFA68EAAAAAA0G7wQAAAAABQo\u002fBAAAAAANDX8EAAAAAAUAzxQAAAAADQQPFAAAAAAFB18UAAAAAA0KnxQAAAAABQ3vFAAAAAANAS8kAAAAAAUEfyQAAAAADQe\u002fJAAAAAAFCw8kAAAAAA0OTyQAAAAABQGfNAAAAAANBN80AAAAAAUILzQAAAAADQtvNAAAAAAFDr80AAAAAA0B\u002f0QAAAAABQVPRAAAAAANCI9EAAAAAAUL30QAAAAADQ8fRAAAAAAFAm9UAAAAAA0Fr1QAAAAABQj\u002fVAAAAAANDD9UAAAAAAUPj1QAAAAADQLPZAAAAAAFBh9kAAAAAA0JX2QAAAAABQyvZAAAAAAND+9kAAAAAAUDP3QAAAAADQZ\u002fdA"},"type":"scatter","xaxis":"x2","yaxis":"y2"},{"hovertemplate":"\u003cb\u003eOptimistic\u003c\u002fb\u003e\u003cbr\u003eTenants: %{x}\u003cbr\u003eProfit: $%{y:,.0f}\u003cextra\u003e\u003c\u002fextra\u003e","line":{"color":"#388E3C","width":2},"name":"Optimistic ($1,200 ARPA)","x":{"dtype":"i2","bdata":"AQACAAMABAAFAAYABwAIAAkACgALAAwADQAOAA8AEAARABIAEwAUABUAFgAXABgAGQAaABsAHAAdAB4AHwAgACEAIgAjACQAJQAmACcAKAApACoAKwAsAC0ALgAvADAAMQAyADMANAA1ADYANwA4ADkAOgA7ADwAPQA+AD8AQABBAEIAQwBEAEUARgBHAEgASQBKAEsATABNAE4ATwBQAFEAUgBTAFQAVQBWAFcAWABZAFoAWwBcAF0AXgBfAGAAYQBiAGMAZABlAGYAZwBoAGkAagBrAGwAbQBuAG8AcABxAHIAcwB0AHUAdgB3AHgAeQB6AHsAfAB9AH4AfwCAAIEAggCDAIQAhQCGAIcAiACJAIoAiwCMAI0AjgCPAJAAkQCSAJMAlACVAJYA"},"y":{"dtype":"f8","bdata":"AAAAAEB80cAAAAAAQFDQwAAAAACASM7ASpIkSRISzMCSJEmSpNvJwNy2bds2pcfAJEmSJMluxcBu27ZtWzjDwLZt27btAcHAAAAAAACXvcBoZmZm5iy5wMzMzMzMwrTANDMzM7NYsMAwMzMzM92nwAAAAAAAEp7AQDMzMzPTiMBAMzMzM\u002ft0QDAzMzMz55ZA0MzMzMxHpEAAAAAAABytQBARERER\u002f7BAJCIiIiJws0A0MzMzM+G1QEREREREUrhAVFVVVVXDukBoZmZmZjS9QHh3d3d3pb9AREREREQLwUDMzMzMzEPCQFZVVVVVfMNA3t3d3d20xEBoZmZmZu3FQPDu7u7uJcdAeHd3d3deyEAAAAAAAJfJQBIRERGRv8tAIiIiIiLozUCamZmZWQjQQCIiIiKiHNFAq6qqquow0kAzMzMzM0XTQLy7u7t7WdRARERERMRt1UDNzMzMDILWQFVVVVVVltdA3t3d3Z2q2EBmZmZm5r7ZQO\u002fu7u4u09pAeHd3d3fn20AAAAAAwPvcQAAAAADAw91AAAAAAMCL3kAAAAAAwFPfQAAAAADgDeBAAAAAAOBx4EAAAAAA4NXgQAAAAADgOeFAAAAAAOCd4UAAAAAA4AHiQAAAAADgZeJAAAAAAODJ4kAAAAAA4C3jQAAAAADgkeNAAAAAAOD140AAAAAA4FnkQAAAAADgveRAAAAAAOAh5UAAAAAA4IXlQAAAAADg6eVAAAAAAOBN5kAAAAAA4LHmQAAAAADgFedAAAAAAOB550AAAAAA4N3nQAAAAADgQehAMzMzM9O66EBmZmZmxjPpQJqZmZm5rOlAzczMzKwl6kAAAAAAoJ7qQDMzMzOTF+tAZmZmZoaQ60CamZmZeQnsQM3MzMxsguxAAAAAAGD77EAzMzMzU3TtQGZmZmZG7e1AmpmZmTlm7kDNzMzMLN\u002fuQAAAAAAgWO9AMzMzMxPR70AzMzMzAyXwQM3MzMx8YfBAZmZmZvad8EAAAAAAcNrwQJqZmZnpFvFAMzMzM2NT8UDNzMzM3I\u002fxQGZmZmZWzPFAAAAAANAI8kAAAAAA0EnyQAAAAADQivJAAAAAANDL8kAAAAAA0AzzQAAAAADQTfNAAAAAANCO80AAAAAA0M\u002fzQAAAAADQEPRAAAAAANBR9EAAAAAA0JL0QAAAAADQ0\u002fRAAAAAANAU9UAAAAAA0FX1QAAAAADQlvVAAAAAANDX9UAAAAAA0Bj2QAAAAADQWfZAAAAAANCa9kAAAAAA0Nv2QAAAAADQHPdAAAAAANBd90AAAAAA0J73QAAAAADQ3\u002fdAAAAAANAg+EAAAAAA0GH4QAAAAADQovhAAAAAANDj+EAAAAAA0CT5QAAAAADQZflAAAAAANCm+UAAAAAA0Of5QAAAAADQKPpAAAAAANBp+kAAAAAA0Kr6QAAAAADQ6\u002fpAAAAAANAs+0AAAAAA0G37QAAAAADQrvtAAAAAANDv+0AAAAAA0DD8QAAAAADQcfxAAAAAANCy\u002fEAAAAAA0PP8QAAAAADQNP1AAAAAANB1\u002fUAAAAAA0Lb9QAAAAADQ9\u002f1AAAAAANA4\u002fkAAAAAA0Hn+QAAAAADQuv5A"},"type":"scatter","xaxis":"x2","yaxis":"y2"},{"hoverinfo":"skip","line":{"color":"black","dash":"dot","width":1},"name":"Break-Even Line","showlegend":false,"x":[0,150],"y":[0,0],"type":"scatter","xaxis":"x2","yaxis":"y2"},{"hovertemplate":"\u003cb\u003eConservative\u003c\u002fb\u003e\u003cbr\u003eTenants: %{x}\u003cbr\u003eMargin: %{y:.1f}%\u003cextra\u003e\u003c\u002fextra\u003e","line":{"color":"#F57C00","width":2},"name":"Conservative ($800 ARPA)","showlegend":false,"x":{"dtype":"i2","bdata":"AQACAAMABAAFAAYABwAIAAkACgALAAwADQAOAA8AEAARABIAEwAUABUAFgAXABgAGQAaABsAHAAdAB4AHwAgACEAIgAjACQAJQAmACcAKAApACoAKwAsAC0ALgAvADAAMQAyADMANAA1ADYANwA4ADkAOgA7ADwAPQA+AD8AQABBAEIAQwBEAEUARgBHAEgASQBKAEsATABNAE4ATwBQAFEAUgBTAFQAVQBWAFcAWABZAFoAWwBcAF0AXgBfAGAAYQBiAGMAZABlAGYAZwBoAGkAagBrAGwAbQBuAG8AcABxAHIAcwB0AHUAdgB3AHgAeQB6AHsAfAB9AH4AfwCAAIEAggCDAIQAhQCGAIcAiACJAIoAiwCMAI0AjgCPAJAAkQCSAJMAlACVAJYA"},"y":{"dtype":"f8","bdata":"AAAAAEDgocAAAAAAQBiRwFVVVVVVwIXASpIkSRIyf8Dbtm3bts93wOh5nud543LA4OUUvJy+bsBv27ZtW3hpwKIoiqIoXmXAAAAAAAAWYsA1MzMzM89ewDMzMzMzV1rAMzMzMzOPVsBXfMVXfFFTwGdmZmZmglDAaGZmZmYaTMALDAwMDMRHwBIRERER6UPA3nNLnPp1QMBmZmZmZrY6wJ7N2ZzNGTjAV86f5fy5NcAcgaKtBo8zwKVP+qRPkjHAAGPJL5Z8L8DFjdzIjRwswHGiQwGG\u002fCjAXKM1WqMVJsDLHw54\u002fGEjwMRxHMdx3CDAAJ4R4BkBHcDAzMzMzJQYwBBOJ4wfbRTAAAQEBASEEMCDOqiDOqgJwKqmGDX8beW\u002fBjuAvqmw+z9RnPo9twQQQFzapV3apRhARkRERERsIEBRtiZla1IkQJIKqZAKCShAKjcxtHKTK0AGeUqQp\u002fQuQHoJ7SW0FzFABqF\u002fdBujMkAsxSFjrx00QCh90id9iDVAbleb\u002fnvkNkDC9ShcjzI4QBQUFBQUtDhAiZ3YiZ0wOUAE463sc6g5QL2E9hLaGzpAat+w9g2LOkAlSZIkSfY6QN1HcB\u002fBXTtAfBphuafBO0Cm7stjKyI8QHh3d3d3fzxALhmCdbTZPEAhhBBCCDE9QFmWZVmWhT1AAAAAAIDXPUBu5EZu5CY+QIMPPvjgcz5At\u002fCrMZG+PkAQDw8PDwc\u002fQA\u002fMtQNzTT9AHNRBHdSRP0CKVtgcSNQ\u002fQMdxHMdxCkBAnjt37twpQEAHU+SzbkhAQJb8YskvZkBAp37PLXGmQEBQB3VQB+VAQKECKqACIkFAAbrDtnJdQUBmZmZmZpdBQFTP2MXrz0FAvwPxOxAHQkDwpS2K4DxCQNdojdZocUJAtbS0tLSkQkDy7G8uz9ZCQCx8n8vCB0NAmpmZmZk3Q0D8pwwyXWZDQMIWbMEWlENADc\u002fwDM\u002fAQ0AUbTV4juxDQKjQdQpdF0RATut4c0JBRECkHSsQRmpEQO\u002fu7u5ukkRAX2+p08O5RECqJo87S+BEQGELtmALBkVA16NwPQorRUCE3PWzxVpFQJGRkZGRiUVAv9XG0HS3RUAndmInduRFQAqcwAmcEEZA1ATjrew7RkB36loObmZGQEJ7Ce0lkEZAkoq51Rm5RkAJ8pQgT+FGQI3td\u002fTKCEdASZIkSZIvR0CeWljpqVVHQDKdxXQWe0dAu6TyYdyfR0AAAAAAAMRHQHiFV3iF50dAemxF0HAKSEDqxXzqxSxIQIiIiIiITkhAZlAqTLxvSEBt3qe4ZJBIQEBTCDSFsEhAhBBCCCHQSECsHFpkO+9IQF3XdV3XDUlAf7\u002ff7\u002fcrSUAAAAAAoElJQCZtSVvSZklAuJEbuZGDSUC2YZq74J9JQAgffPDBu0lAc\u002fTN0TfXSUDdwq\u002fGRPJJQM6VByTrDEpALS0tLS0nSkC9A44UDUFKQPIzSvyMWkpABZfK9q5zSkAIdVAHdYxKQJoXfyLhpEpAn4zfLvW8SkCR4V4Fs9RKQHIcx3Ec7EpAMzMzMzMDS0AfP378+BlLQFAmrnRvMEtAKvJZN5hGS0DfBgzVdFxLQDptoNMGcktA"},"type":"scatter","xaxis":"x3","yaxis":"y3"},{"hovertemplate":"\u003cb\u003eBase Case\u003c\u002fb\u003e\u003cbr\u003eTenants: %{x}\u003cbr\u003eMargin: %{y:.1f}%\u003cextra\u003e\u003c\u002fextra\u003e","line":{"color":"#1976D2","width":3},"name":"Base Case ($1,000 ARPA)","showlegend":false,"x":{"dtype":"i2","bdata":"AQACAAMABAAFAAYABwAIAAkACgALAAwADQAOAA8AEAARABIAEwAUABUAFgAXABgAGQAaABsAHAAdAB4AHwAgACEAIgAjACQAJQAmACcAKAApACoAKwAsAC0ALgAvADAAMQAyADMANAA1ADYANwA4ADkAOgA7ADwAPQA+AD8AQABBAEIAQwBEAEUARgBHAEgASQBKAEsATABNAE4ATwBQAFEAUgBTAFQAVQBWAFcAWABZAFoAWwBcAF0AXgBfAGAAYQBiAGMAZABlAGYAZwBoAGkAagBrAGwAbQBuAG8AcABxAHIAcwB0AHUAdgB3AHgAeQB6AHsAfAB9AH4AfwCAAIEAggCDAIQAhQCGAIcAiACJAIoAiwCMAI0AjgCPAJAAkQCSAJMAlACVAJYA"},"y":{"dtype":"f8","bdata":"AAAAAABKnMAAAAAAALqKwKuqqqqqxoDAbtu2bdu0d8BJkiRJksxxwA3DMAzDuGvAGutDY30YZsAlSZIkSeBhwANBEARBMF3AAAAAAADwV8D3KFyPwqVTwML1KFyPElDAuR6F61EYSsC+k9XyxuhEwArXo3A9akDA2qNwPQr3OMBFE+CseQYywDnQaQOdtifAKH98G3dZGcDsUbgehev1v\u002fQ8OOoJBec\u002fBHE0D0fzBEBBycQ6hGkRQO\u002fNq4lnxRdAzZSKsw+fHUD89LXFwYIhQKUX\u002ff7HAiRAHUoI6xZVJkD3TI45aX4oQDDYgi3YgipAZ1pfpvVlLECAFK5H4SouQC5H8MdZ1C9AM\u002f\u002fLmGWyMEAm+jtZLW8xQDxi37HZdjNA8wIg425iNUAQ7P6lJDQ3QKwrIXn47ThAg04b6LSROkAhfA\u002fC9yA8QKFqEG03nT1A3uJGe8cHP0AB5Q5Q7jBAQGSdKw9I1kBAz6bMYXF0QUBEtUDB3wtCQHeYutz+nEJAxu8KmTEoQ0Dn+6nx0q1DQKKhoaGh4UNAOHIjN3ITRECcJ9+RYUNEQBk1\u002fG2KcURAXlnglQWeREAP6qAO6shEQCSDxj9N8kRAMaTzFkMaRUBCLOsn3kBFQJb8YskvZkVA39YAL0iKRUANaNOANq1FQPAIj\u002fAIz0VAzczMzMzvRUDGwYKSjg9GQM+f5fxZLkZASWDeEzpMRkA5OTk5OWlGQG0erzRhhUZApiHnPrugRkA3vIkLULtGQNMnfdIn1UZA5WJfWEruRkBsQlD2vgZHQEX9G6GMHkdA7P6lJPRRR0ANOffZBYRHQBsCiObOtEdAm2FpxVvkR0AfhetRuBJIQHY\u002fetHvP0hAzM\u002fA\u002fAxsSEDAhCQIGpdIQN9TpKsgwUhAKioqKirqSEBcillYPxJJQPH85aJoOUlASOF6FK5fSUAwUz1bF4VJQDUS8M2rqUlAo6XAcHLNSUBDV8T5cfBJQFQNK9WwEkpAC4ktKTU0SkC3F7zZBFVKQL9Y8osldUpAGVlUqZyUSkC869hib7NKQOjVxLOi0UpArBxaZDvvSkAESl72ahVLQNva2traOktAzXcFp5BfS0C5kRu5kYNLQNR8ADvjpktAd521JIrJS0D5Ia8+i+tLQM+VByTrDExA3G6URK4tTEBtjt3m2E1MQNaK+SlvbUxAB3VQB3WMTEDlrkZU7qpMQI1K0cPeyExAllD150nmTEA0MzMzMwNNQPqd3\u002fmdH01ALr1qc407TUC7BJe7BFdNQDptoNMGck1AHw1Vo5aMTUAk5R\u002f6tqZNQAGpBpBqwE1AaUCbBrTZTUCKsOHplfJNQLESK7ESC05AzTLmvywjTkBmZmZm5jpOQB8koeJBUk5A+9riYEFpTkBfgXv85n9OQAZMY8A0lk5Aw\u002fbXpyysTkBKAvOe0MFOQKVEOYMi105AJSQkJCTsTkDLz6RD1wBPQCjDoZY9FU9AON9uxVgpT0CfXUBsKj1PQK7fmBu0UE9A5tayWPdjT0BBgeWd9XZPQFuwBVuwiU9AXI\u002fC9SicT0DmmP7JYK5PQHTrJCpZwE9AISh7XxPST0CABXCqkONPQMe95kLS9E9A"},"type":"scatter","xaxis":"x3","yaxis":"y3"},{"hovertemplate":"\u003cb\u003eOptimistic\u003c\u002fb\u003e\u003cbr\u003eTenants: %{x}\u003cbr\u003eMargin: %{y:.1f}%\u003cextra\u003e\u003c\u002fextra\u003e","line":{"color":"#388E3C","width":2},"name":"Optimistic ($1,200 ARPA)","showlegend":false,"x":{"dtype":"i2","bdata":"AQACAAMABAAFAAYABwAIAAkACgALAAwADQAOAA8AEAARABIAEwAUABUAFgAXABgAGQAaABsAHAAdAB4AHwAgACEAIgAjACQAJQAmACcAKAApACoAKwAsAC0ALgAvADAAMQAyADMANAA1ADYANwA4ADkAOgA7ADwAPQA+AD8AQABBAEIAQwBEAEUARgBHAEgASQBKAEsATABNAE4ATwBQAFEAUgBTAFQAVQBWAFcAWABZAFoAWwBcAF0AXgBfAGAAYQBiAGMAZABlAGYAZwBoAGkAagBrAGwAbQBuAG8AcABxAHIAcwB0AHUAdgB3AHgAeQB6AHsAfAB9AH4AfwCAAIEAggCDAIQAhQCGAIcAiACJAIoAiwCMAI0AjgCPAJAAkQCSAJMAlACVAJYA"},"y":{"dtype":"f8","bdata":"VVVVVVVQl8BVVVVVVcCFwHIcx3Ec63rA3LZt27a2csDP8zzP85RrwIuiKIqiBGXA60NjfWhUYMDpeZ7neaBZwIKLDS42KFTAAAAAAACQT8CbmZmZmWlIwENEREREdELANDMzMzPTOsDooA7qoC4ywCIiIiIiYiXA1szMzMyMEMBlVFRUVFT6P0z6pE\u002f6JBtAWiCMtGPFJkDNzMzMzAwvQEHMbpchRDFAxcvqZlfZMkDuqZPhUEs0QOfKA5J1njVAAN+8mnjWNkBpe7Zne\u002fY3QNrJPqooATlAjMmYjMn4OUBn9aWCVt86QGkvob2EtjtAqmVSBdF\u002fPECLiIiIiDw9QFLIThPQ7T1AAapU\u002f6mUPkAf+7Ef+zE\u002fQO5ocl+FcUBA5qui3lg+QUAHjX+aZABCQIgnI918uEJAtmALtmBnQ0ANyduQvA1EQMOBcW0srERAh96yyD1DRUAsFLdCcdNFQH5YpAw8XUZArDXVJgnhRkAPl2B2Ol9HQGPU8Lcp2EdAenLeVClMSEDrUbgehbtIQFyxBlyx5khAgzRIgzQQSUBW9jmkJjhJQEAsUgaeXklAI\u002fU6Uq+DSUC3bdu2badJQJ\u002fCegrryUlAfrN16DfrSUDipO7LYwtKQCh90id9KkpAELOAfJFISkC21lprrWVKQB4yd8jcgUpAqqqqqiqdSkB6oRd6obdKQCsFav1K0UpA5\u002frjZTDqSkBaWlpaWgJLQFuZPAHRGUtACpzACZwwS0DYHEi0wkZLQIT2EtpLXEtAE31P9D1xS0BaN5gin4VLQGSo7DB1mUtAxKnfc0vES0DfBE7gBO5LQGysxmqsFkxAVtHXeUw+TEDv7u7u7mRMQDeKkC6dikxAfwL2J2CvTECgbh5cQNNMQORFXuRF9kxAeHh4eHgYTUD3nUp03zlNQHT9FN2BWk1AZmZmZmZ6TUCoGrN2k5lNQIFknSsPuE1AXd\u002f1Xd\u002fVTUBi83ilCfNNQBqLTlyTD05A3ZxQooErTkBtvhxg2UZOQEuf9EmfYU5A6vRw4td7TkDGGQp9h5VOQOpceUCyrk5Aj8L1KFzHTkCtPfl3LudOQAthtgthBk9AKjkvi\u002fgkT0Bw+ZZv+UJPQAZogAZoYE9A4q3sc0h9T0BQnDy0nplPQC1SBp5utU9ADAfR47vQT0BbobgViutPQC9PfVHuAlBAbtu2bdsPUEDfyHL4jRxQQBDfQXwHKVBAPoz7dUk1UEBWVVVVVUFQQNOBcn0sTVBAfnlsRdBYUED5QdT4QWRQQNiCLdiCb1BAInBjGZR6UEDP9DfodoVQQBVxrWYskFBA11prrbWaUECPCR7ME6VQQHTy0clHr1BAKpVKpVK5UEBWVVVVNcNQQLd5GMnwzFBA6YVe6IXWUECSIN6T9d9QQAK1fqVA6VBAJvyZ8GfyUEBKljpCbPtQQJrcV2FOBFFADw8PDw8NUUA\u002fAdoGrxVRQKVmw\u002f4uHlFAAt2Yp48mUUCt0Rqt0S5RQDNdKrb1NlFA4C71ZPw+UUCGoB9X5kZRQHsJ7SW0TlFAZmZmZmZWUUBgan+p\u002fV1RQMUMOnx6ZVFADqbIZ91sUUD1rK7xJnRRQGgk4JtXe1FA"},"type":"scatter","xaxis":"x3","yaxis":"y3"},{"hoverinfo":"skip","line":{"color":"black","dash":"dot","width":1},"name":"Break-Even (0%)","showlegend":false,"x":[0,150],"y":[0,0],"type":"scatter","xaxis":"x3","yaxis":"y3"},{"hovertemplate":"\u003cb\u003eTarget Margin\u003c\u002fb\u003e\u003cbr\u003e50%\u003cextra\u003e\u003c\u002fextra\u003e","line":{"color":"green","dash":"dash","width":1},"name":"Target Margin (50%)","showlegend":false,"x":[0,150],"y":[50,50],"type":"scatter","xaxis":"x3","yaxis":"y3"},{"fill":"tozeroy","fillcolor":"rgba(211, 47, 47, 0.1)","hovertemplate":"\u003cb\u003eCost Per Tenant\u003c\u002fb\u003e\u003cbr\u003eTenants: %{x}\u003cbr\u003eCost: $%{y:,.0f}\u003cextra\u003e\u003c\u002fextra\u003e","line":{"color":"#D32F2F","width":3},"name":"Cost Per Tenant","showlegend":false,"x":{"dtype":"i2","bdata":"AQACAAMABAAFAAYABwAIAAkACgALAAwADQAOAA8AEAARABIAEwAUABUAFgAXABgAGQAaABsAHAAdAB4AHwAgACEAIgAjACQAJQAmACcAKAApACoAKwAsAC0ALgAvADAAMQAyADMANAA1ADYANwA4ADkAOgA7ADwAPQA+AD8AQABBAEIAQwBEAEUARgBHAEgASQBKAEsATABNAE4ATwBQAFEAUgBTAFQAVQBWAFcAWABZAFoAWwBcAF0AXgBfAGAAYQBiAGMAZABlAGYAZwBoAGkAagBrAGwAbQBuAG8AcABxAHIAcwB0AHUAdgB3AHgAeQB6AHsAfAB9AH4AfwCAAIEAggCDAIQAhQCGAIcAiACJAIoAiwCMAI0AjgCPAJAAkQCSAJMAlACVAJYA"},"y":{"dtype":"f8","bdata":"AAAAAECo0kAAAAAAQKjCQFVVVVVV4LhAJUmSJAm5skDbtm3btg+uQOh5nud5I6lA8HIKXk6fpUC3bdu2LfyiQFEURVEU76BAAAAAAACWnkCamZmZmeebQJmZmZmZq5lAmpmZmZnHl0ArvuIrviiWQDMzMzMzwZRAmpmZmZmGk0ADAwMDA3GSQEREREREepFA+NwSp36dkECamZmZma2PQGhzNmdzBo9AlvNnOX9ujkBHoGirweONQOmTPumTZI1AYCz5xZLvjEC5kRu5kYOMQE50KMCQH4xAa7RGa7TCi0D5wwGPP2yLQDmO4ziOG4tA4BkBnhHQikDMzMzMTImKQOF0wvjRRopAQEBAQEAIikDUQR3UQc2JQE0xavjbKolAFP8FWT2RiEA7ViCMtP+HQFqiJVqidYdAd3d3d3fyhkA2KVuTsnWGQK7e6q3e\u002foVAG9l5qZGNhUDfsPYNayGFQKG9hPYSuoRAvxfgIjlXhEC1jjcnlPiDQLZgC7bgnYNAJSpZAOFGg0CPwvUoXPOCQPv6+vr60oJAntiJndizgkA\u002fh9QE45WCQNFeQnsJeYJAJchTgjxdgkC3bdu2bUKCQAnuI7iPKIJAYbmnEZYPgkBXBA0ndfeBQCIiIiIi4IFAtHmf4pLJgUD43nvvvbOBQGqapmmanoFAAAAAACCKgUDkRm7kRnaBQB988MEHY4FA0gOVs1tQgUA8PDw8PD6BQPyMEj+jLIFA+Yqv+IobgUBe6sn47QqBQBzHcRzH+oBAMWLEiBHrgEB91g2myNuAQLWBThvozIBArUAYacesgEBYfMVXfI2AQLD+6q\u002f+boBA\u002fyKepEZRgEDNzMzMTDSAQFaYEx0KGIBAQvwOxO\u002f4f0APWtJ1H8N\u002fQCmXcimXjn9AS0tLS0tbf0ANE5DRMCl\u002fQNSDYDQ9+H5AZmZmZmbIfkAEWPPNopl+QD\u002fpkz7pa35A8zAP8zA\u002ffkDtksqHcRN+QFgvivWi6H1AshSHjL2+fUBc4tTvuZV9QBERERGRbX1AoZBWLDxGfUBW2XDEtB99QJ\u002f0SZ\u002f0+XxAKVyPwvXUfEB8IwpMOqV8QG5ubm5udnxAQSo5L4tIfEDZiZ3YiRt8QPZjP\u002fZj73tAK\u002fscUhPEe0CIFaXxkZl7QL6E9hLab3tAbnVGKuZGe0D3DWvfsB57QHMSiAs193pAt23btm3QekBhpacWVqp6QM9iOovphHpARVsNniNgekAAAAAAADx6QIh6qId6GHpAh5O6L4\u002f1eUAWOoMVOtN5QHd3d3d3sXlAmq\u002fVs0OQeUCTIVhHm295QL+s98t6T3lAfO+9994veUBU46WbxBB5QKMoiqIo8nhAgUAgEAjUeEAAAAAAYLZ4QNqStqQtmXhAR27kRm58eEBKnmVEH2B4QPjggw8+RHhAjQsyLsgoeEAiPVA5uw14QDFq+NsU83dA09LS0tLYd0BD\u002fHHr8r53QA\u002fMtQNzpXdA+mg1CVGMd0D5iq\u002f4inN3QGbogN0eW3dAYXMg0QpDd0BvHqH6TCt3QI7jOI7jE3dAzczMzMz8dkDgwIEDB+Z2QLDZUYuQz3ZA1g2myGe5dkAh+fMqi6N2QMaSXyz5jXZA"},"type":"scatter","xaxis":"x4","yaxis":"y4"},{"hovertemplate":"\u003cb\u003eInflection Point\u003c\u002fb\u003e\u003cbr\u003eTenants: 20\u003cbr\u003eCost: $1,014\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#FF6F00","size":12,"symbol":"diamond"},"mode":"markers+text","showlegend":false,"text":["20 tenants\u003cbr\u003e$1014"],"textfont":{"color":"#FF6F00","size":10},"textposition":"top center","x":[20],"y":[1013.7],"type":"scatter","xaxis":"x4","yaxis":"y4"},{"hovertemplate":"\u003cb\u003eInflection Point\u003c\u002fb\u003e\u003cbr\u003eTenants: 50\u003cbr\u003eCost: $606\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#FF6F00","size":12,"symbol":"diamond"},"mode":"markers+text","showlegend":false,"text":["50 tenants\u003cbr\u003e$606"],"textfont":{"color":"#FF6F00","size":10},"textposition":"top center","x":[50],"y":[606.42],"type":"scatter","xaxis":"x4","yaxis":"y4"},{"hovertemplate":"\u003cb\u003eInflection Point\u003c\u002fb\u003e\u003cbr\u003eTenants: 100\u003cbr\u003eCost: $461\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#FF6F00","size":12,"symbol":"diamond"},"mode":"markers+text","showlegend":false,"text":["100 tenants\u003cbr\u003e$461"],"textfont":{"color":"#FF6F00","size":10},"textposition":"top center","x":[100],"y":[461.31],"type":"scatter","xaxis":"x4","yaxis":"y4"}],                        {"template":{"data":{"histogram2dcontour":[{"type":"histogram2dcontour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"choropleth":[{"type":"choropleth","colorbar":{"outlinewidth":0,"ticks":""}}],"histogram2d":[{"type":"histogram2d","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"heatmap":[{"type":"heatmap","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"contourcarpet":[{"type":"contourcarpet","colorbar":{"outlinewidth":0,"ticks":""}}],"contour":[{"type":"contour","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"surface":[{"type":"surface","colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]}],"mesh3d":[{"type":"mesh3d","colorbar":{"outlinewidth":0,"ticks":""}}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"parcoords":[{"type":"parcoords","line":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolargl":[{"type":"scatterpolargl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"scattergeo":[{"type":"scattergeo","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterpolar":[{"type":"scatterpolar","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"scattergl":[{"type":"scattergl","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatter3d":[{"type":"scatter3d","line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermap":[{"type":"scattermap","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattermapbox":[{"type":"scattermapbox","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scatterternary":[{"type":"scatterternary","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"scattercarpet":[{"type":"scattercarpet","marker":{"colorbar":{"outlinewidth":0,"ticks":""}}}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"white","linecolor":"white","minorgridcolor":"white","startlinecolor":"#2a3f5f"},"type":"carpet"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}],"barpolar":[{"marker":{"line":{"color":"#E5ECF6","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"pie":[{"automargin":true,"type":"pie"}]},"layout":{"autotypenumbers":"strict","colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"hovermode":"closest","hoverlabel":{"align":"left"},"paper_bgcolor":"white","plot_bgcolor":"#E5ECF6","polar":{"bgcolor":"#E5ECF6","angularaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"radialaxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"ternary":{"bgcolor":"#E5ECF6","aaxis":{"gridcolor":"white","linecolor":"white","ticks":""},"baxis":{"gridcolor":"white","linecolor":"white","ticks":""},"caxis":{"gridcolor":"white","linecolor":"white","ticks":""}},"coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]]},"xaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"yaxis":{"gridcolor":"white","linecolor":"white","ticks":"","title":{"standoff":15},"zerolinecolor":"white","automargin":true,"zerolinewidth":2},"scene":{"xaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"yaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2},"zaxis":{"backgroundcolor":"#E5ECF6","gridcolor":"white","linecolor":"white","showbackground":true,"ticks":"","zerolinecolor":"white","gridwidth":2}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"geo":{"bgcolor":"white","landcolor":"#E5ECF6","subunitcolor":"white","showland":true,"showlakes":true,"lakecolor":"white"},"title":{"x":0.05},"mapbox":{"style":"light"}}},"xaxis":{"anchor":"y","domain":[0.0,0.45],"title":{"text":"Number of Tenants"},"gridcolor":"lightgray"},"yaxis":{"anchor":"x","domain":[0.56,1.0],"title":{"text":"Amount ($)"},"gridcolor":"lightgray"},"xaxis2":{"anchor":"y2","domain":[0.55,1.0],"title":{"text":"Number of Tenants"},"gridcolor":"lightgray"},"yaxis2":{"anchor":"x2","domain":[0.56,1.0],"title":{"text":"Gross Profit ($)"},"gridcolor":"lightgray"},"xaxis3":{"anchor":"y3","domain":[0.0,0.45],"title":{"text":"Number of Tenants"},"gridcolor":"lightgray"},"yaxis3":{"anchor":"x3","domain":[0.0,0.44],"title":{"text":"Gross Margin (%)"},"gridcolor":"lightgray"},"xaxis4":{"anchor":"y4","domain":[0.55,1.0],"title":{"text":"Number of Tenants"},"gridcolor":"lightgray"},"yaxis4":{"anchor":"x4","domain":[0.0,0.44],"title":{"text":"Cost Per Tenant ($)"},"gridcolor":"lightgray"},"annotations":[{"font":{"size":10,"color":"#FF6F00"},"showarrow":true,"text":"Break-Even\u003cbr\u003e21 tenants","x":21.0,"xanchor":"center","xref":"x","y":20848.933333333334,"yanchor":"bottom","yref":"y","arrowhead":2,"arrowsize":1,"arrowwidth":2,"arrowcolor":"#FF6F00","ax":40,"ay":-40,"bgcolor":"rgba(255, 111, 0, 0.1)","bordercolor":"#FF6F00","borderwidth":1},{"font":{"size":10,"color":"#388E3C"},"showarrow":true,"text":"50% Margin\u003cbr\u003e86 tenants","x":86.0,"xanchor":"center","xref":"x3","y":50,"yanchor":"bottom","yref":"y3","arrowhead":2,"arrowsize":1,"arrowwidth":2,"arrowcolor":"#388E3C","ax":-40,"ay":-40,"bgcolor":"rgba(56, 142, 60, 0.1)","bordercolor":"#388E3C","borderwidth":1},{"font":{"size":10,"color":"#FF6F00"},"showarrow":true,"text":"Break-Even\u003cbr\u003e21 tenants","x":21.0,"xanchor":"center","xref":"x","y":20848.933333333334,"yanchor":"bottom","yref":"y","arrowhead":2,"arrowsize":1,"arrowwidth":2,"arrowcolor":"#FF6F00","ax":40,"ay":-40,"bgcolor":"rgba(255, 111, 0, 0.1)","bordercolor":"#FF6F00","borderwidth":1},{"font":{"size":10,"color":"#388E3C"},"showarrow":true,"text":"50% Margin\u003cbr\u003e86 tenants","x":86.0,"xanchor":"center","xref":"x3","y":50,"yanchor":"bottom","yref":"y3","arrowhead":2,"arrowsize":1,"arrowwidth":2,"arrowcolor":"#388E3C","ax":-40,"ay":-40,"bgcolor":"rgba(56, 142, 60, 0.1)","bordercolor":"#388E3C","borderwidth":1}],"title":{"font":{"size":20,"color":"#1a1a1a"},"text":"Chef's Kiss Multi-Tenant SaaS Financial Projections\u003cbr\u003e\u003csub\u003eHybrid Architecture on Azure | Interactive Break-Even Analysis\u003c\u002fsub\u003e","x":0.5,"xanchor":"center"},"legend":{"font":{"size":11},"orientation":"h","yanchor":"bottom","y":-0.15,"xanchor":"center","x":0.5},"font":{"family":"Arial, sans-serif","size":11,"color":"#333"},"height":900,"showlegend":true,"hovermode":"closest","plot_bgcolor":"white","paper_bgcolor":"white"},                        {"responsive": true}                    )                };            </script>        </div>
+        
+        <div class="summary-section">
+            <h2>Financial Summary by Scenario</h2>
+            <table class="dataframe summary-table">
+  <thead>
+    <tr style="text-align: right;">
+      <th>Scenario</th>
+      <th>ARPA</th>
+      <th>Tenants</th>
+      <th>Revenue</th>
+      <th>Cost</th>
+      <th>Profit</th>
+      <th>Margin</th>
+      <th>Cost/Tenant</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Conservative</td>
+      <td>$800</td>
+      <td>10</td>
+      <td>$8,000</td>
+      <td>$19,575</td>
+      <td>$-11,575</td>
+      <td>-144.7%</td>
+      <td>$1958</td>
+    </tr>
+    <tr>
+      <td>Conservative</td>
+      <td>$800</td>
+      <td>25</td>
+      <td>$20,000</td>
+      <td>$23,149</td>
+      <td>$-3,149</td>
+      <td>-15.7%</td>
+      <td>$926</td>
+    </tr>
+    <tr>
+      <td>Conservative</td>
+      <td>$800</td>
+      <td>50</td>
+      <td>$40,000</td>
+      <td>$30,321</td>
+      <td>$9,679</td>
+      <td>24.2%</td>
+      <td>$606</td>
+    </tr>
+    <tr>
+      <td>Conservative</td>
+      <td>$800</td>
+      <td>75</td>
+      <td>$60,000</td>
+      <td>$40,321</td>
+      <td>$19,679</td>
+      <td>32.8%</td>
+      <td>$538</td>
+    </tr>
+    <tr>
+      <td>Conservative</td>
+      <td>$800</td>
+      <td>100</td>
+      <td>$80,000</td>
+      <td>$46,131</td>
+      <td>$33,869</td>
+      <td>42.3%</td>
+      <td>$461</td>
+    </tr>
+    <tr>
+      <td>Conservative</td>
+      <td>$800</td>
+      <td>150</td>
+      <td>$120,000</td>
+      <td>$54,131</td>
+      <td>$65,869</td>
+      <td>54.9%</td>
+      <td>$361</td>
+    </tr>
+    <tr>
+      <td>Base</td>
+      <td>$1000</td>
+      <td>10</td>
+      <td>$10,000</td>
+      <td>$19,575</td>
+      <td>$-9,575</td>
+      <td>-95.8%</td>
+      <td>$1958</td>
+    </tr>
+    <tr>
+      <td>Base</td>
+      <td>$1000</td>
+      <td>25</td>
+      <td>$25,000</td>
+      <td>$23,149</td>
+      <td>$1,851</td>
+      <td>7.4%</td>
+      <td>$926</td>
+    </tr>
+    <tr>
+      <td>Base</td>
+      <td>$1000</td>
+      <td>50</td>
+      <td>$50,000</td>
+      <td>$30,321</td>
+      <td>$19,679</td>
+      <td>39.4%</td>
+      <td>$606</td>
+    </tr>
+    <tr>
+      <td>Base</td>
+      <td>$1000</td>
+      <td>75</td>
+      <td>$75,000</td>
+      <td>$40,321</td>
+      <td>$34,679</td>
+      <td>46.2%</td>
+      <td>$538</td>
+    </tr>
+    <tr>
+      <td>Base</td>
+      <td>$1000</td>
+      <td>100</td>
+      <td>$100,000</td>
+      <td>$46,131</td>
+      <td>$53,869</td>
+      <td>53.9%</td>
+      <td>$461</td>
+    </tr>
+    <tr>
+      <td>Base</td>
+      <td>$1000</td>
+      <td>150</td>
+      <td>$150,000</td>
+      <td>$54,131</td>
+      <td>$95,869</td>
+      <td>63.9%</td>
+      <td>$361</td>
+    </tr>
+    <tr>
+      <td>Optimistic</td>
+      <td>$1200</td>
+      <td>10</td>
+      <td>$12,000</td>
+      <td>$19,575</td>
+      <td>$-7,575</td>
+      <td>-63.1%</td>
+      <td>$1958</td>
+    </tr>
+    <tr>
+      <td>Optimistic</td>
+      <td>$1200</td>
+      <td>25</td>
+      <td>$30,000</td>
+      <td>$23,149</td>
+      <td>$6,851</td>
+      <td>22.8%</td>
+      <td>$926</td>
+    </tr>
+    <tr>
+      <td>Optimistic</td>
+      <td>$1200</td>
+      <td>50</td>
+      <td>$60,000</td>
+      <td>$30,321</td>
+      <td>$29,679</td>
+      <td>49.5%</td>
+      <td>$606</td>
+    </tr>
+    <tr>
+      <td>Optimistic</td>
+      <td>$1200</td>
+      <td>75</td>
+      <td>$90,000</td>
+      <td>$40,321</td>
+      <td>$49,679</td>
+      <td>55.2%</td>
+      <td>$538</td>
+    </tr>
+    <tr>
+      <td>Optimistic</td>
+      <td>$1200</td>
+      <td>100</td>
+      <td>$120,000</td>
+      <td>$46,131</td>
+      <td>$73,869</td>
+      <td>61.6%</td>
+      <td>$461</td>
+    </tr>
+    <tr>
+      <td>Optimistic</td>
+      <td>$1200</td>
+      <td>150</td>
+      <td>$180,000</td>
+      <td>$54,131</td>
+      <td>$125,869</td>
+      <td>69.9%</td>
+      <td>$361</td>
+    </tr>
+  </tbody>
+</table>
+        </div>
+        
+        <div class="key-insights" style="background-color: #FFF3E0; border-left-color: #F57C00; margin-top: 30px;">
+            <h3>💡 Scenario Definitions</h3>
+            <ul>
+                <li><strong>Conservative ($800 ARPA):</strong> Entry-level pricing for small independent restaurants</li>
+                <li><strong>Base Case ($1,000 ARPA):</strong> Standard pricing for typical restaurant customers</li>
+                <li><strong>Optimistic ($1,200 ARPA):</strong> Premium pricing for restaurant chains or advanced features</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

@@ -54,6 +54,14 @@ function generateTemplate(columns: ColumnMetadata[], includeExamples: boolean = 
 export function generateIngredientsTemplate(): string {
   const columns: ColumnMetadata[] = [
     {
+      name: 'id',
+      required: false,
+      type: 'integer',
+      format: 'Positive integer (leave empty for new ingredients)',
+      example: '',
+      validation: 'If provided, updates existing ingredient; if empty, creates new ingredient'
+    },
+    {
       name: 'name',
       required: true,
       type: 'string',
@@ -128,6 +136,14 @@ export function generateIngredientsTemplate(): string {
 export function generateRecipesTemplate(): string {
   const columns: ColumnMetadata[] = [
     {
+      name: 'id',
+      required: false,
+      type: 'integer',
+      format: 'Positive integer (leave empty for new recipes)',
+      example: '',
+      validation: 'If provided, updates existing recipe; if empty, creates new recipe'
+    },
+    {
       name: 'name',
       required: true,
       type: 'string',
@@ -201,6 +217,14 @@ export function generateRecipesTemplate(): string {
  */
 export function generateRecipeIngredientsTemplate(): string {
   const columns: ColumnMetadata[] = [
+    {
+      name: 'id',
+      required: false,
+      type: 'integer',
+      format: 'Positive integer (leave empty for new recipe ingredients)',
+      example: '',
+      validation: 'If provided, updates existing recipe ingredient; if empty, creates new'
+    },
     {
       name: 'recipeId',
       required: true,

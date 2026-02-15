@@ -701,6 +701,7 @@ function generateRecipeIngredientMetadataRows(columns: string[]): string[] {
  */
 export function recipeIngredientsToCSV(recipeIngredients: any[]): string {
   const columns = [
+    "id",
     "recipeId",
     "recipeName",
     "ingredientId",

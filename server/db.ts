@@ -1330,6 +1330,7 @@ export async function getRecipeIngredientsForExport(restaurantId: number) {
 
   const result = await db
     .select({
+      id: recipeIngredients.id,
       recipeId: recipeIngredients.recipeId,
       recipeName: recipes.name,
       ingredientId: recipeIngredients.ingredientId,

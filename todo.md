@@ -1854,4 +1854,11 @@ All tasks from this session have been marked as [x] completed above. Key achieve
 - [x] Add import history logging to importRecipeIngredients procedure
 - [x] Test recipe-ingredients import with new IDs (manual testing required)
 - [x] Verify all data appears correctly (manual testing required)
-- [ ] Save checkpoint and deliver fix
+- [x] Save checkpoint and deliver fix
+
+
+## Fix Duplicate React Key Errors on Recipes Page - Current Sprint
+- [x] Identify where category names are used as React keys in Recipes page
+- [x] Replace category-based keys with unique identifiers (recipe ID or category+index)
+- [x] Test that errors are resolved
+- [ ] Save checkpoint

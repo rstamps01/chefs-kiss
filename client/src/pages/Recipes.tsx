@@ -389,10 +389,10 @@ export default function Recipes() {
                     <span className="font-medium">All Categories</span>
                   </SelectItem>
                   <div className="my-1 h-px bg-border" />
-                  {Array.from(new Set(recipes?.map(r => r.category).filter((cat): cat is string => Boolean(cat)))).sort((a, b) => a.localeCompare(b)).map((category) => {
+                  {Array.from(new Set(recipes?.map(r => r.category).filter((cat): cat is string => Boolean(cat)))).sort((a, b) => a.localeCompare(b)).map((category, index) => {
                     const categoryType = getCategoryType(category);
                     return (
-                      <SelectItem key={category} value={category}>
+                      <SelectItem key={`recipe-cat-${index}-${category}`} value={category}>
                         <div className="flex items-center gap-2">
                           <Badge 
                             variant="outline"

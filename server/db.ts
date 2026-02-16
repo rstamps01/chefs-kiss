@@ -843,41 +843,49 @@ export async function deleteIngredient(ingredientId: number) {
 // ============================================================================
 
 /**
- * Get all recipe categories for a restaurant
+ * Get all recipe categories for a restaurant (filtered by type)
  */
-export async function getRecipeCategories(restaurantId: number) {
+export async function getRecipeCategories(restaurantId: number, categoryType?: 'recipe' | 'ingredient') {
   const db = await getDb();
   if (!db) {
     throw new Error("Database not available");
   }
 
+  const conditions = [eq(recipeCategories.restaurantId, restaurantId)];
+  if (categoryType) {
+    conditions.push(eq(recipeCategories.categoryType, categoryType));
+  }
+
   const categories = await db
     .select()
     .from(recipeCategories)
-    .where(eq(recipeCategories.restaurantId, restaurantId))
+    .where(and(...conditions))
     .orderBy(recipeCategories.displayOrder, recipeCategories.name);
 
   return categories;
 }
 
 /**
- * Get only active recipe categories
+ * Get only active recipe categories (filtered by type)
  */
-export async function getActiveRecipeCategories(restaurantId: number) {
+export async function getActiveRecipeCategories(restaurantId: number, categoryType?: 'recipe' | 'ingredient') {
   const db = await getDb();
   if (!db) {
     throw new Error("Database not available");
   }
 
+  const conditions = [
+    eq(recipeCategories.restaurantId, restaurantId),
+    eq(recipeCategories.isActive, true)
+  ];
+  if (categoryType) {
+    conditions.push(eq(recipeCategories.categoryType, categoryType));
+  }
+
   const categories = await db
     .select()
     .from(recipeCategories)
-    .where(
-      and(
-        eq(recipeCategories.restaurantId, restaurantId),
-        eq(recipeCategories.isActive, true)
-      )
-    )
+    .where(and(...conditions))
     .orderBy(recipeCategories.displayOrder, recipeCategories.name);
 
   return categories;
@@ -912,6 +920,7 @@ export async function getIngredientCategories(restaurantId: number) {
 export async function createRecipeCategory(data: {
   restaurantId: number;
   name: string;
+  categoryType: 'recipe' | 'ingredient';
   isActive?: boolean;
   displayOrder?: number;
 }) {
@@ -923,6 +932,7 @@ export async function createRecipeCategory(data: {
   const [result] = await db.insert(recipeCategories).values({
     restaurantId: data.restaurantId,
     name: data.name,
+    categoryType: data.categoryType,
     isActive: data.isActive ?? true,
     displayOrder: data.displayOrder ?? 0,
   }).$returningId();
@@ -937,6 +947,7 @@ export async function updateRecipeCategory(
   categoryId: number,
   data: {
     name?: string;
+    categoryType?: 'recipe' | 'ingredient';
     isActive?: boolean;
     displayOrder?: number;
   }
@@ -949,6 +960,7 @@ export async function updateRecipeCategory(
   const updateData: Record<string, any> = {};
   
   if (data.name !== undefined) updateData.name = data.name;
+  if (data.categoryType !== undefined) updateData.categoryType = data.categoryType;
   if (data.isActive !== undefined) updateData.isActive = data.isActive;
   if (data.displayOrder !== undefined) updateData.displayOrder = data.displayOrder;
 

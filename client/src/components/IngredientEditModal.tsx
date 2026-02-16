@@ -39,7 +39,7 @@ export function IngredientEditModal({ open, onOpenChange, ingredient }: Ingredie
 
   // Fetch active units and categories
   const { data: activeUnits = [] } = trpc.ingredientUnits.listActive.useQuery();
-  const { data: activeCategories = [] } = trpc.recipeCategories.listActive.useQuery();
+  const { data: activeCategories = [] } = trpc.recipeCategories.listActive.useQuery({ categoryType: 'ingredient' });
 
   useEffect(() => {
     if (ingredient) {
@@ -143,7 +143,7 @@ export function IngredientEditModal({ open, onOpenChange, ingredient }: Ingredie
                   ))}
                 </SelectContent>
               </Select>
-              <QuickAddCategoryDialog onCategoryAdded={(name) => setCategory(name)} />
+              <QuickAddCategoryDialog categoryType="ingredient" onCategoryAdded={(name) => setCategory(name)} />
             </div>
           </div>
 

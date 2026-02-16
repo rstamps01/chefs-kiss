@@ -25,6 +25,7 @@ export function CategoriesUnitsManager() {
   const [categoryDialogOpen, setCategoryDialogOpen] = useState(false);
   const [editingCategory, setEditingCategory] = useState<any>(null);
   const [categoryName, setCategoryName] = useState("");
+  const [categoryType, setCategoryType] = useState<'recipe' | 'ingredient'>('recipe');
 
   // Ingredient Units State
   const [unitDialogOpen, setUnitDialogOpen] = useState(false);
@@ -33,7 +34,8 @@ export function CategoriesUnitsManager() {
   const [unitDisplayName, setUnitDisplayName] = useState("");
 
   // Queries
-  const { data: categories = [], isLoading: categoriesLoading } = trpc.recipeCategories.list.useQuery();
+  const { data: recipeCategories = [], isLoading: recipeCategoriesLoading } = trpc.recipeCategories.list.useQuery({ categoryType: 'recipe' });
+  const { data: ingredientCategories = [], isLoading: ingredientCategoriesLoading } = trpc.recipeCategories.list.useQuery({ categoryType: 'ingredient' });
   const { data: units = [], isLoading: unitsLoading } = trpc.ingredientUnits.list.useQuery();
 
   // Recipe Category Mutations
@@ -117,9 +119,10 @@ export function CategoriesUnitsManager() {
   });
 
   // Handlers
-  const handleCreateCategory = () => {
+  const handleCreateCategory = (type: 'recipe' | 'ingredient') => {
     setEditingCategory(null);
     setCategoryName("");
+    setCategoryType(type);
     setCategoryDialogOpen(true);
   };
 
@@ -143,6 +146,7 @@ export function CategoriesUnitsManager() {
     } else {
       createCategoryMutation.mutate({
         name: categoryName,
+        categoryType: categoryType,
       });
     }
   };
@@ -209,11 +213,15 @@ export function CategoriesUnitsManager() {
 
   return (
     <>
-      <Tabs defaultValue="categories" className="space-y-4">
+      <Tabs defaultValue="recipeCategories" className="space-y-4">
         <TabsList>
-          <TabsTrigger value="categories">
+          <TabsTrigger value="recipeCategories">
             <Tag className="mr-2 h-4 w-4" />
             Recipe Categories
+          </TabsTrigger>
+          <TabsTrigger value="ingredientCategories">
+            <Tag className="mr-2 h-4 w-4" />
+            Ingredient Categories
           </TabsTrigger>
           <TabsTrigger value="units">
             <Ruler className="mr-2 h-4 w-4" />
@@ -221,7 +229,7 @@ export function CategoriesUnitsManager() {
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="categories" className="space-y-4">
+        <TabsContent value="recipeCategories" className="space-y-4">
           <div className="flex justify-between items-center">
             <div>
               <h3 className="text-lg font-semibold">Recipe Categories</h3>
@@ -229,29 +237,104 @@ export function CategoriesUnitsManager() {
                 Manage categories available when creating recipes
               </p>
             </div>
-            <Button onClick={handleCreateCategory}>
+            <Button onClick={() => handleCreateCategory('recipe')}>
               <Plus className="mr-2 h-4 w-4" />
-              Add Category
+              Add Recipe Category
             </Button>
           </div>
 
-          {categoriesLoading ? (
+          {recipeCategoriesLoading ? (
             <Card>
               <CardContent className="py-8">
                 <p className="text-center text-muted-foreground">Loading categories...</p>
               </CardContent>
             </Card>
-          ) : categories.length === 0 ? (
+          ) : recipeCategories.length === 0 ? (
             <Card>
               <CardContent className="py-8">
                 <p className="text-center text-muted-foreground">
-                  No categories yet. Click "Add Category" to create one.
+                  No recipe categories yet. Click "Add Recipe Category" to create one.
                 </p>
               </CardContent>
             </Card>
           ) : (
             <div className="grid gap-4">
-              {categories.map((category) => (
+              {recipeCategories.map((category) => (
+                <Card key={category.id}>
+                  <CardContent className="flex items-center justify-between py-4">
+                    <div className="flex items-center gap-4 flex-1">
+                      <Tag className="h-5 w-5 text-muted-foreground" />
+                      <div className="flex-1">
+                        <p className="font-medium">{category.name}</p>
+                        <p className="text-sm text-muted-foreground">
+                          {category.isActive ? "Active" : "Inactive"}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2 mr-4">
+                        <Label htmlFor={`category-${category.id}`} className="text-sm">
+                          Active
+                        </Label>
+                        <Switch
+                          id={`category-${category.id}`}
+                          checked={category.isActive}
+                          onCheckedChange={() => handleToggleCategoryActive(category.id, category.isActive)}
+                        />
+                      </div>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleEditCategory(category)}
+                      >
+                        <Pencil className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleDeleteCategory(category.id)}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
+        </TabsContent>
+
+        <TabsContent value="ingredientCategories" className="space-y-4">
+          <div className="flex justify-between items-center">
+            <div>
+              <h3 className="text-lg font-semibold">Ingredient Categories</h3>
+              <p className="text-sm text-muted-foreground">
+                Manage categories available when creating ingredients
+              </p>
+            </div>
+            <Button onClick={() => handleCreateCategory('ingredient')}>
+              <Plus className="mr-2 h-4 w-4" />
+              Add Ingredient Category
+            </Button>
+          </div>
+
+          {ingredientCategoriesLoading ? (
+            <Card>
+              <CardContent className="py-8">
+                <p className="text-center text-muted-foreground">Loading categories...</p>
+              </CardContent>
+            </Card>
+          ) : ingredientCategories.length === 0 ? (
+            <Card>
+              <CardContent className="py-8">
+                <p className="text-center text-muted-foreground">
+                  No ingredient categories yet. Click "Add Ingredient Category" to create one.
+                </p>
+              </CardContent>
+            </Card>
+          ) : (
+            <div className="grid gap-4">
+              {ingredientCategories.map((category) => (
                 <Card key={category.id}>
                   <CardContent className="flex items-center justify-between py-4">
                     <div className="flex items-center gap-4 flex-1">

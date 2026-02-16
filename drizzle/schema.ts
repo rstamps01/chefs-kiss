@@ -306,6 +306,7 @@ export const recipeCategories = mysqlTable("recipeCategories", {
   id: int("id").autoincrement().primaryKey(),
   restaurantId: int("restaurantId").notNull(),
   name: varchar("name", { length: 100 }).notNull(),
+  categoryType: mysqlEnum("categoryType", ["recipe", "ingredient"]).default("recipe").notNull(),
   isActive: boolean("isActive").default(true).notNull(),
   displayOrder: int("displayOrder").default(0),
   createdAt: timestamp("createdAt").defaultNow().notNull(),

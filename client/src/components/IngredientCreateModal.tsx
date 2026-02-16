@@ -26,7 +26,7 @@ export function IngredientCreateModal({ open, onOpenChange }: IngredientCreateMo
 
   // Fetch active units and categories
   const { data: activeUnits = [] } = trpc.ingredientUnits.listActive.useQuery();
-  const { data: activeCategories = [] } = trpc.recipeCategories.listActive.useQuery();
+  const { data: activeCategories = [] } = trpc.recipeCategories.listActive.useQuery({ categoryType: 'ingredient' });
 
   const createMutation = trpc.ingredients.create.useMutation({
     onSuccess: () => {
@@ -122,7 +122,7 @@ export function IngredientCreateModal({ open, onOpenChange }: IngredientCreateMo
                   ))}
                 </SelectContent>
               </Select>
-              <QuickAddCategoryDialog onCategoryAdded={(name) => setCategory(name)} />
+              <QuickAddCategoryDialog categoryType="ingredient" onCategoryAdded={(name) => setCategory(name)} />
             </div>
           </div>
 

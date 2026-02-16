@@ -471,20 +471,28 @@ export const appRouter = router({
 
   // Recipe Categories endpoints
   recipeCategories: router({
-    list: protectedProcedure.query(async ({ ctx }) => {
-      const restaurant = await getUserRestaurant(ctx.user.id);
-      if (!restaurant) {
-        return [];
-      }
-      return await getRecipeCategories(restaurant.id);
-    }),
-    listActive: protectedProcedure.query(async ({ ctx }) => {
-      const restaurant = await getUserRestaurant(ctx.user.id);
-      if (!restaurant) {
-        return [];
-      }
-      return await getActiveRecipeCategories(restaurant.id);
-    }),
+    list: protectedProcedure
+      .input(z.object({
+        categoryType: z.enum(['recipe', 'ingredient']).optional(),
+      }).optional())
+      .query(async ({ ctx, input }) => {
+        const restaurant = await getUserRestaurant(ctx.user.id);
+        if (!restaurant) {
+          return [];
+        }
+        return await getRecipeCategories(restaurant.id, input?.categoryType);
+      }),
+    listActive: protectedProcedure
+      .input(z.object({
+        categoryType: z.enum(['recipe', 'ingredient']).optional(),
+      }).optional())
+      .query(async ({ ctx, input }) => {
+        const restaurant = await getUserRestaurant(ctx.user.id);
+        if (!restaurant) {
+          return [];
+        }
+        return await getActiveRecipeCategories(restaurant.id, input?.categoryType);
+      }),
     listIngredientCategories: protectedProcedure.query(async ({ ctx }) => {
       const restaurant = await getUserRestaurant(ctx.user.id);
       if (!restaurant) {
@@ -495,6 +503,7 @@ export const appRouter = router({
     create: protectedProcedure
       .input(z.object({
         name: z.string().min(1),
+        categoryType: z.enum(['recipe', 'ingredient']),
         isActive: z.boolean().optional(),
         displayOrder: z.number().int().optional(),
       }))
@@ -513,6 +522,7 @@ export const appRouter = router({
       .input(z.object({
         categoryId: z.number(),
         name: z.string().min(1).optional(),
+        categoryType: z.enum(['recipe', 'ingredient']).optional(),
         isActive: z.boolean().optional(),
         displayOrder: z.number().int().optional(),
       }))

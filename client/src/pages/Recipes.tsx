@@ -42,8 +42,9 @@ export default function Recipes() {
   const { data: activeUnits = [] } = trpc.ingredientUnits.listActive.useQuery();
   
   // Fetch category lists to determine category types
-  const { data: recipeCategories = [] } = trpc.recipeCategories.listActive.useQuery();
-  const { data: ingredientCategoryNames = [] } = trpc.recipeCategories.listIngredientCategories.useQuery();
+  const { data: recipeCategories = [] } = trpc.recipeCategories.listActive.useQuery({ categoryType: 'recipe' });
+  const { data: ingredientCategories = [] } = trpc.recipeCategories.listActive.useQuery({ categoryType: 'ingredient' });
+  const ingredientCategoryNames = ingredientCategories.map(cat => cat.name);
   
   // Helper function to determine category type
   const getCategoryType = (categoryName: string): 'recipe' | 'ingredient' | 'unknown' => {

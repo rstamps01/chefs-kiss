@@ -1,0 +1,1 @@
+ALTER TABLE `recipeCategories` ADD `categoryType` enum('recipe','ingredient') DEFAULT 'recipe' NOT NULL;

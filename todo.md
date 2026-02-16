@@ -1879,4 +1879,19 @@ All tasks from this session have been marked as [x] completed above. Key achieve
 - [x] Check current state of Recipes.tsx category key usage
 - [x] Fix duplicate keys in IngredientsTableView.tsx
 - [x] Fix duplicate keys in RecipesTableView.tsx
-- [ ] Save checkpoint combining both name-based import and key fixes
+- [x] Save checkpoint combining both name-based import and key fixes
+
+
+## Separate Recipe and Ingredient Categories - Current Sprint
+- [x] Review current category schema in drizzle/schema.ts
+- [x] Add categoryType field to recipeCategories table (enum: 'recipe' | 'ingredient')
+- [x] Run database migration to add new field
+- [x] Update existing categories with appropriate types
+- [x] Update backend procedures to filter by category type
+- [x] Update Recipe create/edit modals to show only recipe categories
+- [x] Update Ingredient create/edit modals to show only ingredient categories
+- [x] Update Settings UI to separate category management into two sections
+- [x] Update Recipes page to use filtered categories
+- [x] Write and run tests for category type separation
+- [x] Test all category dropdowns show correct filtered lists
+- [ ] Save checkpoint

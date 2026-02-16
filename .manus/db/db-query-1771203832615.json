@@ -1,0 +1,100 @@
+{
+  "query": "SELECT id, name, categoryType FROM recipeCategories ORDER BY name;",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 49cxSE1jUeHq7LY.root --database KMmUaMc2BgFeVkUfVYZGPD --execute SELECT id, name, categoryType FROM recipeCategories ORDER BY name;",
+  "rows": [
+    {
+      "id": "5",
+      "name": "Appetizers",
+      "categoryType": "recipe"
+    },
+    {
+      "id": "60006",
+      "name": "Dairy & Other",
+      "categoryType": "recipe"
+    },
+    {
+      "id": "8",
+      "name": "Desserts",
+      "categoryType": "recipe"
+    },
+    {
+      "id": "7",
+      "name": "Entrees",
+      "categoryType": "recipe"
+    },
+    {
+      "id": "30001",
+      "name": "Fish",
+      "categoryType": "recipe"
+    },
+    {
+      "id": "60001",
+      "name": "Fish & Seafood",
+      "categoryType": "recipe"
+    },
+    {
+      "id": "9",
+      "name": "Ingredient",
+      "categoryType": "recipe"
+    },
+    {
+      "id": "2",
+      "name": "Nigiri",
+      "categoryType": "recipe"
+    },
+    {
+      "id": "60004",
+      "name": "Oils & Dressings",
+      "categoryType": "recipe"
+    },
+    {
+      "id": "30002",
+      "name": "Produce",
+      "categoryType": "recipe"
+    },
+    {
+      "id": "60002",
+      "name": "Roe & Eggs",
+      "categoryType": "recipe"
+    },
+    {
+      "id": "3",
+      "name": "Sashimi",
+      "categoryType": "recipe"
+    },
+    {
+      "id": "60003",
+      "name": "Sauces & Condiments",
+      "categoryType": "recipe"
+    },
+    {
+      "id": "6",
+      "name": "Soups & Salads",
+      "categoryType": "recipe"
+    },
+    {
+      "id": "60007",
+      "name": "Specialty Items",
+      "categoryType": "recipe"
+    },
+    {
+      "id": "4",
+      "name": "Specialty Rolls",
+      "categoryType": "recipe"
+    },
+    {
+      "id": "1",
+      "name": "Sushi Rolls",
+      "categoryType": "recipe"
+    },
+    {
+      "id": "60005",
+      "name": "Toppings & Garnishes",
+      "categoryType": "recipe"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\tcategoryType\n5\tAppetizers\trecipe\n60006\tDairy & Other\trecipe\n8\tDesserts\trecipe\n7\tEntrees\trecipe\n30001\tFish\trecipe\n60001\tFish & Seafood\trecipe\n9\tIngredient\trecipe\n2\tNigiri\trecipe\n60004\tOils & Dressings\trecipe\n30002\tProduce\trecipe\n60002\tRoe & Eggs\trecipe\n3\tSashimi\trecipe\n60003\tSauces & Condiments\trecipe\n6\tSoups & Salads\trecipe\n60007\tSpecialty Items\trecipe\n4\tSpecialty Rolls\trecipe\n1\tSushi Rolls\trecipe\n60005\tToppings & Garnishes\trecipe\n",
+  "stderr": "",
+  "execution_time_ms": 76
+}

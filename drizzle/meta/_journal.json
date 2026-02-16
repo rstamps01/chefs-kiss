@@ -78,6 +78,13 @@
       "when": 1771196650603,
       "tag": "0010_charming_rockslide",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "5",
+      "when": 1771203819613,
+      "tag": "0011_fluffy_darkstar",
+      "breakpoints": true
     }
   ]
 }

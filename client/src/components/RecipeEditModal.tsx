@@ -24,7 +24,7 @@ export function RecipeEditModal({ recipe, open, onOpenChange }: RecipeEditModalP
   
   // Fetch available ingredients, categories, and units
   const { data: availableIngredients } = trpc.ingredients.list.useQuery();
-  const { data: activeRecipeCategories = [] } = trpc.recipeCategories.listActive.useQuery();
+  const { data: activeRecipeCategories = [] } = trpc.recipeCategories.listActive.useQuery({ categoryType: 'recipe' });
   const { data: ingredientCategories = [] } = trpc.recipeCategories.listIngredientCategories.useQuery();
   const { data: activeUnits = [] } = trpc.ingredientUnits.listActive.useQuery();
   
@@ -257,7 +257,7 @@ export function RecipeEditModal({ recipe, open, onOpenChange }: RecipeEditModalP
                       ))}
                     </SelectContent>
                   </Select>
-                  <QuickAddCategoryButton onCategoryAdded={(name) => setCategory(name)} />
+                  <QuickAddCategoryButton categoryType="recipe" onCategoryAdded={(name) => setCategory(name)} />
                 </div>
               </div>
 

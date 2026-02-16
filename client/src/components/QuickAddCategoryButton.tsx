@@ -12,10 +12,11 @@ import { useToast } from "@/hooks/use-toast";
 import { Plus } from "lucide-react";
 
 interface QuickAddCategoryButtonProps {
+  categoryType: 'recipe' | 'ingredient';
   onCategoryAdded?: (categoryName: string) => void;
 }
 
-export function QuickAddCategoryButton({ onCategoryAdded }: QuickAddCategoryButtonProps) {
+export function QuickAddCategoryButton({ categoryType, onCategoryAdded }: QuickAddCategoryButtonProps) {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
   const { toast } = useToast();
@@ -47,7 +48,7 @@ export function QuickAddCategoryButton({ onCategoryAdded }: QuickAddCategoryButt
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim()) return;
-    createMutation.mutate({ name: name.trim() });
+    createMutation.mutate({ name: name.trim(), categoryType });
   };
 
   return (

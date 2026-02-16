@@ -34,9 +34,14 @@ export function CategoriesUnitsManager() {
   const [unitDisplayName, setUnitDisplayName] = useState("");
 
   // Queries
-  const { data: recipeCategories = [], isLoading: recipeCategoriesLoading } = trpc.recipeCategories.list.useQuery({ categoryType: 'recipe' });
-  const { data: ingredientCategories = [], isLoading: ingredientCategoriesLoading } = trpc.recipeCategories.list.useQuery({ categoryType: 'ingredient' });
-  const { data: units = [], isLoading: unitsLoading } = trpc.ingredientUnits.list.useQuery();
+  const { data: recipeCategoriesRaw = [], isLoading: recipeCategoriesLoading } = trpc.recipeCategories.list.useQuery({ categoryType: 'recipe' });
+  const { data: ingredientCategoriesRaw = [], isLoading: ingredientCategoriesLoading } = trpc.recipeCategories.list.useQuery({ categoryType: 'ingredient' });
+  const { data: unitsRaw = [], isLoading: unitsLoading } = trpc.ingredientUnits.list.useQuery();
+
+  // Sort alphabetically by name
+  const recipeCategories = [...recipeCategoriesRaw].sort((a, b) => a.name.localeCompare(b.name));
+  const ingredientCategories = [...ingredientCategoriesRaw].sort((a, b) => a.name.localeCompare(b.name));
+  const units = [...unitsRaw].sort((a, b) => a.name.localeCompare(b.name));
 
   // Recipe Category Mutations
   const createCategoryMutation = trpc.recipeCategories.create.useMutation({

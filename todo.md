@@ -1934,4 +1934,14 @@ All tasks from this session have been marked as [x] completed above. Key achieve
 - [x] Simplified dropdown to show only active recipe categories
 - [x] Verified TypeScript compilation successful
 - [x] Test that dropdowns show only recipe categories
+- [x] Save checkpoint
+
+## Alphabetize Category Lists in Settings - Current Sprint
+- [x] Update Settings page to sort recipe categories alphabetically
+- [x] Update Settings page to sort ingredient categories alphabetically
+- [x] Also sorted ingredient units alphabetically
+- [x] Verified recipe categories display in alphabetical order (Appetizers → Test Recipe Category)
+- [x] Verified ingredient categories display in alphabetical order (Dairy & Other → Toppings & Garnishes)
+- [x] Test that new categories maintain alphabetical order
+- [x] Test that renamed categories maintain alphabetical order
 - [ ] Save checkpoint

@@ -952,7 +952,26 @@ export const appRouter = router({
           restaurantId: restaurant.id,
         }));
         
+        // Get snapshot of records that will be updated (for rollback)
+        const idsToUpdate = updateData
+          .filter(item => item.id !== null)
+          .map(item => item.id as number);
+        const snapshot = await getSnapshotBeforeUpdate('recipes', restaurant.id, idsToUpdate);
+        
         const results = await bulkUpdateRecipes(updateData);
+        
+        // Save import history if successful
+        if (results.failed === 0 && (results.created > 0 || results.updated > 0)) {
+          await saveImportHistory({
+            restaurantId: restaurant.id,
+            userId: ctx.user.openId,
+            importType: 'recipes',
+            recordsCreated: results.created,
+            recordsUpdated: results.updated,
+            createdIds: results.createdIds,
+            updatedData: snapshot,
+          });
+        }
         
         return {
           success: results.failed === 0,
@@ -974,6 +993,18 @@ export const appRouter = router({
           return {
             success: false,
             errors: parsed.errors,
+            created: 0,
+            updated: 0,
+            failed: 0,
+          };
+        }
+        
+        const restaurant = await getUserRestaurant(ctx.user.id);
+        if (!restaurant) {
+          return {
+            success: false,
+            errors: ['Restaurant not found for user'],
+            created: 0,
             updated: 0,
             failed: 0,
           };
@@ -989,9 +1020,23 @@ export const appRouter = router({
         
         const results = await bulkUpdateRecipeIngredients(updateData);
         
+        // Save import history if successful
+        if (results.failed === 0 && (results.created > 0 || results.updated > 0)) {
+          await saveImportHistory({
+            restaurantId: restaurant.id,
+            userId: ctx.user.openId,
+            importType: 'recipeIngredients',
+            recordsCreated: results.created,
+            recordsUpdated: results.updated,
+            createdIds: results.createdIds,
+            updatedData: [],
+          });
+        }
+        
         return {
           success: results.failed === 0,
           errors: results.errors,
+          created: results.created,
           updated: results.updated,
           failed: results.failed,
         };

@@ -1604,7 +1604,9 @@ export async function bulkUpdateRecipes(recipesData: Array<{
 }
 
 /**
- * Bulk update recipe ingredients from CSV import
+ * Bulk update or create recipe ingredients from CSV import
+ * - If the recipe-ingredient link exists: updates quantity and unit
+ * - If the link doesn't exist: creates a new recipe-ingredient link
  */
 export async function bulkUpdateRecipeIngredients(recipeIngredientsData: Array<{
   recipeId: number;
@@ -1616,30 +1618,55 @@ export async function bulkUpdateRecipeIngredients(recipeIngredientsData: Array<{
   if (!db) throw new Error("Database not available");
 
   const results = {
+    created: 0,
     updated: 0,
     failed: 0,
     errors: [] as string[],
+    createdIds: [] as number[],
+    updatedIds: [] as number[],
   };
 
   for (const item of recipeIngredientsData) {
     try {
-      await db
-        .update(recipeIngredients)
-        .set({
-          quantity: item.quantity.toString(),
-          unit: item.unit,
-        })
+      // Check if this recipe-ingredient link already exists
+      const existing = await db
+        .select({ id: recipeIngredients.id })
+        .from(recipeIngredients)
         .where(
           and(
             eq(recipeIngredients.recipeId, item.recipeId),
             eq(recipeIngredients.ingredientId, item.ingredientId)
           )
-        );
+        )
+        .limit(1);
       
-      results.updated++;
+      if (existing.length > 0) {
+        // Update existing link
+        await db
+          .update(recipeIngredients)
+          .set({
+            quantity: item.quantity.toString(),
+            unit: item.unit,
+          })
+          .where(eq(recipeIngredients.id, existing[0].id));
+        
+        results.updated++;
+        results.updatedIds.push(existing[0].id);
+      } else {
+        // Create new link
+        const [result] = await db.insert(recipeIngredients).values({
+          recipeId: item.recipeId,
+          ingredientId: item.ingredientId,
+          quantity: item.quantity.toString(),
+          unit: item.unit,
+        });
+        
+        results.created++;
+        results.createdIds.push(Number(result.insertId));
+      }
     } catch (error) {
       results.failed++;
-      results.errors.push(`Failed to update recipe ${item.recipeId} ingredient ${item.ingredientId}: ${error instanceof Error ? error.message : String(error)}`);
+      results.errors.push(`Failed to process recipe ${item.recipeId} ingredient ${item.ingredientId}: ${error instanceof Error ? error.message : String(error)}`);
     }
   }
 

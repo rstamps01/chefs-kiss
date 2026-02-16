@@ -25,20 +25,7 @@ export function RecipeEditModal({ recipe, open, onOpenChange }: RecipeEditModalP
   // Fetch available ingredients, categories, and units
   const { data: availableIngredients } = trpc.ingredients.list.useQuery();
   const { data: activeRecipeCategories = [] } = trpc.recipeCategories.listActive.useQuery({ categoryType: 'recipe' });
-  const { data: ingredientCategories = [] } = trpc.recipeCategories.listIngredientCategories.useQuery();
   const { data: activeUnits = [] } = trpc.ingredientUnits.listActive.useQuery();
-  
-  // Combine and group categories
-  const groupedCategories = [
-    {
-      label: "Recipe Categories",
-      categories: activeRecipeCategories.map(cat => cat.name).sort((a: string, b: string) => a.localeCompare(b))
-    },
-    {
-      label: "Ingredient Categories",
-      categories: ingredientCategories.filter((cat): cat is string => cat !== null).sort((a: string, b: string) => a.localeCompare(b))
-    }
-  ];
   
   // Form state
   const [name, setName] = useState(recipe.name);
@@ -243,17 +230,10 @@ export function RecipeEditModal({ recipe, open, onOpenChange }: RecipeEditModalP
                       <SelectValue placeholder="Select a category" />
                     </SelectTrigger>
                     <SelectContent>
-                      {groupedCategories.map((group) => (
-                        <div key={group.label}>
-                          <div className="px-2 py-1.5 text-sm font-semibold text-muted-foreground">
-                            {group.label}
-                          </div>
-                          {group.categories.map((catName) => (
-                            <SelectItem key={catName} value={catName}>
-                              {catName}
-                            </SelectItem>
-                          ))}
-                        </div>
+                      {activeRecipeCategories.map((cat) => (
+                        <SelectItem key={cat.id} value={cat.name}>
+                          {cat.name}
+                        </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>

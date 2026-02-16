@@ -1924,4 +1924,14 @@ All tasks from this session have been marked as [x] completed above. Key achieve
 - [x] Update ingredient filter to use ingredientCategories from listActive query
 - [x] Update recipe filter to use recipeCategories from listActive query
 - [x] Verified fix works - filters now use active categories from Settings
+- [x] Save checkpoint
+
+
+## Fix Recipe Modal Category Dropdowns - Current Sprint
+- [x] Check RecipeCreateModal category query
+- [x] Check RecipeEditModal category query  
+- [x] Removed ingredient categories from both modals
+- [x] Simplified dropdown to show only active recipe categories
+- [x] Verified TypeScript compilation successful
+- [x] Test that dropdowns show only recipe categories
 - [ ] Save checkpoint

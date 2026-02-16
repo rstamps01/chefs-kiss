@@ -10,6 +10,7 @@ import { generateForecast } from "./forecasting";
 import { generatePrepPlan } from "./prep-planning";
 import { generateMultiDayPrepPlan } from "./multi-day-prep-planning";
 import { z } from "zod";
+import { TRPCError } from '@trpc/server';
 import { getImportHistory, getImportHistoryById, rollbackImport, saveImportHistory, getSnapshotBeforeUpdate } from './import-history';
 import { lookupIngredientIdsByNames, lookupRecipeIdsByNames } from './id-lookup-helpers';
 
@@ -198,6 +199,18 @@ export const appRouter = router({
           throw new Error("Restaurant not found");
         }
         
+        // Validate category is an ingredient category if provided
+        if (input.category) {
+          const categories = await getRecipeCategories(restaurant.id, 'ingredient');
+          const validCategory = categories.find(cat => cat.name === input.category);
+          if (!validCategory) {
+            throw new TRPCError({
+              code: 'BAD_REQUEST',
+              message: `Category "${input.category}" is not a valid ingredient category. Please select from the ingredient categories list.`,
+            });
+          }
+        }
+        
         const ingredientId = await createIngredient({
           restaurantId: restaurant.id,
           ...input,
@@ -218,6 +231,23 @@ export const appRouter = router({
         pieceWeightOz: z.number().positive().optional(),
       }))
       .mutation(async ({ ctx, input }) => {
+        const restaurant = await getUserRestaurant(ctx.user.id);
+        if (!restaurant) {
+          throw new Error("Restaurant not found");
+        }
+        
+        // Validate category is an ingredient category if provided
+        if (input.category) {
+          const categories = await getRecipeCategories(restaurant.id, 'ingredient');
+          const validCategory = categories.find(cat => cat.name === input.category);
+          if (!validCategory) {
+            throw new TRPCError({
+              code: 'BAD_REQUEST',
+              message: `Category "${input.category}" is not a valid ingredient category. Please select from the ingredient categories list.`,
+            });
+          }
+        }
+        
         const { ingredientId, ...updates } = input;
         await updateIngredient(ingredientId, updates);
         return { success: true };

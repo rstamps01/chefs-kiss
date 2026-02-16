@@ -1,0 +1,15 @@
+{
+  "query": "\nSELECT name, categoryType, isActive \nFROM recipeCategories \nWHERE name = 'Specialty Items' AND restaurantId = 1;\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 49cxSE1jUeHq7LY.root --database KMmUaMc2BgFeVkUfVYZGPD --execute \nSELECT name, categoryType, isActive \nFROM recipeCategories \nWHERE name = 'Specialty Items' AND restaurantId = 1;\n",
+  "rows": [
+    {
+      "name": "Specialty Items",
+      "categoryType": "ingredient",
+      "isActive": "1"
+    }
+  ],
+  "messages": [],
+  "stdout": "name\tcategoryType\tisActive\nSpecialty Items\tingredient\t1\n",
+  "stderr": "",
+  "execution_time_ms": 66
+}

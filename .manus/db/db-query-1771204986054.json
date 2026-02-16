@@ -1,0 +1,20 @@
+{
+  "query": "\nSELECT \n  COALESCE(rc.categoryType, 'no_match') as categoryType,\n  COUNT(*) as count,\n  GROUP_CONCAT(DISTINCT i.category) as categories\nFROM ingredients i\nLEFT JOIN recipeCategories rc ON i.category = rc.name AND rc.restaurantId = 1\nWHERE i.restaurantId = 1\nGROUP BY rc.categoryType;\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 49cxSE1jUeHq7LY.root --database KMmUaMc2BgFeVkUfVYZGPD --execute \nSELECT \n  COALESCE(rc.categoryType, 'no_match') as categoryType,\n  COUNT(*) as count,\n  GROUP_CONCAT(DISTINCT i.category) as categories\nFROM ingredients i\nLEFT JOIN recipeCategories rc ON i.category = rc.name AND rc.restaurantId = 1\nWHERE i.restaurantId = 1\nGROUP BY rc.categoryType;\n",
+  "rows": [
+    {
+      "categoryType": "ingredient",
+      "count": "60",
+      "categories": "Fish & Seafood,Produce,Sauces & Condiments,Ingredient,Specialty Items,Roe & Eggs,Oils & Dressings,Toppings & Garnishes,Dairy & Other"
+    },
+    {
+      "categoryType": "recipe",
+      "count": "2",
+      "categories": "Sushi Rolls"
+    }
+  ],
+  "messages": [],
+  "stdout": "categoryType\tcount\tcategories\ningredient\t60\tFish & Seafood,Produce,Sauces & Condiments,Ingredient,Specialty Items,Roe & Eggs,Oils & Dressings,Toppings & Garnishes,Dairy & Other\nrecipe\t2\tSushi Rolls\n",
+  "stderr": "",
+  "execution_time_ms": 60
+}

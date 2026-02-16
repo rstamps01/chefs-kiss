@@ -1,0 +1,9 @@
+{
+  "query": "\n-- Map recipe categories to ingredient categories\nUPDATE ingredients \nSET category = CASE \n  WHEN category = 'Sushi Rolls' THEN 'Fish & Seafood'\n  WHEN category = 'Specialty Items' THEN 'Fish & Seafood'\n  WHEN category = 'Ingredient' THEN 'Produce'\n  WHEN category = 'Toppings & Garnishes' THEN 'Toppings & Garnishes'\n  WHEN category = 'Sauces & Condiments' THEN 'Sauces & Condiments'\n  ELSE category\nEND\nWHERE restaurantId = 1\nAND category IN ('Sushi Rolls', 'Specialty Items', 'Ingredient');\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 49cxSE1jUeHq7LY.root --database KMmUaMc2BgFeVkUfVYZGPD --execute \n-- Map recipe categories to ingredient categories\nUPDATE ingredients \nSET category = CASE \n  WHEN category = 'Sushi Rolls' THEN 'Fish & Seafood'\n  WHEN category = 'Specialty Items' THEN 'Fish & Seafood'\n  WHEN category = 'Ingredient' THEN 'Produce'\n  WHEN category = 'Toppings & Garnishes' THEN 'Toppings & Garnishes'\n  WHEN category = 'Sauces & Condiments' THEN 'Sauces & Condiments'\n  ELSE category\nEND\nWHERE restaurantId = 1\nAND category IN ('Sushi Rolls', 'Specialty Items', 'Ingredient');\n",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 62
+}

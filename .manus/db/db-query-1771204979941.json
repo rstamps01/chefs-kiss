@@ -1,0 +1,444 @@
+{
+  "query": "\nSELECT \n  i.id,\n  i.name,\n  i.category,\n  rc.categoryType,\n  rc.name as categoryName\nFROM ingredients i\nLEFT JOIN recipeCategories rc ON i.category = rc.name AND rc.restaurantId = 1\nWHERE i.restaurantId = 1\nORDER BY i.category;\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 49cxSE1jUeHq7LY.root --database KMmUaMc2BgFeVkUfVYZGPD --execute \nSELECT \n  i.id,\n  i.name,\n  i.category,\n  rc.categoryType,\n  rc.name as categoryName\nFROM ingredients i\nLEFT JOIN recipeCategories rc ON i.category = rc.name AND rc.restaurantId = 1\nWHERE i.restaurantId = 1\nORDER BY i.category;\n",
+  "rows": [
+    {
+      "id": "420061",
+      "name": "Fried Tofu (Inari)",
+      "category": "Dairy & Other",
+      "categoryType": "ingredient",
+      "categoryName": "Dairy & Other"
+    },
+    {
+      "id": "420060",
+      "name": "Cream Cheese",
+      "category": "Dairy & Other",
+      "categoryType": "ingredient",
+      "categoryName": "Dairy & Other"
+    },
+    {
+      "id": "420019",
+      "name": "Eel (Unagi)",
+      "category": "Fish & Seafood",
+      "categoryType": "ingredient",
+      "categoryName": "Fish & Seafood"
+    },
+    {
+      "id": "420024",
+      "name": "Snow Crab",
+      "category": "Fish & Seafood",
+      "categoryType": "ingredient",
+      "categoryName": "Fish & Seafood"
+    },
+    {
+      "id": "420002",
+      "name": "Salmon",
+      "category": "Fish & Seafood",
+      "categoryType": "ingredient",
+      "categoryName": "Fish & Seafood"
+    },
+    {
+      "id": "420026",
+      "name": "Smoked Salmon",
+      "category": "Fish & Seafood",
+      "categoryType": "ingredient",
+      "categoryName": "Fish & Seafood"
+    },
+    {
+      "id": "420025",
+      "name": "Cooked Salmon",
+      "category": "Fish & Seafood",
+      "categoryType": "ingredient",
+      "categoryName": "Fish & Seafood"
+    },
+    {
+      "id": "420023",
+      "name": "Crab Stick (Kani Kama)",
+      "category": "Fish & Seafood",
+      "categoryType": "ingredient",
+      "categoryName": "Fish & Seafood"
+    },
+    {
+      "id": "420009",
+      "name": "Salmon (sashimi grade)",
+      "category": "Fish & Seafood",
+      "categoryType": "ingredient",
+      "categoryName": "Fish & Seafood"
+    },
+    {
+      "id": "420010",
+      "name": "Tuna (sashimi grade)",
+      "category": "Fish & Seafood",
+      "categoryType": "ingredient",
+      "categoryName": "Fish & Seafood"
+    },
+    {
+      "id": "420011",
+      "name": "Yellowtail (sashimi grade)",
+      "category": "Fish & Seafood",
+      "categoryType": "ingredient",
+      "categoryName": "Fish & Seafood"
+    },
+    {
+      "id": "420012",
+      "name": "Albacore (sashimi grade)",
+      "category": "Fish & Seafood",
+      "categoryType": "ingredient",
+      "categoryName": "Fish & Seafood"
+    },
+    {
+      "id": "420013",
+      "name": "Shrimp (cooked)",
+      "category": "Fish & Seafood",
+      "categoryType": "ingredient",
+      "categoryName": "Fish & Seafood"
+    },
+    {
+      "id": "420022",
+      "name": "Soft-Shell Crab",
+      "category": "Fish & Seafood",
+      "categoryType": "ingredient",
+      "categoryName": "Fish & Seafood"
+    },
+    {
+      "id": "420021",
+      "name": "Shrimp Tempura",
+      "category": "Fish & Seafood",
+      "categoryType": "ingredient",
+      "categoryName": "Fish & Seafood"
+    },
+    {
+      "id": "420017",
+      "name": "Salmon Belly",
+      "category": "Fish & Seafood",
+      "categoryType": "ingredient",
+      "categoryName": "Fish & Seafood"
+    },
+    {
+      "id": "420020",
+      "name": "Cooked Shrimp (Ebi)",
+      "category": "Fish & Seafood",
+      "categoryType": "ingredient",
+      "categoryName": "Fish & Seafood"
+    },
+    {
+      "id": "420018",
+      "name": "Scallops (Hokkaido Hotate)",
+      "category": "Fish & Seafood",
+      "categoryType": "ingredient",
+      "categoryName": "Fish & Seafood"
+    },
+    {
+      "id": "420001",
+      "name": "Tuna (Ahi)",
+      "category": "Fish & Seafood",
+      "categoryType": "ingredient",
+      "categoryName": "Fish & Seafood"
+    },
+    {
+      "id": "420062",
+      "name": "Soy Paper",
+      "category": "Ingredient",
+      "categoryType": "ingredient",
+      "categoryName": "Ingredient"
+    },
+    {
+      "id": "420008",
+      "name": "Sesame Seeds",
+      "category": "Ingredient",
+      "categoryType": "ingredient",
+      "categoryName": "Ingredient"
+    },
+    {
+      "id": "420007",
+      "name": "Ginger (Pickled)",
+      "category": "Ingredient",
+      "categoryType": "ingredient",
+      "categoryName": "Ingredient"
+    },
+    {
+      "id": "420006",
+      "name": "Wasabi Paste",
+      "category": "Ingredient",
+      "categoryType": "ingredient",
+      "categoryName": "Ingredient"
+    },
+    {
+      "id": "420053",
+      "name": "Meyer Lemon Olive Oil",
+      "category": "Oils & Dressings",
+      "categoryType": "ingredient",
+      "categoryName": "Oils & Dressings"
+    },
+    {
+      "id": "420054",
+      "name": "Jalapeño-Infused Olive Oil",
+      "category": "Oils & Dressings",
+      "categoryType": "ingredient",
+      "categoryName": "Oils & Dressings"
+    },
+    {
+      "id": "420052",
+      "name": "Persian Lime Olive Oil",
+      "category": "Oils & Dressings",
+      "categoryType": "ingredient",
+      "categoryName": "Oils & Dressings"
+    },
+    {
+      "id": "420051",
+      "name": "Truffle Olive Oil",
+      "category": "Oils & Dressings",
+      "categoryType": "ingredient",
+      "categoryName": "Oils & Dressings"
+    },
+    {
+      "id": "420031",
+      "name": "Jalapeño",
+      "category": "Produce",
+      "categoryType": "ingredient",
+      "categoryName": "Produce"
+    },
+    {
+      "id": "420003",
+      "name": "Avocado",
+      "category": "Produce",
+      "categoryType": "ingredient",
+      "categoryName": "Produce"
+    },
+    {
+      "id": "420030",
+      "name": "Lime",
+      "category": "Produce",
+      "categoryType": "ingredient",
+      "categoryName": "Produce"
+    },
+    {
+      "id": "420028",
+      "name": "Carrot",
+      "category": "Produce",
+      "categoryType": "ingredient",
+      "categoryName": "Produce"
+    },
+    {
+      "id": "420032",
+      "name": "Green Onion (Scallion)",
+      "category": "Produce",
+      "categoryType": "ingredient",
+      "categoryName": "Produce"
+    },
+    {
+      "id": "420033",
+      "name": "Shishito Pepper",
+      "category": "Produce",
+      "categoryType": "ingredient",
+      "categoryName": "Produce"
+    },
+    {
+      "id": "420034",
+      "name": "Micro Cilantro",
+      "category": "Produce",
+      "categoryType": "ingredient",
+      "categoryName": "Produce"
+    },
+    {
+      "id": "420035",
+      "name": "Fresh Cilantro",
+      "category": "Produce",
+      "categoryType": "ingredient",
+      "categoryName": "Produce"
+    },
+    {
+      "id": "420036",
+      "name": "Shiitake Mushroom",
+      "category": "Produce",
+      "categoryType": "ingredient",
+      "categoryName": "Produce"
+    },
+    {
+      "id": "420029",
+      "name": "Lemon",
+      "category": "Produce",
+      "categoryType": "ingredient",
+      "categoryName": "Produce"
+    },
+    {
+      "id": "420038",
+      "name": "Habanero Tobiko",
+      "category": "Produce",
+      "categoryType": "ingredient",
+      "categoryName": "Produce"
+    },
+    {
+      "id": "420016",
+      "name": "Fresh Mango (Organic)",
+      "category": "Produce",
+      "categoryType": "ingredient",
+      "categoryName": "Produce"
+    },
+    {
+      "id": "420004",
+      "name": "Cucumber",
+      "category": "Produce",
+      "categoryType": "ingredient",
+      "categoryName": "Produce"
+    },
+    {
+      "id": "420037",
+      "name": "Tobiko (Flying Fish Roe)",
+      "category": "Roe & Eggs",
+      "categoryType": "ingredient",
+      "categoryName": "Roe & Eggs"
+    },
+    {
+      "id": "420041",
+      "name": "Sweet Egg (Tamago)",
+      "category": "Roe & Eggs",
+      "categoryType": "ingredient",
+      "categoryName": "Roe & Eggs"
+    },
+    {
+      "id": "420040",
+      "name": "Quail Egg",
+      "category": "Roe & Eggs",
+      "categoryType": "ingredient",
+      "categoryName": "Roe & Eggs"
+    },
+    {
+      "id": "420039",
+      "name": "Ikura (Salmon Eggs)",
+      "category": "Roe & Eggs",
+      "categoryType": "ingredient",
+      "categoryName": "Roe & Eggs"
+    },
+    {
+      "id": "420045",
+      "name": "Spicy Mayo",
+      "category": "Sauces & Condiments",
+      "categoryType": "ingredient",
+      "categoryName": "Sauces & Condiments"
+    },
+    {
+      "id": "420005",
+      "name": "Soy Sauce",
+      "category": "Sauces & Condiments",
+      "categoryType": "ingredient",
+      "categoryName": "Sauces & Condiments"
+    },
+    {
+      "id": "420047",
+      "name": "Sweet & Sour Sauce",
+      "category": "Sauces & Condiments",
+      "categoryType": "ingredient",
+      "categoryName": "Sauces & Condiments"
+    },
+    {
+      "id": "420048",
+      "name": "Charred Scallion Sauce",
+      "category": "Sauces & Condiments",
+      "categoryType": "ingredient",
+      "categoryName": "Sauces & Condiments"
+    },
+    {
+      "id": "420049",
+      "name": "Sweet Jalapeño Salsa",
+      "category": "Sauces & Condiments",
+      "categoryType": "ingredient",
+      "categoryName": "Sauces & Condiments"
+    },
+    {
+      "id": "420050",
+      "name": "Sweet Musashi Sauce",
+      "category": "Sauces & Condiments",
+      "categoryType": "ingredient",
+      "categoryName": "Sauces & Condiments"
+    },
+    {
+      "id": "420044",
+      "name": "Ponzu Sauce",
+      "category": "Sauces & Condiments",
+      "categoryType": "ingredient",
+      "categoryName": "Sauces & Condiments"
+    },
+    {
+      "id": "420042",
+      "name": "Unagi Sauce",
+      "category": "Sauces & Condiments",
+      "categoryType": "ingredient",
+      "categoryName": "Sauces & Condiments"
+    },
+    {
+      "id": "420046",
+      "name": "Sriracha Sauce",
+      "category": "Sauces & Condiments",
+      "categoryType": "ingredient",
+      "categoryName": "Sauces & Condiments"
+    },
+    {
+      "id": "420043",
+      "name": "Spicy Soy Sauce",
+      "category": "Sauces & Condiments",
+      "categoryType": "ingredient",
+      "categoryName": "Sauces & Condiments"
+    },
+    {
+      "id": "420027",
+      "name": "New York Steak (Sliced)",
+      "category": "Specialty Items",
+      "categoryType": "ingredient",
+      "categoryName": "Specialty Items"
+    },
+    {
+      "id": "420014",
+      "name": "California Roll (base)",
+      "category": "Sushi Rolls",
+      "categoryType": "recipe",
+      "categoryName": "Sushi Rolls"
+    },
+    {
+      "id": "420015",
+      "name": "Philadelphia Roll (base)",
+      "category": "Sushi Rolls",
+      "categoryType": "recipe",
+      "categoryName": "Sushi Rolls"
+    },
+    {
+      "id": "420057",
+      "name": "Sweet Potato Crisps",
+      "category": "Toppings & Garnishes",
+      "categoryType": "ingredient",
+      "categoryName": "Toppings & Garnishes"
+    },
+    {
+      "id": "420058",
+      "name": "Bonito Flakes",
+      "category": "Toppings & Garnishes",
+      "categoryType": "ingredient",
+      "categoryName": "Toppings & Garnishes"
+    },
+    {
+      "id": "420059",
+      "name": "Flamin' HOT Cheetos",
+      "category": "Toppings & Garnishes",
+      "categoryType": "ingredient",
+      "categoryName": "Toppings & Garnishes"
+    },
+    {
+      "id": "420056",
+      "name": "Tempura Crunch",
+      "category": "Toppings & Garnishes",
+      "categoryType": "ingredient",
+      "categoryName": "Toppings & Garnishes"
+    },
+    {
+      "id": "420055",
+      "name": "Macadamia Nuts",
+      "category": "Toppings & Garnishes",
+      "categoryType": "ingredient",
+      "categoryName": "Toppings & Garnishes"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\tcategory\tcategoryType\tcategoryName\n420061\tFried Tofu (Inari)\tDairy & Other\tingredient\tDairy & Other\n420060\tCream Cheese\tDairy & Other\tingredient\tDairy & Other\n420019\tEel (Unagi)\tFish & Seafood\tingredient\tFish & Seafood\n420024\tSnow Crab\tFish & Seafood\tingredient\tFish & Seafood\n420002\tSalmon\tFish & Seafood\tingredient\tFish & Seafood\n420026\tSmoked Salmon\tFish & Seafood\tingredient\tFish & Seafood\n420025\tCooked Salmon\tFish & Seafood\tingredient\tFish & Seafood\n420023\tCrab Stick (Kani Kama)\tFish & Seafood\tingredient\tFish & Seafood\n420009\tSalmon (sashimi grade)\tFish & Seafood\tingredient\tFish & Seafood\n420010\tTuna (sashimi grade)\tFish & Seafood\tingredient\tFish & Seafood\n420011\tYellowtail (sashimi grade)\tFish & Seafood\tingredient\tFish & Seafood\n420012\tAlbacore (sashimi grade)\tFish & Seafood\tingredient\tFish & Seafood\n420013\tShrimp (cooked)\tFish & Seafood\tingredient\tFish & Seafood\n420022\tSoft-Shell Crab\tFish & Seafood\tingredient\tFish & Seafood\n420021\tShrimp Tempura\tFish & Seafood\tingredient\tFish & Seafood\n420017\tSalmon Belly\tFish & Seafood\tingredient\tFish & Seafood\n420020\tCooked Shrimp (Ebi)\tFish & Seafood\tingredient\tFish & Seafood\n420018\tScallops (Hokkaido Hotate)\tFish & Seafood\tingredient\tFish & Seafood\n420001\tTuna (Ahi)\tFish & Seafood\tingredient\tFish & Seafood\n420062\tSoy Paper\tIngredient\tingredient\tIngredient\n420008\tSesame Seeds\tIngredient\tingredient\tIngredient\n420007\tGinger (Pickled)\tIngredient\tingredient\tIngredient\n420006\tWasabi Paste\tIngredient\tingredient\tIngredient\n420053\tMeyer Lemon Olive Oil\tOils & Dressings\tingredient\tOils & Dressings\n420054\tJalapeño-Infused Olive Oil\tOils & Dressings\tingredient\tOils & Dressings\n420052\tPersian Lime Olive Oil\tOils & Dressings\tingredient\tOils & Dressings\n420051\tTruffle Olive Oil\tOils & Dressings\tingredient\tOils & Dressings\n420031\tJalapeño\tProduce\tingredient\tProduce\n420003\tAvocado\tProduce\tingredient\tProduce\n420030\tLime\tProduce\tingredient\tProduce\n420028\tCarrot\tProduce\tingredient\tProduce\n420032\tGreen Onion (Scallion)\tProduce\tingredient\tProduce\n420033\tShishito Pepper\tProduce\tingredient\tProduce\n420034\tMicro Cilantro\tProduce\tingredient\tProduce\n420035\tFresh Cilantro\tProduce\tingredient\tProduce\n420036\tShiitake Mushroom\tProduce\tingredient\tProduce\n420029\tLemon\tProduce\tingredient\tProduce\n420038\tHabanero Tobiko\tProduce\tingredient\tProduce\n420016\tFresh Mango (Organic)\tProduce\tingredient\tProduce\n420004\tCucumber\tProduce\tingredient\tProduce\n420037\tTobiko (Flying Fish Roe)\tRoe & Eggs\tingredient\tRoe & Eggs\n420041\tSweet Egg (Tamago)\tRoe & Eggs\tingredient\tRoe & Eggs\n420040\tQuail Egg\tRoe & Eggs\tingredient\tRoe & Eggs\n420039\tIkura (Salmon Eggs)\tRoe & Eggs\tingredient\tRoe & Eggs\n420045\tSpicy Mayo\tSauces & Condiments\tingredient\tSauces & Condiments\n420005\tSoy Sauce\tSauces & Condiments\tingredient\tSauces & Condiments\n420047\tSweet & Sour Sauce\tSauces & Condiments\tingredient\tSauces & Condiments\n420048\tCharred Scallion Sauce\tSauces & Condiments\tingredient\tSauces & Condiments\n420049\tSweet Jalapeño Salsa\tSauces & Condiments\tingredient\tSauces & Condiments\n420050\tSweet Musashi Sauce\tSauces & Condiments\tingredient\tSauces & Condiments\n420044\tPonzu Sauce\tSauces & Condiments\tingredient\tSauces & Condiments\n420042\tUnagi Sauce\tSauces & Condiments\tingredient\tSauces & Condiments\n420046\tSriracha Sauce\tSauces & Condiments\tingredient\tSauces & Condiments\n420043\tSpicy Soy Sauce\tSauces & Condiments\tingredient\tSauces & Condiments\n420027\tNew York Steak (Sliced)\tSpecialty Items\tingredient\tSpecialty Items\n420014\tCalifornia Roll (base)\tSushi Rolls\trecipe\tSushi Rolls\n420015\tPhiladelphia Roll (base)\tSushi Rolls\trecipe\tSushi Rolls\n420057\tSweet Potato Crisps\tToppings & Garnishes\tingredient\tToppings & Garnishes\n420058\tBonito Flakes\tToppings & Garnishes\tingredient\tToppings & Garnishes\n420059\tFlamin' HOT Cheetos\tToppings & Garnishes\tingredient\tToppings & Garnishes\n420056\tTempura Crunch\tToppings & Garnishes\tingredient\tToppings & Garnishes\n420055\tMacadamia Nuts\tToppings & Garnishes\tingredient\tToppings & Garnishes\n",
+  "stderr": "",
+  "execution_time_ms": 107
+}

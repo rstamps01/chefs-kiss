@@ -1872,4 +1872,11 @@ All tasks from this session have been marked as [x] completed above. Key achieve
 - [x] Write comprehensive test for name-based lookup workflow
 - [x] Test with bulk delete → re-import ingredients → re-import recipes → re-import recipe-ingredients
 - [x] Verify recipe-ingredients are correctly linked with new IDs
-- [ ] Save checkpoint
+- [x] Save checkpoint
+
+
+## Fix Duplicate React Key Errors (Reappeared) - Current Sprint
+- [x] Check current state of Recipes.tsx category key usage
+- [x] Fix duplicate keys in IngredientsTableView.tsx
+- [x] Fix duplicate keys in RecipesTableView.tsx
+- [ ] Save checkpoint combining both name-based import and key fixes

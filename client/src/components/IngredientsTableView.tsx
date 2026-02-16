@@ -311,8 +311,8 @@ export function IngredientsTableView({
                         <SelectValue placeholder="Select category" />
                       </SelectTrigger>
                       <SelectContent>
-                        {categories.map((cat) => (
-                          <SelectItem key={cat} value={cat}>
+                        {categories.map((cat, index) => (
+                          <SelectItem key={`ingredient-cat-${index}-${cat}`} value={cat}>
                             {cat}
                           </SelectItem>
                         ))}

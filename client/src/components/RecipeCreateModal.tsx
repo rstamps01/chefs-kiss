@@ -197,7 +197,7 @@ export function RecipeCreateModal({ open, onOpenChange, onSuccess }: RecipeCreat
                   <SelectValue placeholder="Select a category" />
                 </SelectTrigger>
                 <SelectContent>
-                  {activeRecipeCategories.map((cat) => (
+                  {[...activeRecipeCategories].sort((a, b) => a.name.localeCompare(b.name)).map((cat) => (
                     <SelectItem key={cat.id} value={cat.name}>
                       {cat.name}
                     </SelectItem>

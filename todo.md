@@ -1944,4 +1944,11 @@ All tasks from this session have been marked as [x] completed above. Key achieve
 - [x] Verified ingredient categories display in alphabetical order (Dairy & Other → Toppings & Garnishes)
 - [x] Test that new categories maintain alphabetical order
 - [x] Test that renamed categories maintain alphabetical order
+- [x] Save checkpoint
+
+## Alphabetize Recipe Category Dropdowns - Current Sprint
+- [x] Update Recipes List View category filter to sort alphabetically
+- [x] Update RecipeCreateModal category dropdown to sort alphabetically
+- [x] Update RecipeEditModal category dropdown to sort alphabetically
+- [x] Test all three dropdowns show alphabetical order
 - [ ] Save checkpoint

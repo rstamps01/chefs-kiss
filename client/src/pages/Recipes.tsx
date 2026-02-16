@@ -390,27 +390,11 @@ export default function Recipes() {
                     <span className="font-medium">All Categories</span>
                   </SelectItem>
                   <div className="my-1 h-px bg-border" />
-                  {Array.from(new Set(recipes?.map(r => r.category).filter((cat): cat is string => Boolean(cat)))).sort((a, b) => a.localeCompare(b)).map((category, index) => {
-                    const categoryType = getCategoryType(category);
-                    return (
-                      <SelectItem key={`recipe-cat-${index}-${category}`} value={category}>
-                        <div className="flex items-center gap-2">
-                          <Badge 
-                            variant="outline"
-                            className={
-                              categoryType === 'recipe' 
-                                ? 'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950 dark:text-blue-300 dark:border-blue-800 text-xs'
-                                : categoryType === 'ingredient'
-                                ? 'bg-green-50 text-green-700 border-green-200 dark:bg-green-950 dark:text-green-300 dark:border-green-800 text-xs'
-                                : 'bg-gray-50 text-gray-700 border-gray-200 dark:bg-gray-950 dark:text-gray-300 dark:border-gray-800 text-xs'
-                            }
-                          >
-                            {category}
-                          </Badge>
-                        </div>
-                      </SelectItem>
-                    );
-                  })}
+                  {[...recipeCategories].sort((a, b) => a.name.localeCompare(b.name)).map((category, index) => (
+                    <SelectItem key={`recipe-cat-${index}-${category.name}`} value={category.name}>
+                      {category.name}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
               <Select value={recipeSortBy} onValueChange={(value) => setRecipeSortBy(value as RecipeSortOption)}>

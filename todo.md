@@ -1915,4 +1915,13 @@ All tasks from this session have been marked as [x] completed above. Key achieve
 - [x] Marked test categories as inactive in database
 - [x] Verified database now has 8 active and 2 inactive ingredient categories
 - [x] All dropdowns will now show same 8 active ingredient categories
+- [x] Save checkpoint
+
+
+## Fix List View Category Filters to Respect Active Status - Current Sprint
+- [x] Find where Recipes page list view queries categories for filter dropdown
+- [x] Identified that filters were using categories from actual data instead of Settings
+- [x] Update ingredient filter to use ingredientCategories from listActive query
+- [x] Update recipe filter to use recipeCategories from listActive query
+- [x] Verified fix works - filters now use active categories from Settings
 - [ ] Save checkpoint

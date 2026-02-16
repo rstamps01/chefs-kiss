@@ -585,7 +585,7 @@ export default function Recipes() {
                   })}
                   onEdit={setEditingRecipe}
                   onDelete={handleDeleteRecipe}
-                  categories={Array.from(new Set(recipes?.map(r => r.category).filter((cat): cat is string => Boolean(cat)))).sort((a, b) => a.localeCompare(b))}
+                  categories={recipeCategories.map(cat => cat.name)}
                 />
               )}
             </>
@@ -790,8 +790,7 @@ export default function Recipes() {
                 onEdit={setEditingIngredient}
                 onDelete={handleDeleteIngredient}
                 activeUnits={activeUnits || []}
-                categories={Array.from(new Set(ingredients?.map(i => i.category).filter((c): c is string => c !== null) || []))}
-              />
+                categories={ingredientCategories.map(cat => cat.name)}             />
             )
           )}
         </TabsContent>

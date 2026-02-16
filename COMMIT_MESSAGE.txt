@@ -1,0 +1,54 @@
+feat(categories): implement alphabetical sorting and fix deletion bug
+
+## Summary
+This commit implements comprehensive alphabetical sorting for all category
+and unit lists throughout the application, and fixes a critical bug that
+prevented category deletion in Settings.
+
+## Changes Made
+
+### Alphabetical Sorting (feat)
+- Added automatic alphabetical sorting to recipe categories in Settings
+- Added automatic alphabetical sorting to ingredient categories in Settings
+- Added automatic alphabetical sorting to ingredient units in Settings
+- Sorted recipe category dropdowns in List View filter
+- Sorted recipe category dropdowns in Create Recipe modal
+- Sorted recipe category dropdowns in Edit Recipe modal
+- Sorted recipe category dropdown in table inline edit mode
+- Sorting uses JavaScript's localeCompare() for consistent ordering
+- Categories maintain alphabetical order when added, renamed, or toggled
+
+### Category Deletion Bug Fix (fix)
+- Fixed critical bug in deleteRecipeCategory function (server/db.ts)
+- Corrected malformed SQL query that used invalid subquery syntax
+- Replaced with proper two-step approach:
+  1. Fetch category name from recipeCategories table
+  2. Check if category is used in recipes/ingredients
+- Both recipe and ingredient categories can now be deleted successfully
+- Added proper error handling for category not found scenarios
+
+### Category Separation (fix)
+- Recipe Create/Edit modals now only show recipe categories
+- Ingredient Create/Edit modals now only show ingredient categories
+- Removed incorrect grouped dropdown logic that mixed category types
+
+## Files Modified
+- client/src/components/CategoriesUnitsManager.tsx
+- client/src/pages/Recipes.tsx
+- client/src/components/RecipeCreateModal.tsx
+- client/src/components/RecipeEditModal.tsx
+- client/src/components/RecipesTableView.tsx
+- server/db.ts
+
+## Testing
+- Verified alphabetical order in Settings for all category/unit lists
+- Verified alphabetical order in all recipe category dropdowns
+- Tested category deletion for both recipe and ingredient categories
+- Confirmed categories not in use can be deleted successfully
+- Confirmed proper error handling when categories are in use
+
+## Impact
+- Improved user experience with consistent, predictable category ordering
+- Fixed critical functionality that was completely broken (category deletion)
+- Better data organization and management capabilities
+- Reduced user confusion with separated category types in modals

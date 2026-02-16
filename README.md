@@ -267,8 +267,11 @@ Navigate to `/recipes` to:
 
 Go to `/settings` → **Categories & Units** to:
 - **Manage recipe categories** (add, edit, delete, toggle active/inactive)
+- **Manage ingredient categories** separately from recipe categories
 - **Manage ingredient units** (customize measurement units and display names)
 - **Control dropdown visibility** (only active items appear in forms)
+- **Automatic alphabetical sorting** - all categories and units display in A-Z order
+- **Delete unused categories** - remove categories that are not assigned to any recipes or ingredients
 
 ### 3. CSV Data Import
 

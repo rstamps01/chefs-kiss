@@ -1983,4 +1983,4 @@ All tasks from this session have been marked as [x] completed above. Key achieve
 - [x] Test deleting Test Category under Recipes (successfully deleted via SQL)
 - [x] Test deleting Test Category under Ingredients (successfully deleted via SQL)
 - [x] Verified both test categories no longer appear in Settings
-- [ ] Save checkpoint
+- [x] Save checkpoint

@@ -1861,4 +1861,15 @@ All tasks from this session have been marked as [x] completed above. Key achieve
 - [x] Identify where category names are used as React keys in Recipes page
 - [x] Replace category-based keys with unique identifiers (recipe ID or category+index)
 - [x] Test that errors are resolved
+- [x] Save checkpoint
+
+
+## Fix Recipe-Ingredients Import to Use Name-Based Lookup - Current Sprint
+- [x] Read current recipe-ingredients import logic in server/routers/recipe.ts
+- [x] Add name-based lookup for ingredient IDs (match by ingredient name)
+- [x] Add name-based lookup for recipe IDs (match by recipe name)
+- [x] Update importRecipeIngredients to resolve names to current IDs
+- [x] Write comprehensive test for name-based lookup workflow
+- [x] Test with bulk delete → re-import ingredients → re-import recipes → re-import recipe-ingredients
+- [x] Verify recipe-ingredients are correctly linked with new IDs
 - [ ] Save checkpoint

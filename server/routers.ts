@@ -1010,13 +1010,76 @@ export const appRouter = router({
           };
         }
         
-        // Convert CSV data to update format
-        const updateData = parsed.data.map(row => ({
-          recipeId: parseInt(row.recipeId),
-          ingredientId: parseInt(row.ingredientId),
-          quantity: parseFloat(row.quantity),
-          unit: row.unit,
-        }));
+        // Fetch all recipes and ingredients for name-based lookup
+        const allRecipes = await getRecipesWithIngredients(restaurant.id);
+        const allIngredients = await getIngredients(restaurant.id);
+        
+        // Convert CSV data to update format with name-based ID resolution
+        const updateData: Array<{
+          recipeId: number;
+          ingredientId: number;
+          quantity: number;
+          unit: string;
+        }> = [];
+        
+        const resolutionErrors: string[] = [];
+        
+        for (let i = 0; i < parsed.data.length; i++) {
+          const row = parsed.data[i];
+          const rowNum = i + 2; // Account for header row
+          
+          // Resolve recipe ID by name (preferred) or use provided ID
+          let recipeId: number | null = null;
+          if (row.recipeName && row.recipeName.trim() !== '') {
+            const recipe = allRecipes.find(r => r.name.toLowerCase() === row.recipeName.toLowerCase());
+            if (recipe) {
+              recipeId = recipe.id;
+            } else {
+              resolutionErrors.push(`Row ${rowNum}: Recipe "${row.recipeName}" not found`);
+              continue;
+            }
+          } else if (row.recipeId) {
+            recipeId = parseInt(row.recipeId);
+          } else {
+            resolutionErrors.push(`Row ${rowNum}: No recipe name or ID provided`);
+            continue;
+          }
+          
+          // Resolve ingredient ID by name (preferred) or use provided ID
+          let ingredientId: number | null = null;
+          if (row.ingredientName && row.ingredientName.trim() !== '') {
+            const ingredient = allIngredients.find(ing => ing.name.toLowerCase() === row.ingredientName.toLowerCase());
+            if (ingredient) {
+              ingredientId = ingredient.id;
+            } else {
+              resolutionErrors.push(`Row ${rowNum}: Ingredient "${row.ingredientName}" not found`);
+              continue;
+            }
+          } else if (row.ingredientId) {
+            ingredientId = parseInt(row.ingredientId);
+          } else {
+            resolutionErrors.push(`Row ${rowNum}: No ingredient name or ID provided`);
+            continue;
+          }
+          
+          updateData.push({
+            recipeId,
+            ingredientId,
+            quantity: parseFloat(row.quantity),
+            unit: row.unit,
+          });
+        }
+        
+        // If we have resolution errors, return them
+        if (resolutionErrors.length > 0) {
+          return {
+            success: false,
+            errors: resolutionErrors,
+            created: 0,
+            updated: 0,
+            failed: resolutionErrors.length,
+          };
+        }
         
         const results = await bulkUpdateRecipeIngredients(updateData);
         

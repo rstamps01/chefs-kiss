@@ -1,0 +1,80 @@
+{
+  "query": "\nSELECT id, name, categoryType, isActive, createdAt\nFROM recipeCategories \nWHERE restaurantId = 1 AND categoryType = 'ingredient'\nORDER BY isActive DESC, name;\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 49cxSE1jUeHq7LY.root --database KMmUaMc2BgFeVkUfVYZGPD --execute \nSELECT id, name, categoryType, isActive, createdAt\nFROM recipeCategories \nWHERE restaurantId = 1 AND categoryType = 'ingredient'\nORDER BY isActive DESC, name;\n",
+  "rows": [
+    {
+      "id": "60006",
+      "name": "Dairy & Other",
+      "categoryType": "ingredient",
+      "isActive": "1",
+      "createdAt": "2025-12-28 16:32:33"
+    },
+    {
+      "id": "60001",
+      "name": "Fish & Seafood",
+      "categoryType": "ingredient",
+      "isActive": "1",
+      "createdAt": "2025-12-28 16:32:33"
+    },
+    {
+      "id": "9",
+      "name": "Ingredient",
+      "categoryType": "ingredient",
+      "isActive": "1",
+      "createdAt": "2025-12-28 10:42:58"
+    },
+    {
+      "id": "60004",
+      "name": "Oils & Dressings",
+      "categoryType": "ingredient",
+      "isActive": "1",
+      "createdAt": "2025-12-28 16:32:33"
+    },
+    {
+      "id": "30002",
+      "name": "Produce",
+      "categoryType": "ingredient",
+      "isActive": "1",
+      "createdAt": "2025-12-28 12:50:36"
+    },
+    {
+      "id": "60002",
+      "name": "Roe & Eggs",
+      "categoryType": "ingredient",
+      "isActive": "1",
+      "createdAt": "2025-12-28 16:32:33"
+    },
+    {
+      "id": "60003",
+      "name": "Sauces & Condiments",
+      "categoryType": "ingredient",
+      "isActive": "1",
+      "createdAt": "2025-12-28 16:32:33"
+    },
+    {
+      "id": "60007",
+      "name": "Specialty Items",
+      "categoryType": "ingredient",
+      "isActive": "1",
+      "createdAt": "2025-12-28 16:32:33"
+    },
+    {
+      "id": "90002",
+      "name": "Test Ingredient Category 1771204413179",
+      "categoryType": "ingredient",
+      "isActive": "1",
+      "createdAt": "2026-02-16 01:13:33"
+    },
+    {
+      "id": "60005",
+      "name": "Toppings & Garnishes",
+      "categoryType": "ingredient",
+      "isActive": "1",
+      "createdAt": "2025-12-28 16:32:33"
+    }
+  ],
+  "messages": [],
+  "stdout": "id\tname\tcategoryType\tisActive\tcreatedAt\n60006\tDairy & Other\tingredient\t1\t2025-12-28 16:32:33\n60001\tFish & Seafood\tingredient\t1\t2025-12-28 16:32:33\n9\tIngredient\tingredient\t1\t2025-12-28 10:42:58\n60004\tOils & Dressings\tingredient\t1\t2025-12-28 16:32:33\n30002\tProduce\tingredient\t1\t2025-12-28 12:50:36\n60002\tRoe & Eggs\tingredient\t1\t2025-12-28 16:32:33\n60003\tSauces & Condiments\tingredient\t1\t2025-12-28 16:32:33\n60007\tSpecialty Items\tingredient\t1\t2025-12-28 16:32:33\n90002\tTest Ingredient Category 1771204413179\tingredient\t1\t2026-02-16 01:13:33\n60005\tToppings & Garnishes\tingredient\t1\t2025-12-28 16:32:33\n",
+  "stderr": "",
+  "execution_time_ms": 55
+}

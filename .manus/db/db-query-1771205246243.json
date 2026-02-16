@@ -1,0 +1,110 @@
+{
+  "query": "\nSELECT name, categoryType, isActive \nFROM recipeCategories \nWHERE restaurantId = 1\nORDER BY categoryType, name;\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 49cxSE1jUeHq7LY.root --database KMmUaMc2BgFeVkUfVYZGPD --execute \nSELECT name, categoryType, isActive \nFROM recipeCategories \nWHERE restaurantId = 1\nORDER BY categoryType, name;\n",
+  "rows": [
+    {
+      "name": "Appetizers",
+      "categoryType": "recipe",
+      "isActive": "1"
+    },
+    {
+      "name": "Desserts",
+      "categoryType": "recipe",
+      "isActive": "1"
+    },
+    {
+      "name": "Entrees",
+      "categoryType": "recipe",
+      "isActive": "1"
+    },
+    {
+      "name": "Fish",
+      "categoryType": "recipe",
+      "isActive": "1"
+    },
+    {
+      "name": "Nigiri",
+      "categoryType": "recipe",
+      "isActive": "1"
+    },
+    {
+      "name": "Sashimi",
+      "categoryType": "recipe",
+      "isActive": "1"
+    },
+    {
+      "name": "Soups & Salads",
+      "categoryType": "recipe",
+      "isActive": "1"
+    },
+    {
+      "name": "Specialty Rolls",
+      "categoryType": "recipe",
+      "isActive": "1"
+    },
+    {
+      "name": "Sushi Rolls",
+      "categoryType": "recipe",
+      "isActive": "1"
+    },
+    {
+      "name": "Test Recipe Category 1771204413149",
+      "categoryType": "recipe",
+      "isActive": "1"
+    },
+    {
+      "name": "Dairy & Other",
+      "categoryType": "ingredient",
+      "isActive": "1"
+    },
+    {
+      "name": "Fish & Seafood",
+      "categoryType": "ingredient",
+      "isActive": "1"
+    },
+    {
+      "name": "Ingredient",
+      "categoryType": "ingredient",
+      "isActive": "1"
+    },
+    {
+      "name": "Oils & Dressings",
+      "categoryType": "ingredient",
+      "isActive": "1"
+    },
+    {
+      "name": "Produce",
+      "categoryType": "ingredient",
+      "isActive": "1"
+    },
+    {
+      "name": "Roe & Eggs",
+      "categoryType": "ingredient",
+      "isActive": "1"
+    },
+    {
+      "name": "Sauces & Condiments",
+      "categoryType": "ingredient",
+      "isActive": "1"
+    },
+    {
+      "name": "Specialty Items",
+      "categoryType": "ingredient",
+      "isActive": "1"
+    },
+    {
+      "name": "Test Ingredient Category 1771204413179",
+      "categoryType": "ingredient",
+      "isActive": "1"
+    },
+    {
+      "name": "Toppings & Garnishes",
+      "categoryType": "ingredient",
+      "isActive": "1"
+    }
+  ],
+  "messages": [],
+  "stdout": "name\tcategoryType\tisActive\nAppetizers\trecipe\t1\nDesserts\trecipe\t1\nEntrees\trecipe\t1\nFish\trecipe\t1\nNigiri\trecipe\t1\nSashimi\trecipe\t1\nSoups & Salads\trecipe\t1\nSpecialty Rolls\trecipe\t1\nSushi Rolls\trecipe\t1\nTest Recipe Category 1771204413149\trecipe\t1\nDairy & Other\tingredient\t1\nFish & Seafood\tingredient\t1\nIngredient\tingredient\t1\nOils & Dressings\tingredient\t1\nProduce\tingredient\t1\nRoe & Eggs\tingredient\t1\nSauces & Condiments\tingredient\t1\nSpecialty Items\tingredient\t1\nTest Ingredient Category 1771204413179\tingredient\t1\nToppings & Garnishes\tingredient\t1\n",
+  "stderr": "",
+  "execution_time_ms": 56
+}

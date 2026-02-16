@@ -1,0 +1,50 @@
+{
+  "query": "\nSELECT name, isActive\nFROM recipeCategories \nWHERE restaurantId = 1 AND categoryType = 'ingredient'\nORDER BY isActive DESC, name;\n",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 49cxSE1jUeHq7LY.root --database KMmUaMc2BgFeVkUfVYZGPD --execute \nSELECT name, isActive\nFROM recipeCategories \nWHERE restaurantId = 1 AND categoryType = 'ingredient'\nORDER BY isActive DESC, name;\n",
+  "rows": [
+    {
+      "name": "Dairy & Other",
+      "isActive": "1"
+    },
+    {
+      "name": "Fish & Seafood",
+      "isActive": "1"
+    },
+    {
+      "name": "Oils & Dressings",
+      "isActive": "1"
+    },
+    {
+      "name": "Produce",
+      "isActive": "1"
+    },
+    {
+      "name": "Roe & Eggs",
+      "isActive": "1"
+    },
+    {
+      "name": "Sauces & Condiments",
+      "isActive": "1"
+    },
+    {
+      "name": "Specialty Items",
+      "isActive": "1"
+    },
+    {
+      "name": "Toppings & Garnishes",
+      "isActive": "1"
+    },
+    {
+      "name": "Ingredient",
+      "isActive": "0"
+    },
+    {
+      "name": "Test Ingredient Category 1771204413179",
+      "isActive": "0"
+    }
+  ],
+  "messages": [],
+  "stdout": "name\tisActive\nDairy & Other\t1\nFish & Seafood\t1\nOils & Dressings\t1\nProduce\t1\nRoe & Eggs\t1\nSauces & Condiments\t1\nSpecialty Items\t1\nToppings & Garnishes\t1\nIngredient\t0\nTest Ingredient Category 1771204413179\t0\n",
+  "stderr": "",
+  "execution_time_ms": 61
+}

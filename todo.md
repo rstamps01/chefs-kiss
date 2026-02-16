@@ -1904,4 +1904,15 @@ All tasks from this session have been marked as [x] completed above. Key achieve
 - [x] Add backend validation to prevent recipe categories from being assigned to ingredients
 - [x] Write and run tests for ingredient category validation
 - [x] Test that all ingredients show correct ingredient categories in list view
+- [x] Save checkpoint
+
+
+## Fix Ingredient Category Dropdown Consistency - Current Sprint
+- [x] Check which query is used in list view filter (shows 8 categories correctly)
+- [x] Check which query is used in Create/Edit modals (shows 10 categories incorrectly)
+- [x] Confirmed modals already use listActive with 'ingredient' filter - working correctly
+- [x] Identified root cause: test categories "Ingredient" and "Test Ingredient Category 1771204413179" are marked as active
+- [x] Marked test categories as inactive in database
+- [x] Verified database now has 8 active and 2 inactive ingredient categories
+- [x] All dropdowns will now show same 8 active ingredient categories
 - [ ] Save checkpoint

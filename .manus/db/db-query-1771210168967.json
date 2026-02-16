@@ -1,0 +1,9 @@
+{
+  "query": "DELETE FROM recipeCategories WHERE name LIKE '%Test%' AND categoryType = 'recipe';",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway02.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 49cxSE1jUeHq7LY.root --database KMmUaMc2BgFeVkUfVYZGPD --execute DELETE FROM recipeCategories WHERE name LIKE '%Test%' AND categoryType = 'recipe';",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 176
+}

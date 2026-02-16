@@ -981,17 +981,22 @@ export async function deleteRecipeCategory(categoryId: number) {
     throw new Error("Database not available");
   }
 
+  // First get the category name
+  const category = await db
+    .select()
+    .from(recipeCategories)
+    .where(eq(recipeCategories.id, categoryId))
+    .limit(1);
+
+  if (category.length === 0) {
+    throw new Error("Category not found");
+  }
+
   // Check if category is used in any recipes
   const usageCheck = await db
     .select()
     .from(recipes)
-    .where(eq(recipes.category, 
-      db.select({ name: recipeCategories.name })
-        .from(recipeCategories)
-        .where(eq(recipeCategories.id, categoryId))
-        .limit(1)
-        .as('categoryName')
-    ))
+    .where(eq(recipes.category, category[0].name))
     .limit(1);
 
   if (usageCheck.length > 0) {

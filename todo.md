@@ -1951,4 +1951,25 @@ All tasks from this session have been marked as [x] completed above. Key achieve
 - [x] Update RecipeCreateModal category dropdown to sort alphabetically
 - [x] Update RecipeEditModal category dropdown to sort alphabetically
 - [x] Test all three dropdowns show alphabetical order
+- [x] Save checkpoint
+
+## Fix Recipe List View Category Filter Dropdown Order - Current Sprint
+- [x] Investigate why category filter dropdown is not alphabetized
+- [x] Confirmed code already has alphabetical sorting (line 393 in Recipes.tsx)
+- [x] Restarted dev server to clear any caching issues
+- [x] Test category filter dropdown shows alphabetical order
+- [x] Verified dropdown displays: All Categories, Appetizers, Desserts, Entrees, Fish, Nigiri, Sashimi, Soups & Salads, Specialty Rolls, Sushi Rolls
+
+## Add Category Sort Option to Recipe List View - Current Sprint
+- [x] Confirmed "Category" option already exists in sort dropdown
+- [x] Confirmed category-based sorting logic already implemented
+- [x] Verified recipes are grouped by category alphabetically when Category sort is selected
+- [x] Tested category sorting in browser - works correctly
+- [x] No code changes needed - feature already exists
+
+## Fix Table Category Column Dropdown Order - Current Sprint
+- [x] Find RecipesTableView component
+- [x] Locate category dropdown in table Category column (line 429)
+- [x] Add alphabetical sorting to category dropdown using localeCompare
+- [x] Test in browser - verified alphabetical order: Appetizers → Sushi Rolls
 - [ ] Save checkpoint

@@ -426,7 +426,7 @@ export function RecipesTableView({ recipes, onEdit, onDelete, categories }: Reci
                         <SelectValue placeholder="Select category" />
                       </SelectTrigger>
                       <SelectContent>
-                        {categories.map((cat, index) => (
+                        {[...categories].sort((a, b) => a.localeCompare(b)).map((cat, index) => (
                           <SelectItem key={`recipe-table-cat-${index}-${cat}`} value={cat}>
                             {cat}
                           </SelectItem>
